@@ -1,0 +1,18 @@
+# Docker files
+Dockerfile.local
+Dockerfile.release
+.dockerignore
+.cache
+
+# Environment files
+.env
+.env.sample
+.tool-versions
+
+# Project files
+spec/
+README.md
+.editorconfig
+
+# Miscellaneous
+.git

@@ -1,0 +1,62 @@
+#!/bin/bash
+
+function usage {
+  echo "Usage: bin/destroy [OPTIONS]"
+  echo ""
+  echo "Options:"
+  echo ""
+  echo "  --release  start the project in production mode"
+  echo "  --help     display help information"
+  echo ""
+}
+
+function check_docker {
+  docker -v > /dev/null 2>&1
+
+  if [ $? -eq 127 ]; then
+    echo "$(tput setaf 1)Docker not found$(tput sgr 0)"
+    echo ""
+    echo "Follow the instructions in https://docs.docker.com/docker-for-mac/install/"
+
+    exit 1
+  fi
+}
+
+function destroy {
+  echo "You are about to destroy all container and volumes."
+
+  while true; do
+    read -p "Are you sure you want to continue? (y/n)" yn
+    case $yn in
+        [Yy] )
+          docker-compose $ENV_ARG down --rmi all
+          break;;
+        [Nn] )
+          exit;;
+        * ) echo "Please answer yes or no (y/n)";;
+    esac
+  done
+}
+
+# Process user flags
+
+if [[ "$@" =~ --help ]]; then
+  usage
+  exit 0
+fi
+
+if [[ "$@" =~ --release ]]; then
+  ENV_ARG="-f docker-compose.release.yml"
+else
+  ENV_ARG="-f docker-compose.local.yml"
+fi
+
+# Check dependencies
+
+check_docker
+
+# Process user commands
+
+case "$1" in
+  * )  destroy $@ ;;
+esac

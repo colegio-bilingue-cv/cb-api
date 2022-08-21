@@ -1,0 +1,63 @@
+###########################
+# Base Information        #
+###########################
+
+FROM ruby:3.1.2-alpine
+
+##########################
+# Install software       #
+##########################
+
+# Install base packages and other software
+RUN apk add --no-cache build-base libxml2-dev libxslt-dev postgresql-dev
+
+##########################
+# Set working directory  #
+##########################
+
+# Set working directory this directoy is going to
+# be used by default
+WORKDIR /cb-api
+
+##########################
+# Configure environment  #
+##########################
+
+ENV RAILS_ENV production
+
+##########################
+# Add manifest files     #
+##########################
+
+# Copy metadata files that are used to install
+# dependencies
+COPY Gemfile Gemfile.lock ./
+
+##########################
+# Configure dependencies #
+##########################
+
+# Set the place where bundle is going to install gems
+ENV BUNDLE_PATH /bundle
+
+# Configure bundle to to build nokogiri using system libraries
+RUN bundle config --global build.nokogiri --use-system-libraries
+
+RUN bundle install --deployment \
+  --jobs `expr $(cat /proc/cpuinfo | grep -c "cpu cores") - 1` \
+  --retry 3
+
+##########################
+# Copy all apps files    #
+##########################
+
+# Having the apps files and the manifest files in different copies will help
+# to avoid doing bundle install if the manifest files doesn't change
+
+COPY . .
+
+##########################
+# Run the app            #
+##########################
+
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

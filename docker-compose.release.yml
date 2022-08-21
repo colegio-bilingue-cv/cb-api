@@ -1,0 +1,9 @@
+services:
+  api:
+    build:
+      context: ./
+      dockerfile: Dockerfile.release
+    volumes:
+      - /bundle
+    ports:
+      - 3000:3000

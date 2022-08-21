@@ -1,0 +1,52 @@
+#!/bin/bash
+
+ENV_ARG=
+
+function usage {
+  echo "Usage: bin/terminal"
+  echo ""
+  echo "Options:"
+  echo ""
+  echo "  --release  start the project in production mode"
+  echo "  --help     display help information"
+  echo ""
+}
+
+function check_docker {
+  docker -v > /dev/null 2>&1
+
+  if [ $? -eq 127 ]; then
+    echo "$(tput setaf 1)Docker not found$(tput sgr 0)"
+    echo ""
+    echo "Follow the instructions in https://docs.docker.com/docker-for-mac/install/"
+
+    exit 1
+  fi
+}
+
+function terminal {
+  docker-compose $ENV_ARG exec cb-api /bin/sh
+}
+
+# Process user flags
+
+if [[ "$@" =~ --help ]]; then
+  usage
+  exit 0
+fi
+
+if [[ "$@" =~ --release ]]; then
+  ENV_ARG="-f docker-compose.release.yml"
+else
+  ENV_ARG="-f docker-compose.local.yml"
+fi
+
+# Check dependencies
+
+check_docker
+
+# Process user commands
+
+case "$1" in
+  * )  terminal $@ ;;
+esac

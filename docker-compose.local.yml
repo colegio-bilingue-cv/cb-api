@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_MULTIPLE_DATABASES: cb_api_development, cb_api_test
+    volumes:
+      - ./pg-init-scripts:/docker-entrypoint-initdb.d
+      - ./postgres_data:/var/lib/postgresql/data
+
+  cb-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile.local
+    volumes:
+      - $PWD:/cb-api
+      - /bundle
+    env_file:
+      - .env
+    ports:
+      - 3000:3000
+    depends_on:
+      - db

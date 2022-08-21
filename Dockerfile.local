@@ -1,0 +1,40 @@
+###########################
+# Base Information        #
+###########################
+
+FROM ruby:3.1.2-alpine
+
+###########################
+# Install software        #
+###########################
+
+# Install base packages and other software
+RUN apk add --no-cache build-base libxml2-dev libxslt-dev postgresql-dev tzdata
+
+###########################
+# Set working directory   #
+###########################
+
+# Set working directory this directoy is going to
+# be used by default
+WORKDIR /cb-api
+
+###########################
+# Configure dependencies  #
+###########################
+
+# Set the place where bundle is going to install gems
+ENV BUNDLE_PATH /bundle
+
+# Configure bundle to to build nokogiri using system libraries
+RUN bundle config --global build.nokogiri --use-system-libraries
+
+###########################
+# Run the app             #
+###########################
+
+EXPOSE 3000
+
+ENTRYPOINT ["/cb-api/local-entrypoint.sh"]
+
+CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]
