@@ -1,4 +1,4 @@
-# Colegio Bolingüe Ciudad Vieja
+# Colegio Bilingüe Ciudad Vieja
 
 ## Prerequisites
 
