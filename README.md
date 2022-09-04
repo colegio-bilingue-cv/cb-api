@@ -1,4 +1,4 @@
-# Colegio Bolingüe Ciudad Vieja
+# Colegio Bilingüe Ciudad Vieja
 
 ## Prerequisites
 
@@ -80,4 +80,12 @@ Then run the Rake task:
 
 ```
 % bin/rake seed_dev
+```
+
+## Issues with Ubuntu package manager docker compose version
+
+Run the docker compose ubuntu installer:
+
+```
+bash docker_compose_ubuntu_installer.sh
 ```
