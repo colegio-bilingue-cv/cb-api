@@ -2,7 +2,7 @@ class Api::StudentController < BaseController
   def create
     student = Student.create(student_params)
     render json: student, status: :created #201
-
+#setear status
   end
 
     private

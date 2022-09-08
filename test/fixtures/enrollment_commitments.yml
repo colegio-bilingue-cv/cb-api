@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  url: MyString
+  date: 2022-09-08 03:25:38
+  Administrative_Info: one
+
+two:
+  url: MyString
+  date: 2022-09-08 03:25:38
+  Administrative_Info: two
