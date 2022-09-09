@@ -4,7 +4,7 @@ class CreateStudentQuestions < ActiveRecord::Migration[7.0]
       t.text :answer
       t.references :Category, null: false, foreign_key: true
       t.references :Student, null: false, foreign_key: true
-
+      t.references :Cicle, null: false, foreign_key: true
       t.timestamps
     end
   end

@@ -1,4 +1,4 @@
 class StudentQuestion < ApplicationRecord
-  belongs_to :Category
-  belongs_to :Student
+  belongs_to :category
+  belongs_to :student
 end

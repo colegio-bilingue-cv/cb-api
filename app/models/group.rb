@@ -1,3 +1,4 @@
 class Group < ApplicationRecord
-  belongs_to :Cicle
+  belongs_to :Cicles
+  has_many :Subgroups
 end
