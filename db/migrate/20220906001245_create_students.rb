@@ -10,7 +10,7 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.integer :reference_number
       t.string :birthplace
       t.datetime :birthdate
-      t.string :nacionality
+      t.string :nationality
       t.string :first_language
       t.string :office
       t.string :state
@@ -25,7 +25,7 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.datetime :starting_date
       t.string :contact
       t.string :contact_phone
-      
+
       t.timestamps
     end
   end
