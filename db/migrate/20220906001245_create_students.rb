@@ -3,9 +3,7 @@ class CreateStudents < ActiveRecord::Migration[7.0]
     create_table :students do |t|
       t.string :ci
       t.string :surname
-      t.string :second_surname
-      t.string :first_name
-      t.string :middle_name
+      t.string :name
       t.string :group
       t.string :sub_group
       t.string :scheduler_start
