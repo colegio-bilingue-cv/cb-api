@@ -4,8 +4,6 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.string :ci
       t.string :surname
       t.string :name
-      t.string :group
-      t.string :sub_group
       t.string :scheduler_start
       t.string :scheduler_end
       t.string :tuition
@@ -20,9 +18,14 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.string :neighborhood
       t.string :medical_assurance
       t.string :emergency
+      t.string :phone_number
       t.string :vaccine_name
       t.datetime :vaccine_expiration
-
+      t.datetime :inscription_date
+      t.datetime :starting_date
+      t.string :contact
+      t.string :contact_phone
+      
       t.timestamps
     end
   end
