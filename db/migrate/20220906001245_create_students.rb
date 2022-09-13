@@ -25,7 +25,8 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.datetime :starting_date
       t.string :contact
       t.string :contact_phone
-
+      t.string :email
+      
       t.timestamps
     end
   end
