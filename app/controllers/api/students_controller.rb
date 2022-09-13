@@ -8,7 +8,7 @@ class Api::StudentsController < Api::BaseController
   private
   def student_params
     params.require(:student).permit(:ci, :surname,
-      :name, :birthplace, :birthdate, :nationality, :schedule_start, :scheduler_end, :tuition,
+      :name, :birthplace, :birthdate, :nationality, :schedule_start, :schedule_end, :tuition,
       :reference_number, :office, :state, 
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,

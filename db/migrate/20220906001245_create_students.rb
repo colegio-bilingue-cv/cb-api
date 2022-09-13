@@ -4,8 +4,8 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.string :ci
       t.string :surname
       t.string :name
-      t.string :scheduler_start
-      t.string :scheduler_end
+      t.string :schedule_start
+      t.string :schedule_end
       t.string :tuition
       t.integer :reference_number
       t.string :birthplace
