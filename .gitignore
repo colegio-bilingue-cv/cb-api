@@ -29,7 +29,7 @@
 /config/master.key
 
 # Ignore db data
-/data
+/postgres_data
 
 # Ignore env files
 .env*
