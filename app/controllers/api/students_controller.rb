@@ -2,12 +2,12 @@ class Api::StudentsController < Api::BaseController
   def create
     student = Student.create!(student_params)
 
-    render json: StudentSerializer.new.serialize_to_json(student), status: :created
+    render json: StudentSerializer.new.serialize_to_json(student), status: :screated
   end
 
   def show
     student = Student.find(params[:id])
-    render json: StudentSerializer.find.serialize_to_json(student), status: :ok
+    render json: StudentSerializer.new.serialize_to_json(student), status: :ok
   end  
 
   private
