@@ -13,7 +13,7 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.string :nationality
       t.string :first_language
       t.string :office
-      t.string :state
+      t.integer :status, default: 0
       t.string :address
       t.string :neighborhood
       t.string :medical_assurance
@@ -26,7 +26,7 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.string :contact
       t.string :contact_phone
       t.string :email
-      
+
       t.timestamps
     end
   end
