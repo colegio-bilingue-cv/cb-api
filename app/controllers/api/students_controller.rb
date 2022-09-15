@@ -5,6 +5,14 @@ class Api::StudentsController < Api::BaseController
     render json: StudentSerializer.new.serialize_to_json(student), status: :created
   end
 
+  def show
+    student = Student.find(params[:id])
+
+    render json: StudentSerializer.new.serialize_to_json(student), status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: {}, status: :not_found
+  end
+
   private
 
   def student_params
