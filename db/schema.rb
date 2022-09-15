@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_06_001245) do
     t.string "nationality"
     t.string "first_language"
     t.string "office"
-    t.string "state"
+    t.integer "status", default: 0
     t.string "address"
     t.string "neighborhood"
     t.string "medical_assurance"
