@@ -1,4 +1,5 @@
 class Student < ApplicationRecord
+  has_and_belongs_to_many :family_members
   enum status: [:pending, :active, :inactive]
 
   validates :ci, presence: true, length: { minimum: 8 }, uniqueness: true
