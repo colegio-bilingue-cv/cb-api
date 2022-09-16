@@ -20,5 +20,4 @@ class Api::FamilyMembersController < Api::BaseController
       :workplace_neighbourhood, :workplace_phone
     )
   end
-
 end
