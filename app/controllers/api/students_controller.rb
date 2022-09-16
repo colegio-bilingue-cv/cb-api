@@ -13,6 +13,11 @@ class Api::StudentsController < Api::BaseController
     render json: {}, status: :not_found
   end
 
+  def index
+    students = Student.all
+    render json: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer).to_json
+  end
+
   private
 
   def student_params
