@@ -2,20 +2,38 @@ name: Deploy to Heroku
 on:
   workflow_dispatch:
 
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v3
+      
+#       - name: Build, Push and Realease
+#         uses: gonuit/heroku-docker-deploy@v1.3.3
+#         with:
+#           email: ${{ secrets.HEROKU_EMAIL }}
+#           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+#           heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+#           dockerfile_directory: ./
+#           dockerfile_name: Dockerfile.release
+#           docker_options: "--no-cache"
+#           process_type: web
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      
-      - name: Build, Push and Realease
-        uses: gonuit/heroku-docker-deploy@v1.3.3
-        with:
-          email: ${{ secrets.HEROKU_EMAIL }}
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          dockerfile_directory: ./
-          dockerfile_name: Dockerfile.release
-          docker_options: "--no-cache"
-          process_type: "web: bundle exec rails server -p $PORT"
+    - uses: actions/checkout@v3
+    - name: Login to Heroku Container registry
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:login 
+    - name: Build and push
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:push -a ${{ secrets.HEROKU_APP_NAME }} web 
+    - name: Release
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:release -a ${{ secrets.HEROKU_APP_NAME }} web 
