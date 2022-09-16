@@ -13,9 +13,20 @@ class Api::StudentsController < Api::BaseController
     render json: {}, status: :not_found
   end
 
+  def update
+    student = Student.find(params[:id])
+    student.update(student_params)
+
+    render json: StudentSerializer.new.serialize_to_json(student), status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: {}, status: :not_found
+  rescue ActiveRecord::RecordInvalid
+    render json: {}, status: :unprocessable_entity
+  end
+
   def index
     students = Student.all
-    render json: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer).to_json
+    render json: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer).to_json, status: :ok
   end
 
   private

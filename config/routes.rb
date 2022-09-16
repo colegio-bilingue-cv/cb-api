@@ -3,6 +3,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   namespace :api do
-    resources :students, only: [:create, :show, :index]
+    resources :students
   end
 end
