@@ -109,8 +109,64 @@ class Api::StudentsController < Api::BaseController
     render json: {}, status: :not_found
   end
 
-  private
+  def updateState
+    student = Student.find(params[:id])
+    missingData = []; #TODO aca habria que ir agregando lo que falte para mandar con el error
 
+    #:reference_number,  :status,
+
+    if !student['schedule_start']
+      raise "Falta llenar campos"
+    end
+    if !student['schedule_end']
+      raise "Falta llenar campos"
+    end
+    if !student['tuition']
+      raise "Falta llenar campos"
+    end
+    if !student['office']
+      raise "Falta llenar campos"
+    end
+    if !student['emergency']
+      raise "Falta llenar campos"
+    end
+    if !student['vaccine_name']
+      raise "Falta llenar campos"
+    end
+    if !student['vaccine_expiration']
+      raise "Falta llenar campos"
+    end
+    if !student['phone_number']
+      raise "Falta llenar campos"
+    end
+    if !student['inscription_date']
+      raise "Falta llenar campos"
+    end
+    if !student['starting_date']
+      raise "Falta llenar campos"
+    end
+    if !student['contact']
+      raise "Falta llenar campos"
+    end
+    if !student['contact_phone']
+      raise "Falta llenar campos"
+    end
+
+    familyMembers = family_members_students.find_by(student_id: student[:id])
+
+    if familyMembers.length() == 0 
+      raise "Falta llenar campos"
+    end
+
+
+    #chequear que esta toda la info basica del alumno seteada-----
+    #chequear que el usuario tiene los datos de almenos un tutor-------
+    #TODO chequear que hay almenos una forma de pago
+    #TODO checkear que todas las preguntas de la informacion fueron completadas
+
+  end
+
+  private
   def student_params
     params.require(:student).permit(:ci, :surname,
       :name, :birthplace, :birthdate, :nationality, :schedule_start, :schedule_end, :tuition,
