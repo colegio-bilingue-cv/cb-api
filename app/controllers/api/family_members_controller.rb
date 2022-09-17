@@ -11,13 +11,6 @@ class Api::FamilyMembersController < Api::BaseController
     render json: {}, status: :unprocessable_entity
   end
 
-  def index
-    student = Student.find(params[:student_id])
-    family_members = student.family_members.all
-    render json: Panko::ArraySerializer.new(family_members, each_serializer: FamilyMemberSerializer).to_json, status: :ok
-  end
-
-
   private
 
   def family_member_params
