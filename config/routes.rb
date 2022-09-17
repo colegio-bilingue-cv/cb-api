@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   namespace :api do
     resources :students, except: [:destroy] do
       get :family_members, to: 'students#family_members'
-      resources :family_members, only: [:create]
+      resources :family_members, only: [:create, :update]
     end
   end
 end
