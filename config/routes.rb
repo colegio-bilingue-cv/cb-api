@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   namespace :api do
     resources :students, except: [:destroy] do
-      resources :family_members, only: [:create, :index]
+      get :family_members, to: 'students#family_members'
+      resources :family_members, only: [:create]
     end
   end
 end

@@ -29,6 +29,12 @@ class Api::StudentsController < Api::BaseController
     render json: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer).to_json, status: :ok
   end
 
+  def family_members
+    student = Student.find(params[:student_id])
+    family_members = student.family_members.all
+    render json: Panko::ArraySerializer.new(family_members, each_serializer: FamilyMemberSerializer).to_json, status: :ok
+  end
+
   private
 
   def student_params
