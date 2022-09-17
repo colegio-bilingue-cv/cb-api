@@ -28,4 +28,3 @@ FactoryBot.define do
       association :family_member
     end
 end
-  
