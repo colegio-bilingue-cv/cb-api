@@ -1,38 +1,67 @@
 class Api::StudentsController < Api::BaseController
-  def create
-    student = Student.create!(student_params)
 
-    render json: StudentSerializer.new.serialize_to_json(student), status: :created
+  def index
+    students = Student.all
+
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
   end
 
   def show
     student = Student.find(params[:id])
 
-    render json: StudentSerializer.new.serialize_to_json(student), status: :ok
+    response = Panko::Response.create do |r|
+      { student: r.serializer(student, StudentSerializer) }
+    end
+
+    render json: response, status: :ok
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
   end
 
+  def create
+    student = Student.create!(student_params)
+
+    response = Panko::Response.create do |r|
+      { student: r.serializer(student, StudentSerializer) }
+    end
+
+    render json: response, status: :created
+  rescue ActiveRecord::RecordInvalid
+    render json: {}, status: :unprocessable_entity
+  end
+
   def update
     student = Student.find(params[:id])
-    student.update(student_params)
+    student.update!(student_params)
 
-    render json: StudentSerializer.new.serialize_to_json(student), status: :ok
+    response = Panko::Response.create do |r|
+      { student: r.serializer(student, StudentSerializer) }
+    end
+
+    render json: response, status: :ok
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
   rescue ActiveRecord::RecordInvalid
     render json: {}, status: :unprocessable_entity
   end
 
-  def index
-    students = Student.all
-    render json: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer).to_json, status: :ok
-  end
-
   def family_members
     student = Student.find(params[:student_id])
-    family_members = student.family_members.all
-    render json: Panko::ArraySerializer.new(family_members, each_serializer: FamilyMemberSerializer).to_json, status: :ok
+    family_members = student.family_members
+
+    response = Panko::Response.new(
+      student: {
+        family_members: Panko::ArraySerializer.new(family_members, each_serializer: FamilyMemberSerializer)
+      }
+    )
+
+    render json: response, status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: {}, status: :not_found
   end
 
   private
