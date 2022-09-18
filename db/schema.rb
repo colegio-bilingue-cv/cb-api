@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_16_003121) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_18_200523) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,7 +50,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_16_003121) do
     t.string "tuition"
     t.integer "reference_number"
     t.string "birthplace"
-    t.datetime "birthdate"
+    t.date "birthdate"
     t.string "nationality"
     t.string "first_language"
     t.string "office"
@@ -61,9 +61,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_16_003121) do
     t.string "emergency"
     t.string "phone_number"
     t.string "vaccine_name"
-    t.datetime "vaccine_expiration"
-    t.datetime "inscription_date"
-    t.datetime "starting_date"
+    t.date "vaccine_expiration"
+    t.date "inscription_date"
+    t.date "starting_date"
     t.string "contact"
     t.string "contact_phone"
     t.string "email"

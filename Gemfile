@@ -48,4 +48,6 @@ group :test do
   gem 'faker', '~> 2.23.0'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'factory_bot_rails', '~> 6.0'
+  gem 'rspec-its'
+  gem 'rspec-json_expectations'
 end
