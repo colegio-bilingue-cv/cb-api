@@ -1,5 +1,5 @@
 class StudentSerializer < Panko::Serializer
-  attributes :ci, :surname, :name, :birthplace, :birthdate,
+  attributes :id, :ci, :surname, :name, :birthplace, :birthdate,
     :nationality, :schedule_start, :schedule_end, :tuition,
     :reference_number, :office, :status,
     :first_language, :address, :neighborhood, :medical_assurance,
