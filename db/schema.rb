@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_21_212923) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,6 +29,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["student_id"], name: "index_comments_on_student_id"
+  end
+
+  create_table "cicles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "family_members", force: :cascade do |t|
@@ -86,6 +92,51 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
     t.date "date"
   end
 
+  create_table "grades", force: :cascade do |t|
+    t.bigint "cicle_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cicle_id"], name: "index_grades_on_cicle_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.bigint "grade_id", null: false
+    t.bigint "group_id", null: false
+    t.string "name"
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grade_id"], name: "index_groups_on_grade_id"
+    t.index ["group_id"], name: "index_groups_on_group_id"
+  end
+
+  create_table "question_answers", force: :cascade do |t|
+    t.bigint "cicle_id", null: false
+    t.bigint "question_id", null: false
+    t.bigint "student_id", null: false
+    t.string "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cicle_id"], name: "index_question_answers_on_cicle_id"
+    t.index ["question_id"], name: "index_question_answers_on_question_id"
+    t.index ["student_id"], name: "index_question_answers_on_student_id"
+  end
+
+  create_table "question_categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "question"
+    t.bigint "question_category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_category_id"], name: "index_questions_on_question_category_id"
+  end
+
   create_table "students", force: :cascade do |t|
     t.string "ci"
     t.string "surname"
@@ -114,6 +165,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id"
+    t.index ["group_id"], name: "index_students_on_group_id"
   end
 
   create_table "type_scholarships", force: :cascade do |t|
@@ -147,4 +200,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
   end
 
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
+  add_foreign_key "grades", "cicles"
+  add_foreign_key "groups", "grades"
+  add_foreign_key "groups", "groups"
+  add_foreign_key "question_answers", "cicles"
+  add_foreign_key "question_answers", "questions"
+  add_foreign_key "question_answers", "students"
+  add_foreign_key "questions", "question_categories"
+  add_foreign_key "students", "groups"
 end

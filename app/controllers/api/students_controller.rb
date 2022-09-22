@@ -114,6 +114,32 @@ class Api::StudentsController < Api::BaseController
     missingData = []; #TODO aca habria que ir agregando lo que falte para mandar con el error
 
     #:reference_number,  :status,
+    checkStudentData(student)
+    #checkFamily(student)
+    #checkQuestions
+
+    
+
+
+    #chequear que esta toda la info basica del alumno seteada-----
+    #chequear que el usuario tiene los datos de almenos un tutor-------
+    #TODO chequear que hay almenos una forma de pago
+    #TODO checkear que todas las preguntas de la informacion fueron completadas
+
+  end
+
+  private
+  def student_params
+    params.require(:student).permit(:ci, :surname,
+      :name, :birthplace, :birthdate, :nationality, :schedule_start, :schedule_end, :tuition,
+      :reference_number, :office, :status,
+      :first_language, :address, :neighborhood, :medical_assurance,
+      :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
+      :inscription_date, :starting_date, :contact, :contact_phone
+    )
+  end
+
+  def checkStudentData(student)   
 
     if !student['schedule_start']
       raise "Falta llenar campos"
@@ -151,20 +177,25 @@ class Api::StudentsController < Api::BaseController
     if !student['contact_phone']
       raise "Falta llenar campos"
     end
-
-    familyMembers = family_members_students.find_by(student_id: student[:id])
-
-    if familyMembers.length() == 0 
-      raise "Falta llenar campos"
-    end
-
-
-    #chequear que esta toda la info basica del alumno seteada-----
-    #chequear que el usuario tiene los datos de almenos un tutor-------
-    #TODO chequear que hay almenos una forma de pago
-    #TODO checkear que todas las preguntas de la informacion fueron completadas
-
   end
+  #def checkFamily(student)
+  #  familyMembers = family_members_students.find_by(student_id: student[:id])
+  #  if familyMembers.length() == 0 
+  #    raise "Falta llenar campos"
+  #  end
+  #end
+  #def checkComplementaryInfo(student)
+   # cicle = student.group.grade.cicle
+   # totalQuestions = cicle.questions
+   # answeredQuestions = student.question_answers.where(cicle: cicle.id)
+
+    #obtengo el ciclo del alumno
+    #obtengo todas las preguntas para ese ciclo
+    #obtengo las respuestas para el estudiante y el ciclo
+
+  #end
+
+
 
   private
   def student_params

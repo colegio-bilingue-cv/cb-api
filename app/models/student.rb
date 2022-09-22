@@ -10,9 +10,11 @@ class Student < ApplicationRecord
   
   accepts_nested_attributes_for :student_payment_methods
 
+  belongs_to :group
+  belongs_to :question_answer
   enum status: [:pending, :active, :inactive]
 
   validates :ci, presence: true, length: { minimum: 8 }, uniqueness: true
   validates :address, :neighborhood, :name, :surname, :birthplace, :birthdate, :nationality, :first_language, presence: true
   validates :medical_assurance, :emergency, :vaccine_name, :vaccine_expiration, presence: true
-end      
+end
