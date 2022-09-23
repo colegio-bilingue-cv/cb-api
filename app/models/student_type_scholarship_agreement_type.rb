@@ -1,6 +1,6 @@
 class StudentTypeScholarshipAgreementType < ApplicationRecord
-    has_one :type_scholarships
-    has_one :agreement_types
-    has_many :students
+    belongs_to :type_scholarships
+    belongs_to :agreement_types
+    belongs_to :students
     validates :date, presence: true
 end
