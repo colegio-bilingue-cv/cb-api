@@ -1,7 +1,7 @@
 class CreateTypeScholarships < ActiveRecord::Migration[7.0]
   def change
     create_table :type_scholarships do |t|
-      t.integer :description, default: 0
+      t.string :description
       t.timestamps
     end
   end

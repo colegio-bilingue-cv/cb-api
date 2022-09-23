@@ -1,6 +1,7 @@
-desc "Generates 5 typeScholarships instances"
+desc "Generates 4 default typeScholarships instances"
 task :generateTypeScholarships do
-    for index in 0..4
-        TypeScholarship.create(:description => index)
-    end
+    TypeScholarship.create!(:description => "Licitación")
+    TypeScholarship.create!(:description => "Bonificada")
+    TypeScholarship.create!(:description => "Convenio")
+    TypeScholarship.create!(:description => "Especial")
 end

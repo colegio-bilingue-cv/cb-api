@@ -1,10 +1,22 @@
 class Api::AgreementTypesController < Api::BaseController
     def index
-        agreement_types=AgreementType.all
+        agreement_types = AgreementType.all
         
         response = Panko::Response.new(
-            students: Panko::ArraySerializer.new(agreement_types, each_serializer: AgreementType)
+            students: Panko::ArraySerializer.new(agreement_types, each_serializer: AgreementTypeSerializer)
         )
+    end
+    
+    def show
+      agreement_type = AgreementType.find(params[:id])
+  
+      response = Panko::Response.create do |r|
+        { student: r.serializer(agreement_type, AgreementTypeSerializer) }
+      end
+  
+      render json: response, status: :ok
+    rescue ActiveRecord::RecordNotFound
+      render json: {}, status: :not_found
     end
 
     def create
