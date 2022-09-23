@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     resources :students, except: [:destroy] do
       get :family_members, to: 'students#family_members'
       resources :family_members, only: [:create, :update]
+    resources :type_scholarships, only: [:create , :destroy, :update, :index]
     end
   end
 end
