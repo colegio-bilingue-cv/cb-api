@@ -1,4 +1,3 @@
-#aca tengo que hacer el index y el show
 class Api::TypeScholarshipsController < Api::BaseController
     def index
         type_scholarships = TypeScholarship.all
@@ -19,3 +18,4 @@ class Api::TypeScholarshipsController < Api::BaseController
     rescue ActiveRecord::RecordNotFound
       render json: {}, status: :not_found
     end
+    
