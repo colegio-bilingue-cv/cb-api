@@ -20,3 +20,4 @@ class Api::TypeScholarshipsController < Api::BaseController
       render json: {}, status: :not_found
     end
   end
+  

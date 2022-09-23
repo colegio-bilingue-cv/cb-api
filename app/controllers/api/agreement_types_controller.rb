@@ -3,15 +3,16 @@ class Api::AgreementTypesController < Api::BaseController
         agreement_types = AgreementType.all
         
         response = Panko::Response.new(
-            students: Panko::ArraySerializer.new(agreement_types, each_serializer: AgreementTypeSerializer)
+          agreement_types: Panko::ArraySerializer.new(agreement_types, each_serializer: AgreementTypeSerializer)
         )
+        render json: response, status: :ok
     end
     
     def show
       agreement_type = AgreementType.find(params[:id])
   
       response = Panko::Response.create do |r|
-        { student: r.serializer(agreement_type, AgreementTypeSerializer) }
+        { agreement_type: r.serializer(agreement_type, AgreementTypeSerializer) }
       end
   
       render json: response, status: :ok
@@ -30,6 +31,7 @@ class Api::AgreementTypesController < Api::BaseController
       rescue ActiveRecord::RecordInvalid
         render json: {}, status: :unprocessable_entity
       end
+    end
     
     def destroy
         agreement_type = AgreementType.find(params[:id])
@@ -54,5 +56,10 @@ class Api::AgreementTypesController < Api::BaseController
       render json: {}, status: :unprocessable_entity
     end
 
-
+    private
+    
+    def agreement_type_params
+      params.require(:agreement_type).permit(:description
+      )
+    end
 end
