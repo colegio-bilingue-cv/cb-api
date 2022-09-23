@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # Remove a potentially pre-existing server.pid for Rails.
-if [ -f /opt/app/tmp/pids/server.pid ]; then
-  rm -f /opt/app/tmp/pids/server.pid
+if [ -f /cb-api/tmp/pids/server.pid ]; then
+  rm -f /cb-api/tmp/pids/server.pid
 fi
 
 bundle check || \
