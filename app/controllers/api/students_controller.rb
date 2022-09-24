@@ -109,16 +109,18 @@ class Api::StudentsController < Api::BaseController
     render json: {}, status: :not_found
   end
 
-  def updateState
-    student = Student.find(params[:id])
+  def activate    
+    student = Student.find(params[:student_id])
     missingData = []; #TODO aca habria que ir agregando lo que falte para mandar con el error
 
     #:reference_number,  :status,
-    checkStudentData(student)
-    #checkFamily(student)
+    #checkStudentData(student)
+    checkFamily(student)
     #checkQuestions
 
-    
+    render json: {
+      message: "Se ha activado al alumno."
+    }, status: :ok
 
 
     #chequear que esta toda la info basica del alumno seteada-----
@@ -139,51 +141,51 @@ class Api::StudentsController < Api::BaseController
     )
   end
 
-  def checkStudentData(student)   
-
+  def checkStudentData(student)  
+    #TODO reemplazar por errores del modulo de errores
     if !student['schedule_start']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 1"
     end
     if !student['schedule_end']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 2"
     end
     if !student['tuition']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 3"
     end
     if !student['office']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 4"
     end
     if !student['emergency']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 5"
     end
     if !student['vaccine_name']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 6"
     end
     if !student['vaccine_expiration']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 7"
     end
     if !student['phone_number']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 8"
     end
     if !student['inscription_date']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 9"
     end
     if !student['starting_date']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 10"
     end
     if !student['contact']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 11"
     end
     if !student['contact_phone']
-      raise "Falta llenar campos"
+      raise "Falta llenar campos 12"
     end
   end
-  #def checkFamily(student)
-  #  familyMembers = family_members_students.find_by(student_id: student[:id])
-  #  if familyMembers.length() == 0 
-  #    raise "Falta llenar campos"
-  #  end
-  #end
+  def checkFamily(student)
+    familyMembers = student.family_members
+    if familyMembers.length() == 0 
+      raise "Faltan padres"
+    end
+  end
   #def checkComplementaryInfo(student)
    # cicle = student.group.grade.cicle
    # totalQuestions = cicle.questions

@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get :comments, to: 'students#comments'
       resources :comments, only: [:create]
 
+      get 'activate', to: 'students#activate'
     end
     resources :type_scholarships, only: [:index]
     resources :student_type_scholarships, only: [:create]
