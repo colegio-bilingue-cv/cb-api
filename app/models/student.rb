@@ -1,6 +1,6 @@
 class Student < ApplicationRecord
   has_and_belongs_to_many :family_members
-  has_many :student_type_scholarship_agreement_types
+  has_and_belongs_to_many :type_scholarships
   enum status: [:pending, :active, :inactive]
 
   validates :ci, presence: true, length: { minimum: 8 }, uniqueness: true
