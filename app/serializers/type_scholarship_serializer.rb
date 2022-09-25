@@ -1,4 +1,4 @@
 class TypeScholarshipSerializer < Panko::Serializer
-    attributes :description
+    attributes :id, :description, :type
   end
   
