@@ -1,1 +1,5 @@
-#nuevo: inspirado en lo de Maria, ver que va aca
+class StudentTypeScholarship < ApplicationRecord
+    belongs_to :student
+    belongs_to :type_scholarship
+    
+end
