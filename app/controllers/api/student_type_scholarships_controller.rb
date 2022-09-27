@@ -1,4 +1,4 @@
-class Api::StudentTypeScholarshipController < Api::BaseController
+class Api::StudentTypeScholarshipsController < Api::BaseController
     def create
       raise ActiveRecord::RecordInvalid unless Student.exists?(student_type_scholarship_params[:student_id])
       raise ActiveRecord::RecordInvalid unless TypeScholarship.exists?(student_type_scholarship_params[:type_scholarship_id])

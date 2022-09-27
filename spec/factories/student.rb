@@ -29,6 +29,10 @@ FactoryBot.define do
       family_members { FactoryBot.create_list(:family_member, 1) }
     end
 
+    trait :with_type_scholarship do
+      type_scholarships { FactoryBot.create_list(:type_scholarship, 1) }
+    end
+
     trait :with_invalid_data do
       ci { Faker::Number.number(digits: 3) }
       name = nil

@@ -5,8 +5,8 @@ RSpec.describe Api::StudentTypeScholarshipsController do
   describe 'POST create' do
     let(:student_type_scholarship) { FactoryBot.build(:student_type_scholarship, :with_student, :with_type_scholarship) }
     let(:student_type_scholarship_attrs) { student_type_scholarship.attributes }
-    let(:student) { student_type_scholarship_attrs.students.first }
-    let(:type_scholarship) { student_type_scholarship_attrs.type_scholarship.first }
+    let(:student) { student_type_scholarship_attrs.student }
+    let(:type_scholarship) { student_type_scholarship_attrs.type_scholarship }
 
 
     context 'with valid data' do
@@ -29,8 +29,8 @@ RSpec.describe Api::StudentTypeScholarshipsController do
     context 'with invalid data' do
       let(:invalid_student_type_scholarship) { FactoryBot.build(:student_type_scholarship, :with_invalid_data, :with_student, :with_type_scholarship) }
       let(:invalid_student_type_scholarship_attrs) { invalid_student_type_scholarship.attributes }
-      let(:student) { invalid_student_type_scholarship.students.first }
-      let(:type_scholarship) { invalid_student_type_scholarship.type_scholarship.first }
+      let(:student) { invalid_student_type_scholarship.student }
+      let(:type_scholarship) { invalid_student_type_scholarship.type_scholarship }
 
       let(:invalid_params) { {student_id: student.id, type_scholarship_id: type_scholarship.id, student_type_scholarship: invalid_student_type_scholarship_attrs, format: :json} }
 
