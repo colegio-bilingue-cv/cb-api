@@ -19,8 +19,8 @@ RSpec.describe Api::TypeScholarshipsController do
 
       its(:body) do
         should include_json(type_scholarship: [{
-          type: type_scholarship.type,
-          description: type_scholarship.description,
+          type: type_scholarship.type.to_s,
+          description: type_scholarship.description.to_s
         }])
       end
     end
