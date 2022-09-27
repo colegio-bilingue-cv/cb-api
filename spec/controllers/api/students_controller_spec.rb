@@ -350,4 +350,63 @@ RSpec.describe Api::StudentsController do
       end
     end
   end
+
+  describe 'GET type_scholarships' do
+    subject do
+      get :type_scholarships, params: params
+
+      response
+    end
+
+    context 'with valid id' do
+      let(:student) { FactoryBot.create(:student, :with_type_scholarship) }
+
+      let(:type_scholarship) { student.type_scholarships.first }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      before do
+        student
+      end
+
+      its(:status) { should eq(200) }
+
+      its(:body) do
+        should include_json(student:
+          {type_scholarships: [{
+            enum: type_scholarship.enum,
+            description: type_scholarship.description.to_s
+        }]})
+      end
+    end
+
+    context 'without students' do
+      let(:student_without_type_scholarships) { FactoryBot.create(:student) }
+
+      let(:params) { {student_id: student_without_type_scholarships.id, format: :json} }
+
+      before do
+        student_without_type_scholarships
+      end
+
+      its(:status) { should eq(200) }
+
+      its(:body) do
+        should include_json(student: {type_scholarships: []})
+      end
+    end
+
+    context 'with invalid id' do
+      let(:params) do
+        { student_id: -1, format: :json }
+      end
+
+      its(:status) { should eq(404) }
+
+      its(:body) do
+        should include_json({})
+      end
+    end
+  end
+
 end
