@@ -5,6 +5,7 @@ RSpec.describe Api::StudentTypeScholarshipsController do
   describe 'POST create' do
     let(:student_type_scholarship) { FactoryBot.build(:student_type_scholarship, :with_student, :with_type_scholarship) }
     let(:student_type_scholarship_attrs) { student_type_scholarship.attributes }
+
     let(:student) { student_type_scholarship_attrs.student }
     let(:type_scholarship) { student_type_scholarship_attrs.type_scholarship }
 
@@ -22,6 +23,8 @@ RSpec.describe Api::StudentTypeScholarshipsController do
 
       its(:body) do
         should include_json(student_type_scholarship: {
+          student_id: student_type_scholarship.student_id,
+          type_scholarship_id: student_type_scholarship.type_scholarship_id
         })
       end
     end
