@@ -28,7 +28,7 @@ Rails.application.routes.draw do
     resources :payment_methods, only: [:create, :index, :show]
     resources :student_payment_methods, only: [:create]
 
-    resources :cicles, only: [:index] do
+    resources :cicles, only: [:index, :show] do
       resources :questions, only: [:index]
     end
   end

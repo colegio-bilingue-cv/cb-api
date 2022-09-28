@@ -1,6 +1,6 @@
 class CicleSerializer < Panko::Serializer
-    attributes :name
+    attributes :id, :name
 
-    has_many :question_categories
+    has_many :questions
 end
   
