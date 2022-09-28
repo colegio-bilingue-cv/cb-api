@@ -1,7 +1,7 @@
 class Question < ApplicationRecord
   belongs_to :question_category
-  belongs_to :cicle
-  belongs_to :question_answer
+  has_many :cicles, through: :cicles_questions
+  has_many :question_answer
 
-  validates question, presence:true
+  validates :text, presence:true
 end

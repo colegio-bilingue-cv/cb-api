@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_21_212923) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_27_225201) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,6 +35,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_21_212923) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "cicles_questions", id: false, force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "cicle_id", null: false
+    t.index ["cicle_id", "question_id"], name: "index_cicles_questions_on_cicle_id_and_question_id"
+    t.index ["question_id", "cicle_id"], name: "index_cicles_questions_on_question_id_and_cicle_id"
   end
 
   create_table "family_members", force: :cascade do |t|
@@ -102,7 +109,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_21_212923) do
 
   create_table "groups", force: :cascade do |t|
     t.bigint "grade_id", null: false
-    t.bigint "group_id", null: false
+    t.bigint "group_id"
     t.string "name"
     t.integer "year"
     t.datetime "created_at", null: false
@@ -130,10 +137,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_21_212923) do
   end
 
   create_table "questions", force: :cascade do |t|
-    t.string "question"
     t.bigint "question_category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "text"
     t.index ["question_category_id"], name: "index_questions_on_question_category_id"
   end
 

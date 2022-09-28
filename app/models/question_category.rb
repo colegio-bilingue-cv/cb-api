@@ -1,5 +1,5 @@
 class QuestionCategory < ApplicationRecord
     has_many :questions
     
-    validates name, presence:true
+    validates :name, presence:true
 end

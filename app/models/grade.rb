@@ -1,4 +1,4 @@
 class Grade < ApplicationRecord
   belongs_to :cicle
-  has_many: :groups
+  has_many :groups
 end

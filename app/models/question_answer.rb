@@ -1,7 +1,7 @@
 class QuestionAnswer < ApplicationRecord
-  has_one :cicle
-  has_one :question
-  has_one :student
+  belongs_to :cicle
+  belongs_to :question
+  belongs_to :student
 
-  validates answer, presence:true
+  validates :answer, presence:true
 end

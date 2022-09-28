@@ -115,8 +115,8 @@ class Api::StudentsController < Api::BaseController
 
     #:reference_number,  :status,
     #checkStudentData(student)
-    checkFamily(student)
-    #checkQuestions
+    #checkFamily(student)
+    checkComplementaryInfo(student)
 
     render json: {
       message: "Se ha activado al alumno."
@@ -181,21 +181,22 @@ class Api::StudentsController < Api::BaseController
     end
   end
   def checkFamily(student)
+    #TODO poner los errores del manejador
     familyMembers = student.family_members
     if familyMembers.length() == 0 
       raise "Faltan padres"
     end
   end
-  #def checkComplementaryInfo(student)
-   # cicle = student.group.grade.cicle
-   # totalQuestions = cicle.questions
-   # answeredQuestions = student.question_answers.where(cicle: cicle.id)
+  def checkComplementaryInfo(student)
+    cicle = student.group.grade.cicle
+    totalQuestions = cicle.questions
+    answeredQuestions = student.question_answers.where(cicle: cicle.id)
 
     #obtengo el ciclo del alumno
     #obtengo todas las preguntas para ese ciclo
     #obtengo las respuestas para el estudiante y el ciclo
 
-  #end
+  end
 
 
 

@@ -1,5 +1,5 @@
 class Cicle < ApplicationRecord
-    has_many :questions
+    has_many :questions, through: :cicles_questions
     has_many :grades
-    belongs_to :question_answer
+    has_many :question_answer
 end
