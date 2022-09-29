@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe TypeScholarship, type: :model do
   describe TypeScholarship do
     context 'validations' do
-      it { should validate_presence_of(:type)}
+      it { should validate_presence_of(:type_s)}
 
     end
     context 'relations' do

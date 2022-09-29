@@ -374,7 +374,7 @@ RSpec.describe Api::StudentsController do
       its(:body) do
         should include_json(student:
           {type_scholarships: [{
-            type: type_scholarship.type.to_s,
+            type_s: type_scholarship.type_s.to_s,
             description: type_scholarship.description.to_s
         }]})
       end

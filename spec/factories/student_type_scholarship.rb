@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :student_type_scholarship do
+    date { Date.today }
     
     trait :with_student do
       student { FactoryBot.create(:student) }
@@ -10,6 +11,7 @@ FactoryBot.define do
     end
 
     trait :with_invalid_data do
+      date = nil
     end
   end
 end

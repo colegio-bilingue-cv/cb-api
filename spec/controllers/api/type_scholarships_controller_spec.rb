@@ -18,8 +18,8 @@ RSpec.describe Api::TypeScholarshipsController do
       its(:status) { should eq(200) }
 
       its(:body) do
-        should include_json(type_scholarship: [{
-          type: type_scholarship.type.to_s,
+        should include_json(type_scholarships: [{
+          type_s: type_scholarship.type_s.to_s,
           description: type_scholarship.description.to_s
         }])
       end

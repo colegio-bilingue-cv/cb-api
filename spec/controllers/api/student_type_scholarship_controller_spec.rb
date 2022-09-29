@@ -6,12 +6,8 @@ RSpec.describe Api::StudentTypeScholarshipsController do
     let(:student_type_scholarship) { FactoryBot.build(:student_type_scholarship, :with_student, :with_type_scholarship) }
     let(:student_type_scholarship_attrs) { student_type_scholarship.attributes }
 
-    let(:student) { student_type_scholarship_attrs.student }
-    let(:type_scholarship) { student_type_scholarship_attrs.type_scholarship }
-
-
     context 'with valid data' do
-      let(:params) { {student_id: student.id, type_scholarship_id: type_scholarship.id, student_type_scholarship: student_type_scholarship_attrs, format: :json} }
+      let(:params) { { student_type_scholarship: student_type_scholarship_attrs, format: :json} }
 
       subject do
         post :create, params: params

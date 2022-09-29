@@ -9,7 +9,7 @@ Rails.application.routes.draw do
       get :type_scholarships, to: 'students#type_scholarships'
     end
     resources :type_scholarships, only: [:index]
-    resources :students_type_scholarships, only: [:create]
+    resources :student_type_scholarships, only: [:create]
 
   end
 end
