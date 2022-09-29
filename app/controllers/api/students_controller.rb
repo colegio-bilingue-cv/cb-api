@@ -94,6 +94,21 @@ class Api::StudentsController < Api::BaseController
     render json: {}, status: :not_found
   end
 
+  def comments
+    student = Student.find(params[:student_id])
+    comments = student.comments
+
+    response = Panko::Response.new(
+      student: {
+        comments: Panko::ArraySerializer.new(comments, each_serializer: CommentSerializer)
+      }
+    )
+
+    render json: response, status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: {}, status: :not_found
+  end
+
   private
 
   def student_params

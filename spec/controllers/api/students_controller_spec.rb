@@ -407,6 +407,47 @@ RSpec.describe Api::StudentsController do
         should include_json({})
       end
     end
+  endj
+
+  describe 'GET comments' do
+    subject do
+      get :comments, params: params
+
+      response
+    end
+
+    context 'with valid id' do
+      let(:student) { FactoryBot.create(:student, :with_comment) }
+
+      let(:comment) { student.comments.first }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      before do
+        student
+      end
+
+      its(:status) { should eq(200) }
+
+      its(:body) do
+        should include_json(student:{comments: [{
+          text: comment.text
+      }]})
+    end
+
+    context 'with invalid id' do
+      let(:params) do
+        { student_id: -1, format: :json }
+      end
+
+      its(:status) { should eq(404) }
+
+      its(:body) do
+        should include_json({})
+      end
+      
+    end
+
   end
 
 end
