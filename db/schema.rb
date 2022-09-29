@@ -31,6 +31,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
     t.index ["student_id"], name: "index_comments_on_student_id"
   end
 
+  create_table "discounts", force: :cascade do |t|
+    t.integer "percentage"
+    t.integer "explanation"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.text "resolution_description"
+    t.integer "administrative_type"
+    t.bigint "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id"], name: "index_discounts_on_student_id"
+  end
+
   create_table "family_members", force: :cascade do |t|
     t.string "ci"
     t.string "role"
