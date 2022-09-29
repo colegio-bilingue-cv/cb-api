@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :type_scholarship do
-    type_s { Faker::Number.between(from:0, to:3) }
+    scholarship { Faker::Number.between(from:0, to:3) }
     description { Faker::Lorem.sentence }
 
     trait :with_student do
