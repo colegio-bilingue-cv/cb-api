@@ -1,8 +1,10 @@
 class StudentTypeScholarship < ApplicationRecord
   belongs_to :student
   belongs_to :type_scholarship
-  validates :date, presence: true
+
   before_validation :set_date
+  
+  validates :date, presence: true
 
   private
 

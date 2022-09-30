@@ -26,4 +26,5 @@ module CbApi
 
     config.i18n.default_locale = :es
   end
+  config.eager_load_paths << Rails.root.join('lib').to_path
 end
