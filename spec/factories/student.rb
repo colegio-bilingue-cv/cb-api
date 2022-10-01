@@ -32,6 +32,10 @@ FactoryBot.define do
     trait :with_type_scholarship do
       type_scholarships { FactoryBot.create_list(:type_scholarship, 1) }
     end
+    
+    trait :with_payment_method do
+      payment_methods { FactoryBot.create_list(:payment_method, 1) }
+    end
 
     trait :with_invalid_data do
       ci { Faker::Number.number(digits: 3) }

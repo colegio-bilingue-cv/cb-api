@@ -8,7 +8,7 @@ class TypeScholarship < ApplicationRecord
   validates :description, presence: true, if: :bidding_or_agreement?
 
   def bidding_or_agreement?
-    [:bidding, :agreement].includes?(scholarship)
+    [:bidding, :agreement].include?(scholarship)
   end
 
 end
