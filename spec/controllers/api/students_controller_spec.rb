@@ -407,7 +407,7 @@ RSpec.describe Api::StudentsController do
         should include_json({})
       end
     end
-  endj
+  end
 
   describe 'GET comments' do
     subject do
@@ -432,7 +432,8 @@ RSpec.describe Api::StudentsController do
       its(:body) do
         should include_json(student:{comments: [{
           text: comment.text
-      }]})
+        }]})
+      end
     end
 
     context 'with invalid id' do
