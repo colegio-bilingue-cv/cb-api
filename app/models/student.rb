@@ -11,7 +11,6 @@ class Student < ApplicationRecord
   accepts_nested_attributes_for :student_payment_methods
 
   enum status: [:pending, :active, :inactive]
-  
 
   validates :ci, presence: true, length: { minimum: 8 }, uniqueness: true
   validates :address, :neighborhood,
