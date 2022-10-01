@@ -4,4 +4,3 @@ FactoryBot.define do
     student
   end
 end
-  
