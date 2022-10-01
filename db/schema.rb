@@ -41,6 +41,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_25_194139) do
     t.bigint "student_id", null: false
   end
 
+  create_table "payment_methods", force: :cascade do |t|
+    t.string "method"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "student_payment_methods", id: false, force: :cascade do |t|
+    t.bigint "payment_method_id", null: false
+    t.bigint "student_id", null: false
+    t.date "year"
+  end
+
   create_table "student_type_scholarships", id: false, force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "type_scholarship_id", null: false

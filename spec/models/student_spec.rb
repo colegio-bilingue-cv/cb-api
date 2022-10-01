@@ -23,6 +23,8 @@ RSpec.describe Student, type: :model do
     context 'relations' do
       it { should have_and_belong_to_many(:family_members) }
       it { should have_many(:type_scholarships) }
+      it { should have_many(:student_payment_methods) }
+      it { should have_many(:payment_methods) }
     end
 
   end

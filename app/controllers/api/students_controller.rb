@@ -79,6 +79,21 @@ class Api::StudentsController < Api::BaseController
     render json: {}, status: :not_found
   end
   
+  def payment_methods
+    student = Student.find(params[:student_id])
+    student_payment_methods = student.student_payment_methods
+
+    response = Panko::Response.new(
+      student: {
+        payment_methods: Panko::ArraySerializer.new(student_payment_methods, each_serializer: StudentPaymentMethodSerializer)
+      }
+    )
+
+    render json: response, status: :ok
+  rescue ActiveRecord::RecordNotFound
+    render json: {}, status: :not_found
+  end
+
   private
 
   def student_params
@@ -87,7 +102,8 @@ class Api::StudentsController < Api::BaseController
       :reference_number, :office, :status,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
-      :inscription_date, :starting_date, :contact, :contact_phone
+      :inscription_date, :starting_date, :contact, :contact_phone,
+      payment_methods: [ :year ]
     )
   end
 end
