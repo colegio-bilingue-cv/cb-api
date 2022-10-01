@@ -25,6 +25,7 @@ RSpec.describe Student, type: :model do
       it { should have_many(:type_scholarships) }
       it { should have_many(:student_payment_methods) }
       it { should have_many(:payment_methods) }
+      it { should have_many(:comments) } 
     end
 
   end

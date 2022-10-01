@@ -41,5 +41,9 @@ FactoryBot.define do
       ci { Faker::Number.number(digits: 3) }
       name = nil
     end
+
+    trait :with_comment do
+      comments { FactoryBot.create_list(:comment, 1) }
+    end
   end
 end
