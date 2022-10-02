@@ -2,10 +2,11 @@ require 'rails_helper'
 
 RSpec.describe FamilyMember, type: :model do
   describe FamilyMember do
-    context 'validations' do
-      
+    describe 'validations' do
+
       it { should validate_presence_of(:ci) }
       it { should validate_uniqueness_of(:ci) }
+      it { should validate_length_of(:ci).is_at_least(8) }
 
       it { should validate_presence_of(:role) }
       it { should validate_presence_of(:full_name) }
@@ -25,7 +26,7 @@ RSpec.describe FamilyMember, type: :model do
 
     end
 
-    context 'relations' do
+    describe 'relations' do
       it { should have_and_belong_to_many(:students) }
     end
   end
