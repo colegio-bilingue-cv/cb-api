@@ -46,9 +46,8 @@ jobs:
         DB_USER: postgres
         DB_PASSWORD: postgres
         RAILS_ENV: test
-        JWT_ALGORITHM:  ${{ secrets.JWT_ALGORITHM }}
+        JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
       run: |
-        env
         bundle install
         bundle exec rspec

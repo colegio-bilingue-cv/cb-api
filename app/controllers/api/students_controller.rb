@@ -78,7 +78,7 @@ class Api::StudentsController < Api::BaseController
   rescue ActiveRecord::RecordNotFound
     render json: {}, status: :not_found
   end
-  
+
   def payment_methods
     student = Student.find(params[:student_id])
     student_payment_methods = student.student_payment_methods

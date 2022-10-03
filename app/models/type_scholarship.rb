@@ -7,6 +7,8 @@ class TypeScholarship < ApplicationRecord
   validates :scholarship, presence: true
   validates :description, presence: true, if: :bidding_or_agreement?
 
+  private
+
   def bidding_or_agreement?
     [:bidding, :agreement].include?(scholarship)
   end

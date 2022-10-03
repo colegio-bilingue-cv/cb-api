@@ -24,7 +24,11 @@ module CbApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
+    # Set language to spanish
     config.i18n.default_locale = :es
+
+    # Don't draw default ActiveStorage routes
+    config.active_storage.draw_routes = false
 
     config.eager_load_paths << Rails.root.join('lib').to_path
   end

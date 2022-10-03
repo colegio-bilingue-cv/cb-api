@@ -1,13 +1,13 @@
 FactoryBot.define do
   factory :student_payment_method do
-    year { Faker::Date.today}
+    year { Date.today }
 
     trait :with_student do
-      student { FactoryBot.create_list(:student, 1) }
+      student
     end
-    
+
     trait :with_payment_method do
-      payment_method { FactoryBot.create_list(:payment_method, 1) }
+      payment_method
     end
 
     trait :with_invalid_data do
