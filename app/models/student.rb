@@ -7,6 +7,7 @@ class Student < ApplicationRecord
   has_many :student_payment_methods
   has_many :payment_methods, through: :student_payment_methods
   has_many :comments
+  has_many :discounts
   
   accepts_nested_attributes_for :student_payment_methods
 

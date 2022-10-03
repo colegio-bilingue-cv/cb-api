@@ -41,5 +41,9 @@ FactoryBot.define do
     trait :with_comment do
       comments { FactoryBot.create_list(:comment, 1) }
     end
+
+    trait :with_discount do
+      discounts { FactoryBot.create_list(:discount, 1) }
+    end
   end
 end
