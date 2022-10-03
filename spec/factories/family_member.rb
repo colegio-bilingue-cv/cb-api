@@ -22,6 +22,10 @@ FactoryBot.define do
       students { FactoryBot.create_list(:student, 1) }
     end
 
+    trait :with_second_student do
+      students { FactoryBot.create_list(:student, 2) }
+    end
+    
     trait :with_invalid_data do
       ci { Faker::Number.number(digits: 3) }
       full_name = nil

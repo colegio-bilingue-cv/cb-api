@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe Api::FamilyMembersController do
 
   describe 'POST create' do
-    let(:family_member) { FactoryBot.build(:family_member, :with_student) }
+    let(:family_member) { FactoryBot.build(:family_member, :with_student, :with_second_student) }
     let(:family_member_attrs) { family_member.attributes }
     let(:student) { family_member.students.first }
+    let(:student2) { family_member.students.second }
+
 
     context 'with valid data' do
       let(:params) { {student_id: student.id, family_member: family_member_attrs, format: :json} }
@@ -40,6 +42,74 @@ RSpec.describe Api::FamilyMembersController do
         })
       end
     end
+
+    context 'with valid data and two students assigned' do
+      let(:params) { {student_id: student.id, family_member: family_member_attrs, format: :json} }
+
+      subject do
+        post :create, params: params
+
+        response
+      end
+
+      its(:status) { should eq(201) }
+
+      its(:body) do
+        should include_json(family_member: {
+          ci: family_member.ci,
+          role: family_member.role,
+          full_name: family_member.full_name,
+          birthplace: family_member.birthplace.to_s,
+          birthdate: family_member.birthdate.to_s,
+          nationality: family_member.nationality,
+          first_language: family_member.first_language,
+          marital_status: family_member.marital_status,
+          cellphone: family_member.cellphone,
+          email: family_member.email,
+          address: family_member.address,
+          neighborhood: family_member.neighborhood,
+          education_level: family_member.education_level,
+          occupation: family_member.occupation,
+          workplace: family_member.workplace,
+          workplace_neighbourhood: family_member.workplace_neighbourhood.to_s,
+          workplace_phone: family_member.workplace_phone
+        })
+      end
+
+      let(:params2) { {student_id: student2.id, family_member: family_member_attrs, format: :json} }
+
+      subject do
+        post :create, params: params2
+
+        response
+      end
+
+      its(:status) { should eq(201) }
+
+      its(:body) do
+        should include_json(family_member: {
+          ci: family_member.ci,
+          role: family_member.role,
+          full_name: family_member.full_name,
+          birthplace: family_member.birthplace.to_s,
+          birthdate: family_member.birthdate.to_s,
+          nationality: family_member.nationality,
+          first_language: family_member.first_language,
+          marital_status: family_member.marital_status,
+          cellphone: family_member.cellphone,
+          email: family_member.email,
+          address: family_member.address,
+          neighborhood: family_member.neighborhood,
+          education_level: family_member.education_level,
+          occupation: family_member.occupation,
+          workplace: family_member.workplace,
+          workplace_neighbourhood: family_member.workplace_neighbourhood.to_s,
+          workplace_phone: family_member.workplace_phone
+        })
+      end
+    end
+
+
 
     context 'with invalid data' do
       let(:invalid_family_member) { FactoryBot.build(:family_member, :with_invalid_data, :with_student) }
