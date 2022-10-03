@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
-  # Defines the root path route ("/")
-  namespace :api do
+  namespace :api, defaults: {format: :json} do
+    post :sign_in, to: 'auth#sign_in'
+    post :sign_out, to: 'auth#sign_out'
+
+    resources :users, only: [:create]
+
     resources :students, except: [:destroy] do
 
       get :family_members, to: 'students#family_members'
@@ -22,6 +26,6 @@ Rails.application.routes.draw do
 
     resources :payment_methods, only: [:create, :index, :show]
     resources :student_payment_methods, only: [:create]
-   
+
   end
 end

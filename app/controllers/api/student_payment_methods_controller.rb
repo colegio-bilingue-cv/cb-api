@@ -2,7 +2,7 @@ class Api::StudentPaymentMethodsController < Api::BaseController
   def create
     raise ActiveRecord::RecordInvalid unless Student.exists?(student_payment_method_params[:student_id])
     raise ActiveRecord::RecordInvalid unless PaymentMethod.exists?(student_payment_method_params[:payment_method_id])
-   
+
     student_payment_method = StudentPaymentMethod.create!(student_payment_method_params)
 
     response = Panko::Response.create do |r|

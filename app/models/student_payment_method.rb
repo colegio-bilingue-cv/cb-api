@@ -4,6 +4,6 @@ class StudentPaymentMethod < ApplicationRecord
 
   validates :year, presence: true
 
-  delegate :method, :id, to: :payment_method, prefix: true
-    
+  delegate :method, to: :payment_method, prefix: true
+
 end
