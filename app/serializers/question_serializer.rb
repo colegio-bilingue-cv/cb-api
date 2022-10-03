@@ -1,4 +1,4 @@
 class QuestionSerializer < Panko::Serializer
-    attributes :name
+    attributes :id, :text, :question_category_id
   end
   
