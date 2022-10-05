@@ -1,4 +1,4 @@
-class QuestionAnswer < ApplicationRecord
+class Answer < ApplicationRecord
   belongs_to :cicle
   belongs_to :question
   belongs_to :student
