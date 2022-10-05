@@ -1,5 +1,5 @@
 class Student < ApplicationRecord
-  resourcify
+  #resourcify
 
   has_and_belongs_to_many :family_members
   has_many :student_type_scholarships
@@ -11,7 +11,7 @@ class Student < ApplicationRecord
   accepts_nested_attributes_for :student_payment_methods
 
   belongs_to :group
-  has_many :answer
+  has_many :answers
   enum status: [:pending, :active, :inactive]
 
   validates :ci, presence: true, length: { minimum: 8 }, uniqueness: true

@@ -1,9 +1,8 @@
 class CategorySerializer < Panko::Serializer
-  attributes :name
-
-has_many :questions
+  attributes :name, :questions
 
   def questions
-    object.questions_of_cicle(context[:cicle_id])
+    questionsByCicle = object.questions_of_cicle(context[:cicle_id])
+    Panko::ArraySerializer.new(questionsByCicle, each_serializer: QuestionSerializer).subjects
   end
 end
