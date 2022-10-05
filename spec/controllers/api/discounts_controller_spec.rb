@@ -25,8 +25,8 @@ RSpec.describe Api::DiscountsController do
           should include_json(discount: {
             percentage: discount.percentage, 
             explanation: discount.explanation,
-            start_date: discount.start_date,
-            end_date: discount.end_date,
+            start_date: discount.start_date.to_s,
+            end_date: discount.end_date.to_s,
             resolution_description: discount.resolution_description,
             administrative_type: discount.administrative_type
           })

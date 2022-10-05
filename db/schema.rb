@@ -34,8 +34,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
   create_table "discounts", force: :cascade do |t|
     t.integer "percentage"
     t.integer "explanation"
-    t.datetime "start_date"
-    t.datetime "end_date"
+    t.date "start_date"
+    t.date "end_date"
     t.text "resolution_description"
     t.integer "administrative_type"
     t.bigint "student_id"
