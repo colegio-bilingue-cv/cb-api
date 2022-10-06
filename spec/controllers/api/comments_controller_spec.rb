@@ -22,7 +22,7 @@ RSpec.describe Api::CommentsController do
 
         its(:body) do
           should include_json(comment: {
-            text: comment_attrs.text
+            text: comment_attrs[:text]
           })
         end
       end
