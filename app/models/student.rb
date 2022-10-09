@@ -1,5 +1,5 @@
 class Student < ApplicationRecord
-  #resourcify
+  resourcify
 
   has_and_belongs_to_many :family_members
   has_many :student_type_scholarships

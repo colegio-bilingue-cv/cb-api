@@ -113,21 +113,19 @@ class Api::StudentsController < Api::BaseController
     student = Student.find(params[:student_id])
     missingData = []; #TODO aca habria que ir agregando lo que falte para mandar con el error
 
-    #:reference_number,  :status,
-    #checkStudentData(student)
-    #checkFamily(student)
+    
+    checkStudentData(student)
+    checkFamily(student)
     checkComplementaryInfo(student)
+
+    student.reference_number = params[:reference_number]
+    student.status = 1
+
+    student.save
 
     render json: {
       message: "Se ha activado al alumno."
     }, status: :ok
-
-
-    #chequear que esta toda la info basica del alumno seteada-----
-    #chequear que el usuario tiene los datos de almenos un tutor-------
-    #TODO chequear que hay almenos una forma de pago
-    #TODO checkear que todas las preguntas de la informacion fueron completadas
-
   end
 
   private
@@ -181,7 +179,6 @@ class Api::StudentsController < Api::BaseController
     end
   end
   def checkFamily(student)
-    #TODO poner los errores del manejador
     familyMembers = student.family_members
     if familyMembers.length() == 0 
       raise "Faltan padres"
@@ -190,13 +187,17 @@ class Api::StudentsController < Api::BaseController
   def checkComplementaryInfo(student)
     cicle = student.group.grade.cicle
     totalQuestions = cicle.questions
-    answeredQuestions = student.question_answers.where(cicle: cicle.id)
+    answeredQuestions = student.question_answers.where('cicle.id' => cicle.id)
 
-    #obtengo el ciclo del alumno
-    #obtengo todas las preguntas para ese ciclo
-    #obtengo las respuestas para el estudiante y el ciclo
-
+    if totalQuestions.length() > answeredQuestions.length()
+      raise "Falta responder preguntas"
+    end
   end
+  def checkPaymentMethod(student)
+    if student.student_payment_methods.length > 0
+      raise "Falta ingresar metodos de pago"
+  end
+
 
 
 
