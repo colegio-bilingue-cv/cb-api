@@ -32,7 +32,12 @@ RSpec.describe Api::CommentsController do
 
         its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
       end
     end
 
@@ -51,7 +56,10 @@ RSpec.describe Api::CommentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end

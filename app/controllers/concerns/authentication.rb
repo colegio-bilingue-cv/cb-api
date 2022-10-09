@@ -49,7 +49,11 @@ module Authentication
     if request.headers['Authorization'].present?
       set_current_user
     else
-      render json: {}, status: :forbidden
+      response = Panko::Response.create do |r|
+        { error: r.serializer(ErrorMessage.build_required_signed_in, ErrorSerializer) }
+      end
+
+      render json: response, status: :forbidden
     end
   end
 
@@ -69,7 +73,11 @@ module Authentication
   #   end
   def require_no_signed_in_user!
     if request.headers['Authorization'].present?
-      render json: {}, status: :forbidden
+      response = Panko::Response.create do |r|
+        { error: r.serializer(ErrorMessage.build_required_not_signed_in, ErrorSerializer) }
+      end
+
+      render json: response, status: :forbidden
     end
   end
 
@@ -84,10 +92,18 @@ module Authentication
     if @current_user_token.valid?
       @current_user = User.find(@current_user_token.user_id)
     else
-      render json: {}, status: :forbidden
+      response = Panko::Response.create do |r|
+        { error: r.serializer(ErrorMessage.build_invalid_token, ErrorSerializer) }
+      end
+
+      render json: response, status: :forbidden
     end
   rescue InvalidHeaderError, JWT::ExpiredSignature, JWT::DecodeError
-    render json: {}, status: :forbidden
+    response = Panko::Response.create do |r|
+      { error: r.serializer(ErrorMessage.build_invalid_token, ErrorSerializer) }
+    end
+
+    render json: response, status: :forbidden
   end
 
   def get_token_from_header

@@ -1,0 +1,2 @@
+class InvalidCredentialsError < ApiError
+end

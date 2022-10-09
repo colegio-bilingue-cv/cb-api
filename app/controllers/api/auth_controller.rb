@@ -3,7 +3,7 @@ class Api::AuthController < Api::BaseController
   skip_before_action :require_signed_in_user!, only: [:sign_in]
 
   def sign_in
-    user = User.sign_in(email: params[:email], password: params[:password])
+    user = User.sign_in!(email: params[:email], password: params[:password])
 
     if user.valid?
       result = Panko::Response.create do |r|
@@ -16,8 +16,12 @@ class Api::AuthController < Api::BaseController
     else
       render json: {errors: user.errors}, status: :unprocessable_entity
     end
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unauthorized
+  rescue InvalidCredentialsError
+    response = Panko::Response.create do |r|
+      { error: r.serializer(ErrorMessage.build_invalid_credentials, ErrorSerializer) }
+    end
+
+    render json: response, status: :unauthorized
   end
 
   def sign_out
@@ -28,9 +32,5 @@ class Api::AuthController < Api::BaseController
     end
 
     render json: result, status: :ok
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unauthorized
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 end

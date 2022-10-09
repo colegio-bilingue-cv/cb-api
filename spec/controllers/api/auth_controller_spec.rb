@@ -52,7 +52,7 @@ RSpec.describe Api::AuthController do
   end
 
   describe 'POST sign_out' do
-    context "with valid token" do
+    context 'with valid token' do
       let(:user) { FactoryBot.create(:user, password: 'password') }
       let(:auth_header) do
         post :sign_in, params: {email: user.email, password: 'password'}

@@ -72,7 +72,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -135,7 +138,12 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)']
+            }
+          })
         end
       end
     end
@@ -152,7 +160,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -210,7 +221,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
     end
@@ -228,7 +242,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -300,7 +317,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
 
@@ -310,7 +330,13 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)'],
+              name: ['no puede estar en blanco']
+            }
+          })
         end
       end
     end
@@ -318,9 +344,7 @@ RSpec.describe Api::StudentsController do
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
 
-      let(:params) do
-        { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: student.id, format: :json }
-      end
+      let(:params) { { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: student.id, format: :json } }
 
       subject do
         patch :update, params: params
@@ -331,7 +355,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -399,8 +426,33 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:student) { FactoryBot.create(:student, :with_family_member) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        get :family_members, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -451,7 +503,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
     end
@@ -470,7 +525,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -495,7 +553,7 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(student:{comments: [{
+          should include_json(student: {comments: [{
             text: comment.text
           }]})
         end
@@ -507,7 +565,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
 
       end
@@ -528,7 +589,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 

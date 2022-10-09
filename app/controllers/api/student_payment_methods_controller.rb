@@ -1,7 +1,7 @@
 class Api::StudentPaymentMethodsController < Api::BaseController
   def create
-    raise ActiveRecord::RecordInvalid unless Student.exists?(student_payment_method_params[:student_id])
-    raise ActiveRecord::RecordInvalid unless PaymentMethod.exists?(student_payment_method_params[:payment_method_id])
+    raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(student_payment_method_params[:student_id])
+    raise ActiveRecord::RecordNotFound.new('', PaymentMethod.to_s) unless PaymentMethod.exists?(student_payment_method_params[:payment_method_id])
 
     student_payment_method = StudentPaymentMethod.create!(student_payment_method_params)
 
@@ -10,10 +10,6 @@ class Api::StudentPaymentMethodsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def student_payment_method_params
