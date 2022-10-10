@@ -5,9 +5,8 @@ RSpec.describe Api::CommentsController do
   describe 'POST create' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
-      let(:student) { FactoryBot.create(:student, :with_comment) }
-      let(:comment) { student.comments.first }
-      let(:comment_attrs) { comment.attributes }
+      let(:student) { FactoryBot.create(:student) }
+      let(:comment_attrs) { FactoryBot.attributes_for(:comment) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -23,7 +22,7 @@ RSpec.describe Api::CommentsController do
 
         its(:body) do
           should include_json(comment: {
-            text: comment.text
+            text: comment_attrs[:text]
           })
         end
       end
