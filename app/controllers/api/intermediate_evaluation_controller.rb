@@ -17,6 +17,6 @@ class Api::IntermediateEvaluationController < Api::BaseController
   private
 
   def intermediate_evaluation_params
-    params.require(:intermediate_evaluation).permit(:group_id, :starting_month, :ending_month)
+    params.require(:intermediate_evaluation).permit(:group_id, :starting_month, :ending_month, :report_card)
   end
 end
