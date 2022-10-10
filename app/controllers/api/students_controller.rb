@@ -196,10 +196,8 @@ class Api::StudentsController < Api::BaseController
   def checkPaymentMethod(student)
     if student.student_payment_methods.length > 0
       raise "Falta ingresar metodos de pago"
+    end
   end
-
-
-
 
   private
   def student_params
