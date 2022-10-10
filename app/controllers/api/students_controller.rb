@@ -111,21 +111,33 @@ class Api::StudentsController < Api::BaseController
 
   def activate    
     student = Student.find(params[:student_id])
-    missingData = []; #TODO aca habria que ir agregando lo que falte para mandar con el error
-
+    messages = []; #TODO aca habria que ir agregando lo que falte para mandar con el error
     
-    checkStudentData(student)
-    checkFamily(student)
-    checkComplementaryInfo(student)
+    if !validateStudentData(student)
+      messages.push("Falta completar información básica del alumno.")
+    end
+    if !validateFamily(student)
+      messages.push("Falta completar información sobre los tutores del alumno.")
+    end
+    if !validateComplementaryInfo(student)
+      messages.push("Falta completar información complementaria del alumno.")
+    end
+    if !validatePaymentMethod(student)
+      messages.push("Falta agregar métodos de pago para el alumno.")
+    end
 
-    student.reference_number = params[:reference_number]
-    student.status = 1
+    if messages.length() == 0
+      student.reference_number = params[:reference_number]
+      student.status = 1
 
-    student.save
+      student.save
 
-    render json: {
-      message: "Se ha activado al alumno."
-    }, status: :ok
+      render json: {}, status: :ok
+    else
+      render json: { conflicts: messages}, status: :conflict
+    end 
+  rescue ActiveRecord::RecordNotFound
+    render json: {}, status: :not_found
   end
 
   private
@@ -139,64 +151,61 @@ class Api::StudentsController < Api::BaseController
     )
   end
 
-  def checkStudentData(student)  
-    #TODO reemplazar por errores del modulo de errores
+  def validateStudentData(student)
+  missingData = []
+
     if !student['schedule_start']
-      raise "Falta llenar campos 1"
+      return false
     end
     if !student['schedule_end']
-      raise "Falta llenar campos 2"
+      return false
     end
     if !student['tuition']
-      raise "Falta llenar campos 3"
+      return false
     end
     if !student['office']
-      raise "Falta llenar campos 4"
+      return false
     end
     if !student['emergency']
-      raise "Falta llenar campos 5"
+      return false
     end
     if !student['vaccine_name']
-      raise "Falta llenar campos 6"
+      return false
     end
     if !student['vaccine_expiration']
-      raise "Falta llenar campos 7"
+      return false
     end
     if !student['phone_number']
-      raise "Falta llenar campos 8"
+      return false
     end
     if !student['inscription_date']
-      raise "Falta llenar campos 9"
+      return false
     end
     if !student['starting_date']
-      raise "Falta llenar campos 10"
+      return false
     end
     if !student['contact']
-      raise "Falta llenar campos 11"
+      return false
     end
     if !student['contact_phone']
-      raise "Falta llenar campos 12"
+      return false
     end
+
+    return true
   end
-  def checkFamily(student)
+  def validateFamily(student)
     familyMembers = student.family_members
-    if familyMembers.length() == 0 
-      raise "Faltan padres"
-    end
+    return familyMembers.length() > 0
   end
-  def checkComplementaryInfo(student)
+  def validateComplementaryInfo(student)
     cicle = student.group.grade.cicle
     totalQuestions = cicle.questions
-    answeredQuestions = student.question_answers.where('cicle.id' => cicle.id)
+    answeredQuestions = student.answers.where('cicle_id' => cicle.id)
 
-    if totalQuestions.length() > answeredQuestions.length()
-      raise "Falta responder preguntas"
-    end
+    return totalQuestions.length() == answeredQuestions.length()
   end
-  def checkPaymentMethod(student)
-    if student.student_payment_methods.length > 0
-      raise "Falta ingresar metodos de pago"
-    end
+  def validatePaymentMethod(student)
+    return student.student_payment_methods.length > 0
   end
 
   private
@@ -206,7 +215,7 @@ class Api::StudentsController < Api::BaseController
       :reference_number, :office, :status,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
-      :inscription_date, :starting_date, :contact, :contact_phone,
+      :inscription_date, :starting_date, :contact, :contact_phone, :group_id,
       payment_methods: [ :year ]
     )
   end
