@@ -10,14 +10,14 @@ module Authentication
 
   end
 
-  # Retrun the signed in user or nil if no user is signed in.
+  # Returns the signed in user or nil if no user is signed in.
   #
   # @return [User]
   def current_user
     @current_user
   end
 
-  # Retrun the payload from the Token class decoded form the header.
+  # Returns the payload from the Token class decoded form the header.
   #
   # @return [Hash]
   def current_user_token

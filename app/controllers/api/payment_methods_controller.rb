@@ -17,8 +17,6 @@ class Api::PaymentMethodsController < Api::BaseController
     end
 
       render json: response, status: :created
-    rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def show
