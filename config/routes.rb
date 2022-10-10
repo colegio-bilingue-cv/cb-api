@@ -19,6 +19,9 @@ Rails.application.routes.draw do
       get :comments, to: 'students#comments'
       resources :comments, only: [:create]
 
+      get :discounts, to: 'students#discounts'
+      resources :discounts, only: [:create]
+
     end
     resources :type_scholarships, only: [:index]
     resources :student_type_scholarships, only: [:create]
@@ -26,6 +29,5 @@ Rails.application.routes.draw do
 
     resources :payment_methods, only: [:create, :index, :show]
     resources :student_payment_methods, only: [:create]
-
   end
 end

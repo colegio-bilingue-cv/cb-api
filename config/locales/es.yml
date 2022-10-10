@@ -224,3 +224,6 @@ es:
       subsidized: Bonificada
       agreement: Convenio
       special: Especial
+  discount:
+    validations:
+      validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
