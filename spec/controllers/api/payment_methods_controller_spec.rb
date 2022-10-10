@@ -43,7 +43,10 @@ RSpec.describe Api::PaymentMethodsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -80,7 +83,10 @@ RSpec.describe Api::PaymentMethodsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'payment_method.not_found',
+            description: I18n.t('payment_method.not_found')
+          })
         end
       end
     end
@@ -98,7 +104,10 @@ RSpec.describe Api::PaymentMethodsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end

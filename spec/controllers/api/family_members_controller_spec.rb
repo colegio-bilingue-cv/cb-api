@@ -47,14 +47,19 @@ RSpec.describe Api::FamilyMembersController do
       context 'with invalid data' do
         let(:invalid_family_member) { FactoryBot.build(:family_member, :with_invalid_data, :with_student) }
         let(:invalid_family_member_attrs) { invalid_family_member.attributes }
-        let(:invlaid_student) { invalid_family_member.students.first }
+        let(:invalid_student) { invalid_family_member.students.first }
 
-        let(:params) { {student_id: invlaid_student.id, family_member: invalid_family_member_attrs, format: :json} }
+        let(:params) { {student_id: invalid_student.id, family_member: invalid_family_member_attrs, format: :json} }
 
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)']
+            }
+          })
         end
       end
 
@@ -63,7 +68,12 @@ RSpec.describe Api::FamilyMembersController do
 
         its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
       end
     end
 
@@ -82,7 +92,10 @@ RSpec.describe Api::FamilyMembersController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -149,7 +162,10 @@ RSpec.describe Api::FamilyMembersController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
 
@@ -161,7 +177,13 @@ RSpec.describe Api::FamilyMembersController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)'],
+              full_name: ['no puede estar en blanco']
+            }
+          })
         end
       end
     end
@@ -181,7 +203,10 @@ RSpec.describe Api::FamilyMembersController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end

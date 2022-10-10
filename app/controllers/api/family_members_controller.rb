@@ -9,10 +9,6 @@ class Api::FamilyMembersController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def update
@@ -26,10 +22,6 @@ class Api::FamilyMembersController < Api::BaseController
     end
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   private

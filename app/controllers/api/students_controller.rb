@@ -18,8 +18,6 @@ class Api::StudentsController < Api::BaseController
     end
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def create
@@ -30,8 +28,6 @@ class Api::StudentsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def update
@@ -43,10 +39,6 @@ class Api::StudentsController < Api::BaseController
     end
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def family_members
@@ -60,8 +52,6 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def type_scholarships
@@ -75,8 +65,6 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def payment_methods
@@ -90,8 +78,6 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def comments
@@ -105,8 +91,6 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def discounts

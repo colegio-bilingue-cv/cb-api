@@ -39,7 +39,12 @@ RSpec.describe Api::StudentPaymentMethodsController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              year: ['no puede estar en blanco']
+            }
+          })
         end
       end
 
@@ -48,9 +53,14 @@ RSpec.describe Api::StudentPaymentMethodsController do
 
         let(:params) { {student_payment_method: invalid_student_payment_method_attrs, format: :json} }
 
-        its(:status) { should eq(422) }
+        its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
       end
 
       context 'with invalid payment_method id' do
@@ -58,9 +68,14 @@ RSpec.describe Api::StudentPaymentMethodsController do
 
         let(:params) { {student_payment_method: invalid_student_payment_method_attrs, format: :json} }
 
-        its(:status) { should eq(422) }
+        its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'payment_method.not_found',
+            description: I18n.t('payment_method.not_found')
+          })
+        end
       end
     end
 
@@ -76,7 +91,10 @@ RSpec.describe Api::StudentPaymentMethodsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 

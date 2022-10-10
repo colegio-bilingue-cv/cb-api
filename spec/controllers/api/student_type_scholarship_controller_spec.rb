@@ -31,17 +31,27 @@ RSpec.describe Api::StudentTypeScholarshipsController do
       context 'with invalid student id' do
         let(:params) { {student_type_scholarship: {student_id: -1, type_scholarship_id: type_scholarship.id}, format: :json} }
 
-        its(:status) { should eq(422) }
+        its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
       end
 
       context 'with invalid type scholarship id' do
         let(:params) { {student_type_scholarship: {student_id: student.id, type_scholarship_id: -1}, format: :json} }
 
-        its(:status) { should eq(422) }
+        its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'type_scholarship.not_found',
+            description: I18n.t('type_scholarship.not_found')
+          })
+        end
       end
     end
 
@@ -59,7 +69,10 @@ RSpec.describe Api::StudentTypeScholarshipsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
