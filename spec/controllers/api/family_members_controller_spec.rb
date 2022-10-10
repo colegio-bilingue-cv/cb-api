@@ -45,21 +45,17 @@ RSpec.describe Api::FamilyMembersController do
       end
 
       context 'with valid data and two students assigned' do
-  
-        begin do
-          FactoryBot.build(:family_member, :with_student)
+        let(:family_member) { FactoryBot.create(:family_member, :with_student) }
+        let(:second_student) { FactoryBot.create(:student) }
+
+        before do
+          family_member.students << second_student
         end
-  
-        let(:params) { {student_id: student.id, family_member: family_member_attrs, format: :json} }
-  
-        subject do
-          post :create, params: params
-  
-          response
-        end
-  
+
+        let(:params) { {student_id: second_student.id, family_member: family_member_attrs, format: :json} }
+
         its(:status) { should eq(201) }
-  
+
         its(:body) do
           should include_json(family_member: {
             ci: family_member.ci,
