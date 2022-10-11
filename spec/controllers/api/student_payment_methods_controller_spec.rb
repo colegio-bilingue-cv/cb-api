@@ -145,7 +145,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
 
       context 'with invalid id' do
         let(:params) do
-          { student_payment_method: {year: '10-10-2007',
+          { student_payment_method: {year: Date.yesterday,
             student_id: student_payment_method.student_id,
             payment_method_id: student_payment_method.payment_method_id}, id: -1,
             format: :json }
@@ -154,7 +154,10 @@ RSpec.describe Api::StudentPaymentMethodsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student_payment_method.not_found',
+            description: I18n.t('student_payment_method.not_found')
+          })
         end
       end
 
@@ -165,12 +168,17 @@ RSpec.describe Api::StudentPaymentMethodsController do
           format: :json } 
       end
 
-        its(:status) { should eq(422) }
+      its(:status) { should eq(422) }
 
-        its(:body) do
-          should include_json({})
-        end
+      its(:body) do
+        should include_json(error: {
+          key: 'record_invalid',
+          description: {
+            year: ['no puede estar en blanco']
+          }
+        })
       end
+    end
     end
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
@@ -195,7 +203,10 @@ RSpec.describe Api::StudentPaymentMethodsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end

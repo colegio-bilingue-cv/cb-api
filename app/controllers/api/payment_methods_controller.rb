@@ -16,7 +16,7 @@ class Api::PaymentMethodsController < Api::BaseController
       { payment_method: r.serializer(payment_method, PaymentMethodSerializer) }
     end
 
-      render json: response, status: :created
+    render json: response, status: :created
   end
 
   def show
@@ -36,9 +36,8 @@ class Api::PaymentMethodsController < Api::BaseController
     response = Panko::Response.create do |r|
       { payment_method: r.serializer(payment_method, PaymentMethodSerializer) }
     end
+
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
   
   private
