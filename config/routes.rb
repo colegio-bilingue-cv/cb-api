@@ -27,7 +27,9 @@ Rails.application.routes.draw do
     resources :type_scholarships, only: [:index]
     resources :student_type_scholarships, only: [:create]
 
-    resources :payment_methods, only: [:create, :index, :show]
-    resources :student_payment_methods, only: [:create]
+
+    resources :payment_methods, except: [:delete]
+    resources :student_payment_methods, only: [:create, :update]
+
   end
 end

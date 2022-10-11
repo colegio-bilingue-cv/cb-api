@@ -10,9 +10,25 @@ class Api::StudentPaymentMethodsController < Api::BaseController
     end
 
     render json: response, status: :created
+  rescue ActiveRecord::RecordNotUnique
+      render json: {}, status: :unprocessable_entity
+  end
+
+  def update
+    raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(student_payment_method_params[:student_id])
+    raise ActiveRecord::RecordNotFound.new('', PaymentMethod.to_s) unless PaymentMethod.exists?(student_payment_method_params[:payment_method_id])
+
+    student_payment_method = StudentPaymentMethod.find(params[:id])
+    student_payment_method.update!(student_payment_method_params)
+    
+    response = Panko::Response.create do |r|
+      { student_payment_method: r.serializer(student_payment_method, StudentPaymentMethodSerializer) }
+    end
+
+    render json: response, status: :ok
   end
 
   def student_payment_method_params
-    params.require(:student_payment_method).permit(:year, :payment_method_id, :student_id)
+    params.require(:student_payment_method).permit(:id, :year, :payment_method_id, :student_id)
   end
 end
