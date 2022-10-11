@@ -2,23 +2,8 @@ class Api::FamilyMembersController < Api::BaseController
 
   def create
     student = Student.find(params[:student_id])
-    family_member = FamilyMember.find_or_initialize_by(ci:family_member_params[:ci])
-    family_member.role = family_member_params[:role]
-    family_member.full_name = family_member_params[:full_name]
-    family_member.birthdate = family_member_params[:birthdate]
-    family_member.birthplace = family_member_params[:birthplace]
-    family_member.nationality = family_member_params[:nationality]
-    family_member.first_language = family_member_params[:first_language]
-    family_member.marital_status = family_member_params[:marital_status]
-    family_member.cellphone = family_member_params[:cellphone]
-    family_member.email = family_member_params[:email]
-    family_member.address = family_member_params[:address]
-    family_member.neighborhood = family_member_params[:neighborhood]
-    family_member.education_level = family_member_params[:education_level]
-    family_member.occupation = family_member_params[:occupation]
-    family_member.workplace = family_member_params[:workplace]
-    family_member.workplace_neighbourhood = family_member_params[:workplace_neighbourhood]
-    family_member.workplace_phone = family_member_params[:workplace_phone]
+    family_member = FamilyMember.find_or_initialize_by(ci: family_member_params[:ci])
+    family_member.assign_attributes(family_member_params)
 
     family_member.save!
 
