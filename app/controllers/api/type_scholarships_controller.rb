@@ -18,10 +18,6 @@ class Api::TypeScholarshipsController < Api::BaseController
     end
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   private

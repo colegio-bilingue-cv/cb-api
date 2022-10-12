@@ -74,8 +74,6 @@ RSpec.describe Api::TypeScholarshipsController do
 
           let(:params) { { type_scholarship: { scholarship: :subsidized, description: nil}, id: type_scholarship.id } }
 
-          
-    
           it 'changes scholarship and wipes description' do
             expect{
               subject

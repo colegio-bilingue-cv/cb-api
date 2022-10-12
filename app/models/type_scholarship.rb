@@ -7,7 +7,8 @@ class TypeScholarship < ApplicationRecord
   before_update  :blank_description
 
   validates :scholarship, presence: true
-  validates :description, presence: true, if: :bidding_or_agreement?
+  validates :description, uniqueness: true, if: :bidding_or_agreement? 
+  validates :description, presence: true, if: :bidding_or_agreement? 
 
   private
 

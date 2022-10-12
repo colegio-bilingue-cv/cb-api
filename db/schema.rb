@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_12_134954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -93,7 +93,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_02_182508) do
     t.date "year"
   end
 
-  create_table "student_type_scholarships", id: false, force: :cascade do |t|
+  create_table "student_type_scholarships", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "type_scholarship_id", null: false
     t.date "date"
