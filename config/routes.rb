@@ -23,7 +23,7 @@ Rails.application.routes.draw do
       resources :discounts, only: [:create]
 
     end
-    resources :type_scholarships, only: [:index]
+    resources :type_scholarships, only: [:index, :update]
     resources :student_type_scholarships, only: [:create]
 
 

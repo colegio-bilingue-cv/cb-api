@@ -480,7 +480,7 @@ RSpec.describe Api::StudentsController do
           should include_json(student:
             {type_scholarships: [{
               scholarship: type_scholarship.scholarship.to_s,
-              description: type_scholarship.description.to_s
+              description: if type_scholarship.description.to_s=="" then nil else type_scholarship.description.to_s end
           }]})
         end
       end
