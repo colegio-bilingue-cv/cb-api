@@ -29,6 +29,6 @@ class Api::StudentPaymentMethodsController < Api::BaseController
   end
 
   def student_payment_method_params
-    params.require(:student_payment_method).permit(:id, :year, :payment_method_id, :student_id)
+    params.require(:student_payment_method).permit(:year, :payment_method_id, :student_id)
   end
 end

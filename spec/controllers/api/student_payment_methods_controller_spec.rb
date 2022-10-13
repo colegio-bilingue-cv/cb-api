@@ -8,7 +8,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
     let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
 
     let(:student_payment_method) { FactoryBot.build(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
-    let(:student_payment_method_attrs){ student_payment_method.attributes }
+    let(:student_payment_method_attrs) { student_payment_method.attributes }
 
     context 'when user is signed in' do
       subject do
@@ -115,7 +115,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
 
       context 'with valid data' do
        let(:params) do
-          { student_payment_method:{year: Date.yesterday,
+          { student_payment_method: {year: Date.yesterday,
             student_id: student_payment_method.student_id,
             payment_method_id: student_payment_method.payment_method_id },
             id: student_payment_method.id,
@@ -166,20 +166,21 @@ RSpec.describe Api::StudentPaymentMethodsController do
           student_id: student_payment_method.student_id,
           payment_method_id: student_payment_method.payment_method_id}, id: student_payment_method.id,
           format: :json } 
-      end
+        end
 
-      its(:status) { should eq(422) }
+        its(:status) { should eq(422) }
 
-      its(:body) do
-        should include_json(error: {
-          key: 'record_invalid',
-          description: {
-            year: ['no puede estar en blanco']
-          }
-        })
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              year: ['no puede estar en blanco']
+            }
+          })
+        end
       end
     end
-    end
+    
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
       let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
