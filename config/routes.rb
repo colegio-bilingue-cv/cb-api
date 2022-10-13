@@ -21,7 +21,8 @@ Rails.application.routes.draw do
       resources :comments, only: [:create, :update]
 
       get :discounts, to: 'students#discounts'
-      resources :discounts, only: [:create]
+      resources :discounts, only: [:create, :update]
+
     end
 
     resources :type_scholarships, only: [:index]
