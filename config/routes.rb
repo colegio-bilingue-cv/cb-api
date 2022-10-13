@@ -17,7 +17,7 @@ Rails.application.routes.draw do
       get :payment_methods, to: 'students#payment_methods'
 
       get :comments, to: 'students#comments'
-      resources :comments, only: [:create]
+      resources :comments, only: [:create, :update]
 
       get :discounts, to: 'students#discounts'
       resources :discounts, only: [:create]
