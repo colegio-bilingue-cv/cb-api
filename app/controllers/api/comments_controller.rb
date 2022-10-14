@@ -10,6 +10,19 @@ class Api::CommentsController < Api::BaseController
     render json: response, status: :created
   end
 
+  def update
+    student = Student.find(params[:student_id])
+    comment = student.comments.find(params[:id])
+
+    comment.update!(comment_params)
+
+    response = Panko::Response.create do |r|
+      { comment: r.serializer(comment, CommentSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+
   private
 
   def comment_params

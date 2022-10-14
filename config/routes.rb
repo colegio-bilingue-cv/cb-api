@@ -17,15 +17,15 @@ Rails.application.routes.draw do
       get :payment_methods, to: 'students#payment_methods'
 
       get :comments, to: 'students#comments'
-      resources :comments, only: [:create]
+
+      resources :comments, only: [:create, :update]
 
       get :discounts, to: 'students#discounts'
       resources :discounts, only: [:create]
-
     end
+
     resources :type_scholarships, only: [:index]
     resources :student_type_scholarships, only: [:create]
-
 
     resources :payment_methods, only: [:create, :index, :show]
     resources :student_payment_methods, only: [:create]
