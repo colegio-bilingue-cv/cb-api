@@ -10,8 +10,6 @@ class Api::StudentPaymentMethodsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordNotUnique
-      render json: {}, status: :unprocessable_entity
   end
 
   def update

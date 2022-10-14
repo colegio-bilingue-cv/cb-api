@@ -225,6 +225,8 @@ es:
     pm: pm
 
   # Custom internazionalization
+  index_student_payment_method_year:
+    not_unique: 'Ya existe una relación entre estudiante y metodo de pago con esa fecha'
   type_scholarship:
     not_found: 'Tipo de escolaridad no encontrada'
     attributes:
@@ -245,3 +247,4 @@ es:
   discount:
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
+
