@@ -15,7 +15,7 @@ RSpec.describe Api::CommentsController do
         response
       end
 
-      context 'with valid student id' do
+      context 'with valid data' do
         let(:params) { {student_id: student.id, comment: comment_attrs, format: :json} }
 
         its(:status) { should eq(201) }
@@ -36,6 +36,21 @@ RSpec.describe Api::CommentsController do
           should include_json(error: {
             key: 'student.not_found',
             description: I18n.t('student.not_found')
+          })
+        end
+      end
+
+      context 'with invalid data' do
+        let(:params) { {student_id: student.id, comment: { text: '' }, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              text: ['no puede estar en blanco']
+            }
           })
         end
       end
@@ -78,7 +93,7 @@ RSpec.describe Api::CommentsController do
         response
       end
 
-      context 'with valid student id' do
+      context 'with valid data' do
         let(:params) { {student_id: student.id, id: comment.id, comment: comment_attrs, format: :json} }
 
         it 'changes the text of the comment' do
@@ -107,6 +122,21 @@ RSpec.describe Api::CommentsController do
           should include_json(error: {
             key: 'student.not_found',
             description: I18n.t('student.not_found')
+          })
+        end
+      end
+
+      context 'with invalid data' do
+        let(:params) { {student_id: student.id, id: comment.id, comment: { text: '' }, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              text: ['no puede estar en blanco']
+            }
           })
         end
       end
