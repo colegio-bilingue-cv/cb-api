@@ -111,4 +111,78 @@ RSpec.describe Api::PaymentMethodsController do
       end
     end
   end
+  describe 'PATCH update' do
+    context 'when user is signed in' do
+      let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
+      let(:params) { { id: payment_method.id, format: :json } }
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        patch :update, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) do
+          { payment_method: {method: 'Changed Method'}, id: payment_method.id, format: :json }
+        end
+
+        it 'changes the method' do
+          expect {
+            subject
+
+            payment_method.reload
+          }.to change(payment_method, :method).to('Changed Method')
+        end
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(payment_method: {
+            id: payment_method.id,
+            method: 'Changed Method'        
+          })
+        end
+
+      end
+
+      context 'with invalid id' do
+        let(:params) { { id: -1, format: :json } }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'payment_method.not_found',
+            description: I18n.t('payment_method.not_found')
+          })
+        end
+      end
+   end
+
+    context 'when user is not signed in' do
+      let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
+      let(:params) do
+        { payment_method: {method: 'Changed Method'}, id: payment_method.id, format: :json }
+      end
+
+      subject do
+        patch :update, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+
+  end
 end
