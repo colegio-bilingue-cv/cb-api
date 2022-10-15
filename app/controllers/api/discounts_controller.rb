@@ -8,8 +8,6 @@ class Api::DiscountsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def update
@@ -22,10 +20,8 @@ class Api::DiscountsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
-    
   end
+
   private
 
   def discount_params
