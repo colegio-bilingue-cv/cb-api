@@ -8,8 +8,18 @@ class Api::DiscountsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
+  end
+
+  def update
+    student = Student.find(params[:student_id])
+    discount = student.discounts.find(params[:id])
+    discount.update!(discount_params)
+
+    response = Panko::Response.create do |r|
+      { discount: r.serializer(discount, DiscountSerializer) }
+    end
+
+    render json: response, status: :created
   end
 
   private
