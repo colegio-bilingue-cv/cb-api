@@ -103,7 +103,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       let(:user) { FactoryBot.create(:user) }
       let(:student) { FactoryBot.create(:student) }
       let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
-  
+
       let(:student_payment_method) { FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
 
       subject do
@@ -111,6 +111,30 @@ RSpec.describe Api::StudentPaymentMethodsController do
         patch :update, params: params
 
         response
+      end
+      context 'with invalid data duplicate index' do
+        let(:second_student_payment_method) do
+          FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id, year: Date.yesterday)
+        end
+
+        let(:params) do
+          { student_payment_method: {year: second_student_payment_method.year,
+            student_id: student_payment_method.student_id,
+            payment_method_id: student_payment_method.payment_method_id },
+            id: student_payment_method.id,
+            format: :json }
+        end
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              year: ['ya está en uso']
+            }
+          })
+        end
       end
 
       context 'with valid data' do
@@ -140,7 +164,6 @@ RSpec.describe Api::StudentPaymentMethodsController do
             year: Date.yesterday.to_s
           })
         end
-
       end
 
       context 'with invalid id' do
@@ -165,7 +188,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
         let(:params) do { student_payment_method: {year: '',
           student_id: student_payment_method.student_id,
           payment_method_id: student_payment_method.payment_method_id}, id: student_payment_method.id,
-          format: :json } 
+          format: :json }
         end
 
         its(:status) { should eq(422) }
@@ -180,11 +203,11 @@ RSpec.describe Api::StudentPaymentMethodsController do
         end
       end
     end
-    
+
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
       let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
-  
+
       let(:student_payment_method) { FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
 
       let(:params) do

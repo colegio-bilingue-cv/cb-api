@@ -17,14 +17,6 @@ class ErrorMessage
       new(key, description)
     end
 
-    def build_not_unique(error)
-      key = error.message.scan(/index_\S+/)[0].gsub("\"","") + ".not_unique"
-      key.gsub("\"","")
-      description = I18n.t(key)
-
-      new('not_unique', description)
-    end
-
     def build_record_invalid(error)
       record = error.record
 
