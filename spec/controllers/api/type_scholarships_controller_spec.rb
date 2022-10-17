@@ -1,6 +1,73 @@
 require 'rails_helper'
 
 RSpec.describe Api::TypeScholarshipsController do
+
+  describe 'POST create' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      context 'type_scholarship with invalid data' do
+        let(:invalid_type_scholarship) { FactoryBot.create(:type_scholarship, :with_invalid_data) }
+        let(:invalid_type_scholarship_attrs) { invalid_type_scholarship.attributes }
+
+        let(:params) { {type_scholarship: invalid_type_scholarship_attrs, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              description: ['la descripcion no puede estar vacía']
+            }
+            })
+        end
+      end
+
+      context 'with first type scholarship having a description' do
+        let(:first_type_scholarship) { FactoryBot.create(:type_scholarship, :bidding, description: 'test') }
+        
+        context 'and second type scholarship having the same description and another scholarship type' do
+          let(:second_type_scholarship) { FactoryBot.create(:type_scholarship, :agreement, description: 'test') }
+
+          its(:status) { should eq(200) }
+
+          its(:body) do
+            should include_json(type_scholarships: [{
+              scholarship: second_type_scholarship.scholarship.to_s,
+              description: second_type_scholarship.description.to_s
+              }])
+          end
+        end
+
+        context 'and second type scholarship having the same description and same scholarship type' do
+          let(:second_type_scholarship) { FactoryBot.create(:type_scholarship, :bidding, description: 'test') }
+          let(:second_type_scholarship_attrs) { second_type_scholarship.attributes }
+
+          let(:params) { {type_scholarship: second_type_scholarship_attrs, format: :json} }
+
+          its(:status) { should eq(422) }
+
+          its(:body) do
+            should include_json(error: {
+              key: 'record_invalid',
+              description: {
+                description: ['no pueden haber dos convenios iguales']
+              }
+              })
+          end
+        end
+      end
+    end
+  end
+
   describe 'GET index' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }

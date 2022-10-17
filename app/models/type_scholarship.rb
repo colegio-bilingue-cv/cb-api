@@ -7,17 +7,17 @@ class TypeScholarship < ApplicationRecord
   before_update  :blank_description
 
   validates :scholarship, presence: true
-  validates :description, uniqueness: true, if: :bidding_or_agreement? 
+  validates :description, presence: true, uniqueness: { scope: :scholarship } , if: :bidding_or_agreement? 
   validates :description, presence: true, if: :bidding_or_agreement? 
 
   private
 
   def bidding_or_agreement?
-    [:bidding, :agreement].include?(scholarship)
+    scholarship.blank? || [:bidding, :agreement].include?(scholarship.to_sym)
   end
 
   def blank_description
-    if [:subsidized, :special].include?(scholarship)
+    if scholarship.blank? || [:subsidized, :special].include?(scholarship.to_sym)
       description = nil
     end
   end
