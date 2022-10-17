@@ -23,5 +23,4 @@ class Api::BaseController < ApplicationController
 
     render json: response, status: :not_found
   end
-
 end

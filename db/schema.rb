@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2022_10_12_134954) do
+=======
+ActiveRecord::Schema[7.0].define(version: 2022_10_10_184426) do
+>>>>>>> bee3a9b05008d47212265261c5ff0f8767136f17
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -87,10 +91,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_12_134954) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "student_payment_methods", id: false, force: :cascade do |t|
+  create_table "student_payment_methods", force: :cascade do |t|
     t.bigint "payment_method_id", null: false
     t.bigint "student_id", null: false
     t.date "year"
+    t.index ["student_id", "payment_method_id", "year"], name: "index_student_payment_method_year", unique: true
   end
 
   create_table "student_type_scholarships", force: :cascade do |t|
