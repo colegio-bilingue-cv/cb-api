@@ -31,5 +31,8 @@ Rails.application.routes.draw do
     resources :cicles, only: [:index, :show] do
       resources :questions, only: [:index]
     end
+    
+    resources :groups, except: [:show] 
+    #exepc[:create, :index, :destroy]
   end
 end
