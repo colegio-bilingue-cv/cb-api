@@ -7,9 +7,7 @@ class StudentTypeScholarship < ApplicationRecord
   
   validates :date, presence: true
 
-  delegate :description, to: :type_scholarship, prefix: true
-  delegate :scholarship, to: :type_scholarship, prefix: true
-
+  delegate :description, :scholarship, to: :type_scholarship, prefix: true
 
   private
 

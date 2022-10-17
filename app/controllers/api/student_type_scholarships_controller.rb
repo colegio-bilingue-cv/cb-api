@@ -10,8 +10,6 @@ class Api::StudentTypeScholarshipsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordNotUnique
-    render json: {}, status: :unprocessable_entity
   end
 
   def update
@@ -31,7 +29,7 @@ class Api::StudentTypeScholarshipsController < Api::BaseController
   private
 
   def student_type_scholarship_params
-    params.require(:student_type_scholarship).permit(:id, :student_id, :type_scholarship_id)
+    params.require(:student_type_scholarship).permit(:student_id, :type_scholarship_id)
   end
 
 end
