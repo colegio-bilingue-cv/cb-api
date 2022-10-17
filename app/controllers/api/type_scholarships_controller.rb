@@ -10,7 +10,7 @@ class Api::TypeScholarshipsController < Api::BaseController
   end
 
   def create
-    type_scholarship = TypeScholarship.create!(payment_method_params)
+    type_scholarship = TypeScholarship.create!(type_scholarship_params)
 
     response = Panko::Response.create do |r|
       { type_scholarship: r.serializer(type_scholarship, TypeScholarshipSerializer) }

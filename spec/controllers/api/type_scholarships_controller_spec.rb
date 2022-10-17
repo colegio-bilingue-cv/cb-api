@@ -8,7 +8,7 @@ RSpec.describe Api::TypeScholarshipsController do
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
-        get :index, params: { format: :json }
+        get :create, params: { format: :json }
 
         response
       end
