@@ -8,7 +8,7 @@ class Api::GroupsController < ApplicationController
 
     render json: response, status: :ok
   end
-
+  
   def create
     group = Group.create!(group_params)
     
