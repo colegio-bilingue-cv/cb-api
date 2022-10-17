@@ -469,19 +469,38 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid id' do
-        let(:student) { FactoryBot.create(:student, :with_type_scholarship) }
-        let(:type_scholarship) { student.type_scholarships.first }
+        context 'with blank description' do
+          let(:student) { FactoryBot.create(:student, :with_type_scholarship_without_description) }
+          let(:type_scholarship) { student.type_scholarships.first }
 
-        let(:params) { {student_id: student.id, format: :json} }
+          let(:params) { {student_id: student.id, format: :json} }
 
-        its(:status) { should eq(200) }
+          its(:status) { should eq(200) }
 
-        its(:body) do
-          should include_json(student:
-            {type_scholarships: [{
-              scholarship: type_scholarship.scholarship.to_s,
-              description: type_scholarship.description.to_s
-          }]})
+          its(:body) do
+            should include_json(student:
+              {student_type_scholarships: [{
+                scholarship: type_scholarship.scholarship.to_s,
+                description: nil
+            }]})
+          end
+        end
+        
+        context 'with non blank description' do
+          let(:student) { FactoryBot.create(:student, :with_type_scholarship_with_description) }
+          let(:type_scholarship) { student.type_scholarships.first }
+
+          let(:params) { {student_id: student.id, format: :json} }
+
+          its(:status) { should eq(200) }
+
+          its(:body) do
+            should include_json(student:
+              {student_type_scholarships: [{
+                scholarship: type_scholarship.scholarship.to_s,
+                description: type_scholarship.description.to_s
+            }]})
+          end
         end
       end
 
@@ -493,7 +512,7 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(student: {type_scholarships: []})
+          should include_json(student: {student_type_scholarships: []})
         end
       end
 

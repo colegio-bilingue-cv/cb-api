@@ -30,7 +30,15 @@ FactoryBot.define do
     end
 
     trait :with_type_scholarship do
-      type_scholarships { FactoryBot.create_list(:type_scholarship, 1) }
+      type_scholarships { FactoryBot.create_list(:type_scholarship, 1, :agreement) }
+    end
+
+    trait :with_type_scholarship_without_description do
+      type_scholarships { FactoryBot.create_list(:type_scholarship, 1, :special) }
+    end
+
+    trait :with_type_scholarship_with_description do
+      type_scholarships { FactoryBot.create_list(:type_scholarship, 1, :bidding) }
     end
 
     trait :with_invalid_data do

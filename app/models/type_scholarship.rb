@@ -4,8 +4,11 @@ class TypeScholarship < ApplicationRecord
 
   enum scholarship: [:bidding, :subsidized, :agreement, :special]
 
+  before_update  :blank_description
+
   validates :scholarship, presence: true
-  validates :description, presence: true, if: :bidding_or_agreement?
+  validates :description, uniqueness: true, if: :bidding_or_agreement? 
+  validates :description, presence: true, if: :bidding_or_agreement? 
 
   private
 
@@ -13,4 +16,9 @@ class TypeScholarship < ApplicationRecord
     [:bidding, :agreement].include?(scholarship)
   end
 
+  def blank_description
+    if [:subsidized, :special].include?(scholarship)
+      description = nil
+    end
+  end
 end

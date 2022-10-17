@@ -56,11 +56,11 @@ class Api::StudentsController < Api::BaseController
 
   def type_scholarships
     student = Student.find(params[:student_id])
-    type_scholarships = student.type_scholarships
+    student_type_scholarships = student.student_type_scholarships
 
     response = Panko::Response.new(
       student: {
-        type_scholarships: Panko::ArraySerializer.new(type_scholarships, each_serializer: TypeScholarshipSerializer)
+        student_type_scholarships: Panko::ArraySerializer.new(student_type_scholarships, each_serializer: StudentTypeScholarshipSerializer)
       }
     )
 
