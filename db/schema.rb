@@ -10,7 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_17_193500) do
+
+ActiveRecord::Schema[7.0].define(version: 2022_10_12_134954) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -60,6 +61,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_17_193500) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["student_id"], name: "index_comments_on_student_id"
+  end
+
+  create_table "discounts", force: :cascade do |t|
+    t.integer "percentage"
+    t.integer "explanation"
+    t.date "start_date"
+    t.date "end_date"
+    t.text "resolution_description"
+    t.integer "administrative_type"
+    t.bigint "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id"], name: "index_discounts_on_student_id"
   end
 
   create_table "family_members", force: :cascade do |t|
@@ -132,13 +146,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_17_193500) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
-  create_table "student_payment_methods", id: false, force: :cascade do |t|
+  create_table "student_payment_methods", force: :cascade do |t|
     t.bigint "payment_method_id", null: false
     t.bigint "student_id", null: false
     t.date "year"
+    t.index ["student_id", "payment_method_id", "year"], name: "index_student_payment_method_year", unique: true
   end
 
-  create_table "student_type_scholarships", id: false, force: :cascade do |t|
+  create_table "student_type_scholarships", force: :cascade do |t|
     t.bigint "student_id", null: false
     t.bigint "type_scholarship_id", null: false
     t.date "date"

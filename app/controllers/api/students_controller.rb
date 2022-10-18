@@ -18,8 +18,6 @@ class Api::StudentsController < Api::BaseController
     end
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def create
@@ -30,8 +28,6 @@ class Api::StudentsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def update
@@ -43,10 +39,6 @@ class Api::StudentsController < Api::BaseController
     end
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
   end
 
   def family_members
@@ -60,23 +52,19 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def type_scholarships
     student = Student.find(params[:student_id])
-    type_scholarships = student.type_scholarships
+    student_type_scholarships = student.student_type_scholarships
 
     response = Panko::Response.new(
       student: {
-        type_scholarships: Panko::ArraySerializer.new(type_scholarships, each_serializer: TypeScholarshipSerializer)
+        student_type_scholarships: Panko::ArraySerializer.new(student_type_scholarships, each_serializer: StudentTypeScholarshipSerializer)
       }
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def payment_methods
@@ -90,8 +78,6 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
   def comments
@@ -101,6 +87,19 @@ class Api::StudentsController < Api::BaseController
     response = Panko::Response.new(
       student: {
         comments: Panko::ArraySerializer.new(comments, each_serializer: CommentSerializer)
+      }
+    )
+
+    render json: response, status: :ok
+  end
+
+  def discounts
+    student = Student.find(params[:student_id])
+    discounts = student.discounts
+
+    response = Panko::Response.new(
+      student: {
+        discounts: Panko::ArraySerializer.new(discounts, each_serializer: DiscountSerializer)
       }
     )
 

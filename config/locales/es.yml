@@ -107,6 +107,11 @@ es:
       month: Mes
       year: Año
   errors:
+    forbidden:
+      required_signed_in: 'Se requiere iniciar sesión'
+      required_not_signed_in: 'Se requiere cerrar sesión'
+      invalid_token: 'El token proporcionado es inválido'
+    invalid_credentials: 'Usuario o contraseña incorrectos'
     format: "%{attribute} %{message}"
     messages:
       accepted: debe ser aceptado
@@ -218,9 +223,26 @@ es:
       long: "%-d de %B de %Y %H:%M"
       short: "%-d de %b %H:%M"
     pm: pm
+
+  # Custom internazionalization
   type_scholarship:
+    not_found: 'Tipo de escolaridad no encontrada'
     attributes:
       bidding: Licitación
       subsidized: Bonificada
       agreement: Convenio
       special: Especial
+  student:
+    not_found: 'Estudiante no encontrado'
+  user:
+    not_found: 'Usuario no encontrado'
+  student_type_scholarship:
+    not_found: 'Relación entre estudiante y tipo de escolaridad no encontrada'
+  payment_method:
+    not_found: 'Método de pago no encontrado'
+  family_member:
+    not_found: 'Tutor no encontrado'
+  discount:
+    validations:
+      validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
+

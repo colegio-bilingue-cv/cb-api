@@ -1,2 +1,2 @@
-class InvalidHeaderError < StandardError
+class InvalidHeaderError < ApiError
 end

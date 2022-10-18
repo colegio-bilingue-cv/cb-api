@@ -72,7 +72,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -135,7 +138,12 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)']
+            }
+          })
         end
       end
     end
@@ -152,7 +160,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -210,7 +221,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
     end
@@ -228,7 +242,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -300,7 +317,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
 
@@ -310,7 +330,13 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)'],
+              name: ['no puede estar en blanco']
+            }
+          })
         end
       end
     end
@@ -318,9 +344,7 @@ RSpec.describe Api::StudentsController do
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
 
-      let(:params) do
-        { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: student.id, format: :json }
-      end
+      let(:params) { { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: student.id, format: :json } }
 
       subject do
         patch :update, params: params
@@ -331,7 +355,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -399,8 +426,33 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:student) { FactoryBot.create(:student, :with_family_member) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        get :family_members, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -417,19 +469,38 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid id' do
-        let(:student) { FactoryBot.create(:student, :with_type_scholarship) }
-        let(:type_scholarship) { student.type_scholarships.first }
+        context 'with blank description' do
+          let(:student) { FactoryBot.create(:student, :with_type_scholarship_without_description) }
+          let(:type_scholarship) { student.type_scholarships.first }
 
-        let(:params) { {student_id: student.id, format: :json} }
+          let(:params) { {student_id: student.id, format: :json} }
 
-        its(:status) { should eq(200) }
+          its(:status) { should eq(200) }
 
-        its(:body) do
-          should include_json(student:
-            {type_scholarships: [{
-              scholarship: type_scholarship.scholarship.to_s,
-              description: type_scholarship.description.to_s
-          }]})
+          its(:body) do
+            should include_json(student:
+              {student_type_scholarships: [{
+                scholarship: type_scholarship.scholarship.to_s,
+                description: nil
+            }]})
+          end
+        end
+        
+        context 'with non blank description' do
+          let(:student) { FactoryBot.create(:student, :with_type_scholarship_with_description) }
+          let(:type_scholarship) { student.type_scholarships.first }
+
+          let(:params) { {student_id: student.id, format: :json} }
+
+          its(:status) { should eq(200) }
+
+          its(:body) do
+            should include_json(student:
+              {student_type_scholarships: [{
+                scholarship: type_scholarship.scholarship.to_s,
+                description: type_scholarship.description.to_s
+            }]})
+          end
         end
       end
 
@@ -441,7 +512,7 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(student: {type_scholarships: []})
+          should include_json(student: {student_type_scholarships: []})
         end
       end
 
@@ -451,7 +522,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
     end
@@ -470,7 +544,10 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
@@ -495,8 +572,78 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(student:{comments: [{
+          should include_json(student: {comments: [{
             text: comment.text
+          }]})
+        end
+      end
+
+      context 'with invalid id' do
+        let(:params) { { student_id: -1, format: :json } }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
+
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_comment) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        get :comments, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+
+  end
+
+  describe 'GET discounts' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :discounts, params: params
+
+        response
+      end
+
+      context 'with valid id' do
+        let(:student) { FactoryBot.create(:student, :with_discount) }
+        let(:discount) { student.discounts.first }
+
+        let(:params) { {student_id: student.id, format: :json} }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(student:{discounts: [{
+            percentage: discount.percentage, 
+            explanation: discount.explanation,
+            start_date: discount.start_date.to_s,
+            end_date: discount.end_date.to_s,
+            resolution_description: discount.resolution_description,
+            administrative_type: discount.administrative_type
           }]})
         end
       end
@@ -515,12 +662,12 @@ RSpec.describe Api::StudentsController do
     end
 
     context 'when user is not signed in' do
-      let(:student) { FactoryBot.create(:student, :with_comment) }
+      let(:student) { FactoryBot.create(:student, :with_discount) }
 
       let(:params) { {student_id: student.id, format: :json} }
 
       subject do
-        get :comments, params: params
+        get :discounts, params: params
 
         response
       end

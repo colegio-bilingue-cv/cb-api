@@ -15,21 +15,21 @@ RSpec.describe User, type: :model do
       it { should have_many(:allowlisted_jwts).dependent(:destroy) }
     end
 
-    describe '#sign_in' do
+    describe '#sign_in!' do
       let(:user) { FactoryBot.create(:user, password: 'password', password_confirmation: 'password') }
 
       context 'with valid email and password' do
         it 'should return the user' do
-          expect(User.sign_in(email: user.email, password: 'password')).to eq(user)
+          expect(User.sign_in!(email: user.email, password: 'password')).to eq(user)
         end
       end
 
       context 'with invalid password' do
-        it { expect { User.sign_in(email: user.email, password: 'invalid') }.to raise_error(ActiveRecord::RecordInvalid) }
+        it { expect { User.sign_in!(email: user.email, password: 'invalid') }.to raise_error(InvalidCredentialsError) }
       end
 
       context 'with invalid email' do
-        it { expect { User.sign_in(email: 'wrong email', password: 'password') }.to raise_error(ActiveRecord::RecordInvalid) }
+        it { expect { User.sign_in!(email: 'wrong email', password: 'password') }.to raise_error(InvalidCredentialsError) }
       end
 
     end

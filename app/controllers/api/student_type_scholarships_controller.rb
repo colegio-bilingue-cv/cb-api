@@ -1,7 +1,7 @@
 class Api::StudentTypeScholarshipsController < Api::BaseController
   def create
-    raise ActiveRecord::RecordInvalid unless Student.exists?(student_type_scholarship_params[:student_id])
-    raise ActiveRecord::RecordInvalid unless TypeScholarship.exists?(student_type_scholarship_params[:type_scholarship_id])
+    raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(student_type_scholarship_params[:student_id])
+    raise ActiveRecord::RecordNotFound.new('', TypeScholarship.to_s) unless TypeScholarship.exists?(student_type_scholarship_params[:type_scholarship_id])
 
     student_type_scholarship = StudentTypeScholarship.create!(student_type_scholarship_params)
 
@@ -10,12 +10,22 @@ class Api::StudentTypeScholarshipsController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid
-    render json: {}, status: :unprocessable_entity
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
   end
 
+  def update
+    raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(student_type_scholarship_params[:student_id])
+    raise ActiveRecord::RecordNotFound.new('', TypeScholarship.to_s) unless TypeScholarship.exists?(student_type_scholarship_params[:type_scholarship_id])
+
+    student_type_scholarship = StudentTypeScholarship.find(params[:id])
+    student_type_scholarship.update!(student_type_scholarship_params)
+    
+    response = Panko::Response.create do |r|
+      { student_type_scholarship: r.serializer(student_type_scholarship, StudentTypeScholarshipSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+  
   private
 
   def student_type_scholarship_params

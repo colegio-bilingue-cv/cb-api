@@ -17,16 +17,21 @@ Rails.application.routes.draw do
       get :payment_methods, to: 'students#payment_methods'
 
       get :comments, to: 'students#comments'
-      resources :comments, only: [:create]
+
+      resources :comments, only: [:create, :update]
+
+      get :discounts, to: 'students#discounts'
+      resources :discounts, only: [:create, :update]
 
       get 'activate', to: 'students#activate'
     end
-    resources :type_scholarships, only: [:index]
-    resources :student_type_scholarships, only: [:create]
+    
+    resources :type_scholarships, only: [:index, :update]
+    resources :student_type_scholarships, only: [:create, :update]
 
 
-    resources :payment_methods, only: [:create, :index, :show]
-    resources :student_payment_methods, only: [:create]
+    resources :payment_methods, except: [:delete]
+    resources :student_payment_methods, only: [:create, :update]
 
     resources :cicles, only: [:index, :show] do
       resources :questions, only: [:index]

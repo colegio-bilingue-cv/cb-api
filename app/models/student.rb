@@ -10,6 +10,7 @@ class Student < ApplicationRecord
   belongs_to :group
   has_many :answers
   belongs_to :cicle
+  has_many :discounts
   
   accepts_nested_attributes_for :student_payment_methods
 

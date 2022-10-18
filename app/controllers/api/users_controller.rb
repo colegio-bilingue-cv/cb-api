@@ -9,8 +9,6 @@ class Api::UsersController < Api::BaseController
     end
 
     render json: response, status: :created
-  rescue ActiveRecord::RecordInvalid => e
-    render json: {}, status: :unprocessable_entity
   end
 
   private

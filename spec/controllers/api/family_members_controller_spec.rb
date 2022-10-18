@@ -44,17 +44,57 @@ RSpec.describe Api::FamilyMembersController do
         end
       end
 
+      context 'with valid data and two students assigned' do
+        let(:family_member) { FactoryBot.create(:family_member, :with_student) }
+        let(:second_student) { FactoryBot.create(:student) }
+
+        before do
+          family_member.students << second_student
+        end
+
+        let(:params) { {student_id: second_student.id, family_member: family_member_attrs, format: :json} }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(family_member: {
+            ci: family_member.ci,
+            role: family_member.role,
+            full_name: family_member.full_name,
+            birthplace: family_member.birthplace.to_s,
+            birthdate: family_member.birthdate.to_s,
+            nationality: family_member.nationality,
+            first_language: family_member.first_language,
+            marital_status: family_member.marital_status,
+            cellphone: family_member.cellphone,
+            email: family_member.email,
+            address: family_member.address,
+            neighborhood: family_member.neighborhood,
+            education_level: family_member.education_level,
+            occupation: family_member.occupation,
+            workplace: family_member.workplace,
+            workplace_neighbourhood: family_member.workplace_neighbourhood.to_s,
+            workplace_phone: family_member.workplace_phone
+          })
+        end
+      end
+
       context 'with invalid data' do
         let(:invalid_family_member) { FactoryBot.build(:family_member, :with_invalid_data, :with_student) }
         let(:invalid_family_member_attrs) { invalid_family_member.attributes }
-        let(:invlaid_student) { invalid_family_member.students.first }
+        let(:invalid_student) { invalid_family_member.students.first }
 
-        let(:params) { {student_id: invlaid_student.id, family_member: invalid_family_member_attrs, format: :json} }
+        let(:params) { {student_id: invalid_student.id, family_member: invalid_family_member_attrs, format: :json} }
 
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)']
+            }
+          })
         end
       end
 
@@ -63,7 +103,12 @@ RSpec.describe Api::FamilyMembersController do
 
         its(:status) { should eq(404) }
 
-        its(:body) { should include_json({}) }
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
       end
     end
 
@@ -82,7 +127,10 @@ RSpec.describe Api::FamilyMembersController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
@@ -149,7 +197,10 @@ RSpec.describe Api::FamilyMembersController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
       end
 
@@ -161,7 +212,13 @@ RSpec.describe Api::FamilyMembersController do
         its(:status) { should eq(422) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)'],
+              full_name: ['no puede estar en blanco']
+            }
+          })
         end
       end
     end
@@ -181,7 +238,10 @@ RSpec.describe Api::FamilyMembersController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
   end
