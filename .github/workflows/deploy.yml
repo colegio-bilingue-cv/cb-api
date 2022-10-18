@@ -5,7 +5,7 @@ on:
     branches: ["develop"]
 
 jobs:
-  deploy:
+  test:
     runs-on: ubuntu-latest
 
     services:
@@ -53,7 +53,8 @@ jobs:
       run: |
         bundle install
         bundle exec rspec
-        
+
+  deploy:      
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
