@@ -1,53 +1,53 @@
-on:
-  push:
-    branches: [ "develop" ]
+# on:
+#   push:
+#     branches: [ "develop" ]
 
-jobs:
-  test:
-    runs-on: ubuntu-latest
+# jobs:
+#   test:
+#     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:14-alpine
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
+#     services:
+#       postgres:
+#         image: postgres:14-alpine
+#         env:
+#           POSTGRES_USER: postgres
+#           POSTGRES_PASSWORD: postgres
+#         options: >-
+#           --health-cmd pg_isready
+#           --health-interval 10s
+#           --health-timeout 5s
+#           --health-retries 5
+#         ports:
+#           - 5432:5432
 
-    steps:
-    - uses: actions/checkout@v3
+#     steps:
+#     - uses: actions/checkout@v3
 
-    - uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa
-      with:
-        ruby-version: "3.1.2"
-        bundler-cache: true
+#     - uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa
+#       with:
+#         ruby-version: "3.1.2"
+#         bundler-cache: true
 
-    - name: Install PostgreSQL client
-      run: |
-        sudo apt-get -yqq install libpq-dev
-    - name: Build App
-      env:
-        DB_HOST: localhost
-        DB_USER: postgres
-        DB_PASSWORD: postgres
-        RAILS_ENV: test
-      run: |
-        bin/rails db:create
-        bin/rails db:migrate
-    - name: Run Tests
-      env:
-        DB_HOST: localhost
-        DB_USER: postgres
-        DB_PASSWORD: postgres
-        RAILS_ENV: test
-        JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      run: |
-        bundle install
-        bundle exec rspec
+#     - name: Install PostgreSQL client
+#       run: |
+#         sudo apt-get -yqq install libpq-dev
+#     - name: Build App
+#       env:
+#         DB_HOST: localhost
+#         DB_USER: postgres
+#         DB_PASSWORD: postgres
+#         RAILS_ENV: test
+#       run: |
+#         bin/rails db:create
+#         bin/rails db:migrate
+#     - name: Run Tests
+#       env:
+#         DB_HOST: localhost
+#         DB_USER: postgres
+#         DB_PASSWORD: postgres
+#         RAILS_ENV: test
+#         JWT_ALGORITHM: ${{ secrets.JWT_ALGORITHM }}
+#         JWT_SECRET: ${{ secrets.JWT_SECRET }}
+#       run: |
+#         bundle install
+#         bundle exec rspec
