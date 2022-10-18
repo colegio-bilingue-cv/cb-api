@@ -16,7 +16,7 @@ class Api::TypeScholarshipsController < Api::BaseController
       { type_scholarship: r.serializer(type_scholarship, TypeScholarshipSerializer) }
     end
 
-      render json: response, status: :created
+    render json: response, status: :created
   end
 
   def update
