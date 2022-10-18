@@ -16,6 +16,10 @@ FactoryBot.define do
         scholarship { :special }
         description { nil }
       end
+      trait :with_invalid_data do
+        scholarship { :agreement }
+        description { nil }
+      end
 
     trait :with_student do
       students { FactoryBot.create_list(:student, 1) }

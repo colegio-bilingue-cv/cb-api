@@ -1,6 +1,76 @@
 require 'rails_helper'
 
 RSpec.describe Api::TypeScholarshipsController do
+
+  describe 'POST create' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create, params: params
+
+        response
+      end
+
+      context 'type_scholarship with invalid data' do
+        let(:invalid_type_scholarship) { FactoryBot.build(:type_scholarship, :with_invalid_data) }
+        let(:invalid_type_scholarship_attrs) { invalid_type_scholarship.attributes }
+
+        let(:params) { {type_scholarship: invalid_type_scholarship_attrs, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              description: ['no puede estar en blanco']
+          }})
+        end
+      end
+
+      context 'with first type scholarship having a description' do
+        before do
+          FactoryBot.create(:type_scholarship, :bidding, description: 'test')
+        end
+
+        context 'and second type scholarship having the same description and another scholarship type' do
+          let(:second_type_scholarship_attrs) { FactoryBot.attributes_for(:type_scholarship, :agreement, description: 'test') }
+
+          let(:params) { {type_scholarship: second_type_scholarship_attrs, format: :json} }
+
+          its(:status) {
+            should eq(201)
+          }
+
+          its(:body) do
+            should include_json(type_scholarship: {
+              scholarship: second_type_scholarship_attrs[:scholarship].to_s,
+              description: second_type_scholarship_attrs[:description].to_s
+            })
+          end
+        end
+
+        context 'and second type scholarship having the same description and same scholarship type' do
+          let(:second_type_scholarship_attrs) { FactoryBot.attributes_for(:type_scholarship, :bidding, description: 'test') }
+
+          let(:params) { {type_scholarship: second_type_scholarship_attrs, format: :json} }
+
+          its(:status) { should eq(422) }
+
+          its(:body) do
+            should include_json(error: {
+              key: 'record_invalid',
+              description: {
+                description: ['ya está en uso']
+            }})
+          end
+        end
+      end
+    end
+  end
+
   describe 'GET index' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
@@ -79,7 +149,7 @@ RSpec.describe Api::TypeScholarshipsController do
   describe 'PATCH update' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
-      
+
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
         patch :update, params: params
@@ -121,9 +191,9 @@ RSpec.describe Api::TypeScholarshipsController do
           subject do
             request.headers['Authorization'] = "Bearer #{generate_token(user)}"
             patch :update, params: params
-    
+
             response
-          end    
+          end
 
           it 'changes scholarship and fills description' do
             expect{
@@ -175,7 +245,7 @@ RSpec.describe Api::TypeScholarshipsController do
             }
           })
         end
-      end    
+      end
     end
 
     context 'when user is not signed in' do
@@ -183,15 +253,15 @@ RSpec.describe Api::TypeScholarshipsController do
       let(:params) do
         { type_scholarship: { scholarship: :subsidized }, type_scholarship_id: -1, id: type_scholarship.id, format: :json }
       end
-  
+
       subject do
         patch :update, params: params
-  
+
         response
       end
-  
+
       its(:status) { should eq(403) }
-  
+
       its(:body) do
         should include_json(error: {
           key: 'forbidden.required_signed_in',
@@ -199,5 +269,5 @@ RSpec.describe Api::TypeScholarshipsController do
         })
       end
     end
-  end  
+  end
 end

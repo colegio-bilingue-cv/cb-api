@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
     end
     
-    resources :type_scholarships, only: [:index, :update]
+    resources :type_scholarships, only: [:create, :index, :update]
     resources :student_type_scholarships, only: [:create, :update]
 
 
