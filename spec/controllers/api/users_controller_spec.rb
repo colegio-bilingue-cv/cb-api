@@ -68,4 +68,93 @@ RSpec.describe Api::UsersController do
       end
     end
   end
+
+  describe 'PATCH update' do
+    let(:user) { FactoryBot.create(:user) }
+
+    context 'when user is signed in' do
+      let(:user_2) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user_2)}"
+        patch :update, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { {id: user.id, user: {address: 'New address 1234'}, format: :json} }
+
+        it 'changes the address' do
+          expect {
+            subject
+
+            user.reload
+          }.to change(user, :address).to('New address 1234')
+        end
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(user: {
+            ci: user[:ci].to_s,
+            name: user[:name],
+            surname: user[:surname],
+            birthdate: user[:birthdate].to_s,
+            address: 'New address 1234',
+            email: user[:email]
+          })
+        end
+      end
+
+      context 'with invalid data' do
+        let(:params) { {id: user.id, user: {ci: '111'}, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              ci: ['es demasiado corto (8 caracteres mínimo)']
+            }
+          })
+        end
+      end
+
+      context 'with invalid user id' do
+        let(:params) { {id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'user.not_found',
+            description: I18n.t('user.not_found')
+          })
+        end
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json} }
+
+      subject do
+        patch :update, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end
