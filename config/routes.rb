@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     resources :student_payment_methods, only: [:create, :update]
     resources :cicles, only: [:index]
 
+<<<<<<< HEAD
     resources :groups, only: [:index]
     resources :grades, only: [:index, :show] do
       resources :groups, only: [:create, :update]
@@ -36,5 +37,9 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: :me do
       patch :password
     end
+=======
+
+    
+>>>>>>> 3c9c930 (-Arrancando)
   end
 end
