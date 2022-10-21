@@ -37,7 +37,6 @@ Rails.application.routes.draw do
       resources :questions, only: [:index]
     end
     
-    resources :groups, except: [:show] 
-    #exepc[:create, :index, :destroy]
+    resources :groups, only: [:update, :index, :create]
   end
 end

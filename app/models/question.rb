@@ -3,5 +3,5 @@ class Question < ApplicationRecord
   has_and_belongs_to_many :cicles
   has_many :answers
 
-  validates :text, presence:true
+  validates :text, presence: true
 end
