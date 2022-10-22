@@ -35,7 +35,7 @@ class Api::FamilyMembersController < Api::BaseController
     params.require(:family_member).permit(:ci, :role, :full_name, :birthdate, :birthplace, :nationality,
       :first_language, :marital_status, :cellphone, :email,
       :address, :neighborhood, :education_level, :occupation, :workplace,
-      :workplace_neighbourhood, :workplace_phone
+      :workplace_neighbourhood, :workplace_phone, :workplace_address
     )
   end
 end
