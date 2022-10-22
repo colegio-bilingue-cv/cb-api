@@ -17,4 +17,7 @@ class User < ApplicationRecord
     end
   end
 
+  def self.by_role_id(role_id)
+    Role.find(role_id).users
+  end
 end
