@@ -1,0 +1,2 @@
+class RequiredNotSignedInError < ApiError
+end

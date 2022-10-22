@@ -638,7 +638,7 @@ RSpec.describe Api::StudentsController do
 
         its(:body) do
           should include_json(student:{discounts: [{
-            percentage: discount.percentage, 
+            percentage: discount.percentage,
             explanation: discount.explanation,
             start_date: discount.start_date.to_s,
             end_date: discount.end_date.to_s,
@@ -654,7 +654,10 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(404) }
 
         its(:body) do
-          should include_json({})
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
         end
 
       end
@@ -675,10 +678,213 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(403) }
 
       its(:body) do
-        should include_json({})
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
       end
     end
 
+  end
+
+  describe 'POST activate' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:student) { FactoryBot.create(:student) }
+
+
+    context 'when the user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :activate, params: params
+
+        response
+      end
+
+      context 'with valid student' do
+        let(:grade) { FactoryBot.create(:grade) }
+        let(:cicle) { grade.cicle }
+        let(:question) { FactoryBot.create(:question) }
+
+        before do
+          cicle.questions << question
+          payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
+          FactoryBot.create(:student_payment_method, payment_method_id: payment_method.id, student_id: student_with_full_information.id)
+        end
+
+        let(:student_with_full_information) do
+          FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+            student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
+          end
+        end
+
+        let(:params) { {student_id: student_with_full_information.id, format: :json} }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(student: {
+            ci: student_with_full_information.ci,
+            name: student_with_full_information.name,
+            surname: student_with_full_information.surname,
+            birthplace: student_with_full_information.birthplace.to_s,
+            birthdate: student_with_full_information.birthdate.to_s,
+            nationality: student_with_full_information.nationality,
+            schedule_start: student_with_full_information.schedule_start,
+            schedule_end: student_with_full_information.schedule_end,
+            tuition: student_with_full_information.tuition,
+            reference_number: student_with_full_information.reference_number,
+            office: student_with_full_information.office,
+            status: 'active',
+            first_language: student_with_full_information.first_language,
+            address: student_with_full_information.address,
+            neighborhood: student_with_full_information.neighborhood,
+            medical_assurance: student_with_full_information.medical_assurance,
+            emergency: student_with_full_information.emergency,
+            vaccine_expiration: student_with_full_information.vaccine_expiration.to_s,
+            vaccine_name: student_with_full_information.vaccine_name,
+            phone_number: student_with_full_information.phone_number,
+            inscription_date: student_with_full_information.inscription_date.to_s,
+            starting_date: student_with_full_information.starting_date.to_s,
+            contact: student_with_full_information.contact,
+            contact_phone: student_with_full_information.contact_phone
+          })
+        end
+      end
+
+      context 'without basic information' do
+        let(:grade) { FactoryBot.create(:grade) }
+        let(:cicle) { grade.cicle }
+        let(:question) { FactoryBot.create(:question) }
+
+        before do
+          cicle.questions << question
+          payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
+          FactoryBot.create(:student_payment_method, payment_method_id: payment_method.id, student_id: student_without_full_information.id)
+        end
+
+        let(:student_without_full_information) do
+          FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle, vaccine_name: nil) do |student|
+            student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
+          end
+        end
+
+        let(:params) { {student_id: student_without_full_information.id, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.activation_errors.incomplete_basic_info',
+            description: I18n.t('student.activation_errors.incomplete_basic_info')
+          })
+        end
+      end
+
+      context 'without family members' do
+        let(:grade) { FactoryBot.create(:grade) }
+        let(:cicle) { grade.cicle }
+        let(:question) { FactoryBot.create(:question) }
+
+        before do
+          cicle.questions << question
+          payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
+          FactoryBot.create(:student_payment_method, payment_method_id: payment_method.id, student_id: student_without_family_members.id)
+        end
+
+        let(:student_without_family_members) do
+          FactoryBot.create(:student, :pending, cicle: cicle) do |student|
+            student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
+          end
+        end
+
+        let(:params) { {student_id: student_without_family_members.id, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.activation_errors.incomplete_family_member',
+            description: I18n.t('student.activation_errors.incomplete_family_member')
+          })
+        end
+      end
+
+      context 'without answered questions' do
+        let(:grade) { FactoryBot.create(:grade) }
+        let(:cicle) { grade.cicle }
+        let(:question) { FactoryBot.create(:question) }
+
+        before do
+          cicle.questions << question
+          payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
+          FactoryBot.create(:student_payment_method, payment_method_id: payment_method.id, student_id: student_without_answered_questions.id)
+        end
+
+        let(:student_without_answered_questions) { FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) }
+
+        let(:params) { {student_id: student_without_answered_questions.id, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.activation_errors.incomplete_questions_error',
+            description: I18n.t('student.activation_errors.incomplete_questions_error')
+          })
+        end
+      end
+
+      context 'without valid payment method' do
+        let(:grade) { FactoryBot.create(:grade) }
+        let(:cicle) { grade.cicle }
+        let(:question) { FactoryBot.create(:question) }
+
+        before do
+          cicle.questions << question
+          payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
+          FactoryBot.create(:student_payment_method, year: Date.current.prev_year, payment_method_id: payment_method.id, student_id: student_without_valid_payment_method.id)
+        end
+
+        let(:student_without_valid_payment_method) do
+          FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+            student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
+          end
+        end
+
+        let(:params) { {student_id: student_without_valid_payment_method.id, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.activation_errors.incomplete_payment_method',
+            description: I18n.t('student.activation_errors.incomplete_payment_method')
+          })
+        end
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_discount) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        post :activate, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
   end
 
 end

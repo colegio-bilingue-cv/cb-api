@@ -16,9 +16,9 @@ class Api::AuthController < Api::BaseController
     else
       render json: {errors: user.errors}, status: :unprocessable_entity
     end
-  rescue InvalidCredentialsError
+  rescue InvalidCredentialsError => e
     response = Panko::Response.create do |r|
-      { error: r.serializer(ErrorMessage.build_invalid_credentials, ErrorSerializer) }
+      { error: r.serializer(ErrorMessage.build_invalid_credentials(e), ErrorSerializer) }
     end
 
     render json: response, status: :unauthorized

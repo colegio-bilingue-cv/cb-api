@@ -234,6 +234,11 @@ es:
       special: Especial
   student:
     not_found: 'Estudiante no encontrado'
+    activation_errors:
+      incomplete_basic_info: 'La información básica no está completa'
+      incomplete_family_member: 'No tiene familiares asignados'
+      incomplete_questions_error: 'No tiene todas las preguntas del ciclo respondidas'
+      incomplete_payment_method: 'No tiene un método de pago válido'
   user:
     not_found: 'Usuario no encontrado'
   student_type_scholarship:
@@ -245,4 +250,5 @@ es:
   discount:
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
-
+  grade:
+    not_found: 'Grado no encontrado'

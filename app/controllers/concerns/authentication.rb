@@ -57,7 +57,7 @@ module Authentication
     end
   end
 
-   # Returns an error response when the user is not signed in.
+  # Returns an error response when the user is not signed in.
   #   This method can be used as a before_action.
   #
   # @example
@@ -85,22 +85,24 @@ module Authentication
 
   # @private
   def set_current_user
+    raise RequiredSignedInError unless request.headers['Authorization'].present?
+
     token = get_token_from_header
 
     @current_user_token = JWT::Token.new(token)
 
-    if @current_user_token.valid?
-      @current_user = User.find(@current_user_token.user_id)
-    else
-      response = Panko::Response.create do |r|
-        { error: r.serializer(ErrorMessage.build_invalid_token, ErrorSerializer) }
-      end
+    @current_user_token.validate_token!
 
-      render json: response, status: :forbidden
-    end
-  rescue InvalidHeaderError, JWT::ExpiredSignature, JWT::DecodeError
+    @current_user = User.find(@current_user_token.user_id)
+  rescue InvalidHeaderError => e
     response = Panko::Response.create do |r|
-      { error: r.serializer(ErrorMessage.build_invalid_token, ErrorSerializer) }
+      { error: r.serializer(ErrorMessage.build_invalid_token(e), ErrorSerializer) }
+    end
+
+    render json: response, status: :forbidden
+  rescue RequiredSignedInError
+    response = Panko::Response.create do |r|
+      { error: r.serializer(ErrorMessage.build_required_signed_in, ErrorSerializer) }
     end
 
     render json: response, status: :forbidden

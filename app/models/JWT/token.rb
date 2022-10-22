@@ -8,6 +8,9 @@ class JWT::Token
     @payload = JWT.decode(token, JWT_SECRET, JWT_ALGORITHM).first.with_indifferent_access
     @user_id = @payload[:sub]
     @jti = @payload[:jti]
+
+  rescue JWT::ExpiredSignature, JWT::DecodeError
+    raise InvalidHeaderError
   end
 
   def self.generate_for(user_id)
@@ -19,8 +22,8 @@ class JWT::Token
     JWT.encode({sub: user_id, exp: exp, jti: jti}, JWT_SECRET, JWT_ALGORITHM)
   end
 
-  def valid?
-    @user_id.present? && Time.now < Time.at(@payload[:exp].to_i) && AllowlistedJwt.exists?(jti: @payload[:jti], user_id: @user_id)
+  def validate_token!
+    raise InvalidHeaderError unless @user_id.present? && Time.now < Time.at(@payload[:exp].to_i) && AllowlistedJwt.exists?(jti: @payload[:jti], user_id: @user_id)
   end
 
 end
