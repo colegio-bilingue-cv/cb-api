@@ -22,7 +22,6 @@ RSpec.describe FamilyMember, type: :model do
       it { should validate_presence_of(:occupation) }
       it { should validate_presence_of(:workplace) }
       it { should validate_presence_of(:workplace_neighbourhood) }
-      it { should validate_presence_of(:workplace_phone) }
 
     end
 
