@@ -5,5 +5,5 @@ class FamilyMember < ApplicationRecord
   validates :role, :full_name, :birthdate, :birthplace, :nationality,
     :first_language, :marital_status, :cellphone, :email,
     :address, :neighborhood, :education_level, :occupation, :workplace,
-    :workplace_neighbourhood, :workplace_phone, presence: true
+    :workplace_neighbourhood, presence: true
 end
