@@ -31,7 +31,8 @@ Rails.application.routes.draw do
     resources :payment_methods, except: [:delete]
     resources :student_payment_methods, only: [:create, :update]
 
-    resource :me, only: [:show, :update], controller: :me
-
+    resource :me, only: [:show, :update], controller: :me do
+      patch :password
+    end
   end
 end
