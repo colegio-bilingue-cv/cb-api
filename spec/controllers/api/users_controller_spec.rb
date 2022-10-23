@@ -69,6 +69,54 @@ RSpec.describe Api::UsersController do
     end
   end
 
+  describe 'GET index' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      context 'with user' do
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(users: [{
+            ci: user.ci.to_s,
+            name: user.name,
+            surname: user.surname,
+            birthdate: user.birthdate.to_s,
+            address: user.address,
+            email: user.email
+          }])
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:params) { {user: user_attrs, format: :json} }
+
+      subject do
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
   describe 'PATCH update' do
     let(:user) { FactoryBot.create(:user) }
 
