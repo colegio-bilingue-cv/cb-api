@@ -24,15 +24,14 @@ Rails.application.routes.draw do
       resources :discounts, only: [:create, :update]
 
     end
-    
+
     resources :type_scholarships, only: [:create, :index, :update]
     resources :student_type_scholarships, only: [:create, :update]
-
 
     resources :payment_methods, except: [:delete]
     resources :student_payment_methods, only: [:create, :update]
 
-    resource :me, only: [:show], controller: :me
+    resource :me, only: [:show, :update], controller: :me
 
   end
 end
