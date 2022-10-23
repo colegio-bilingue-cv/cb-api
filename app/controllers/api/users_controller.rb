@@ -11,6 +11,16 @@ class Api::UsersController < Api::BaseController
     render json: response, status: :created
   end
 
+  def index
+    users = User.all
+
+    response = Panko::Response.new(
+      users: Panko::ArraySerializer.new(users, each_serializer: UserSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
   def update
     user = User.find(params[:id])
     user.update!(users_params)
