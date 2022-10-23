@@ -104,8 +104,25 @@ class Api::StudentsController < Api::BaseController
     )
 
     render json: response, status: :ok
-  rescue ActiveRecord::RecordNotFound
-    render json: {}, status: :not_found
+  end
+
+  def activate
+    student = Student.find(params[:student_id])
+
+    student.update!(activate_params)
+    student.activate!
+
+    response = Panko::Response.create do |r|
+      { student: r.serializer(student, StudentSerializer) }
+    end
+
+    render json: response, status: :ok
+  rescue StudentsActivation::StudentActivationError => e
+    response = Panko::Response.create do |r|
+      { error: r.serializer(ErrorMessage.build_invalid_student_activation(e), ErrorSerializer) }
+    end
+
+    render json: response, status: :unprocessable_entity
   end
 
   private
@@ -113,11 +130,15 @@ class Api::StudentsController < Api::BaseController
   def student_params
     params.require(:student).permit(:ci, :surname,
       :name, :birthplace, :birthdate, :nationality, :schedule_start, :schedule_end, :tuition,
-      :reference_number, :office, :status,
+      :reference_number, :office,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
       :inscription_date, :starting_date, :contact, :contact_phone,
       payment_methods: [ :year ]
     )
+  end
+
+  def activate_params
+    params.require(:student).permit(:reference_number)
   end
 end

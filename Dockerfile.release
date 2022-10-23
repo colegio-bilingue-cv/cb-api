@@ -60,4 +60,6 @@ COPY . .
 # Run the app            #
 ##########################
 
+ENTRYPOINT ["/cb-api/release-entrypoint.sh"]
+
 CMD ["bundle", "exec", "rails", "server", "-b", "0.0.0.0"]

@@ -8,21 +8,17 @@ Rails.application.routes.draw do
     resources :users, only: [:create, :update, :index]
 
     resources :students, except: [:destroy] do
-
-      get :family_members, to: 'students#family_members'
       resources :family_members, only: [:create, :update]
-
-      get :type_scholarships, to: 'students#type_scholarships'
-
-      get :payment_methods, to: 'students#payment_methods'
-
-      get :comments, to: 'students#comments'
-
       resources :comments, only: [:create, :update]
 
-      get :discounts, to: 'students#discounts'
-      resources :discounts, only: [:create, :update]
+      get :family_members
+      get :type_scholarships
+      get :payment_methods
+      get :comments
+      get :discounts
 
+      resources :discounts, only: [:create, :update]
+      post :activate
     end
 
     resources :type_scholarships, only: [:create, :index, :update]
@@ -30,6 +26,12 @@ Rails.application.routes.draw do
 
     resources :payment_methods, except: [:delete]
     resources :student_payment_methods, only: [:create, :update]
+    resources :cicles, only: [:index]
+
+    resources :groups, only: [:index]
+    resources :grades, only: [:index, :show] do
+      resources :groups, only: [:create, :update]
+    end
 
     resource :me, only: [:show, :update], controller: :me do
       patch :password

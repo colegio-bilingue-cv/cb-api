@@ -7,7 +7,7 @@ FactoryBot.define do
     end
 
     trait :with_payment_method do
-      payment_method
+      payment_method { FactoryBot.create_list(:payment_method, 1, method: Faker::Lorem.word) }
     end
 
     trait :with_invalid_data do

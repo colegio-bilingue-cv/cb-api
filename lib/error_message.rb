@@ -1,6 +1,11 @@
 class ErrorMessage
   attr_reader :key, :description
 
+  def initialize(key, description)
+    @key = key
+    @description = description
+  end
+
   class << self
 
     def build(klass, type)
@@ -23,8 +28,8 @@ class ErrorMessage
       new('record_invalid', record.errors)
     end
 
-    def build_invalid_credentials
-      new('invalid_credentials', I18n.t('errors.invalid_credentials'))
+    def build_invalid_credentials(error)
+      new(error.message_key, I18n.t(error.message_key))
     end
 
     def build_required_signed_in
@@ -35,14 +40,13 @@ class ErrorMessage
       new('forbidden.required_not_signed_in', I18n.t('errors.forbidden.required_not_signed_in'))
     end
 
-    def build_invalid_token
-      new('forbidden.invalid_token', I18n.t('forbidden.invalid_token'))
+    def build_invalid_token(error)
+      new(error.message_key, I18n.t(error.message_key))
     end
 
-  end
+    def build_invalid_student_activation(error)
+      new(error.message_key, I18n.t(error.message_key))
+    end
 
-  def initialize(key, description)
-    @key = key
-    @description = description
   end
 end

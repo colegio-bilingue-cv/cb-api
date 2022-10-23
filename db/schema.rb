@@ -14,6 +14,34 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "allowlisted_jwts", force: :cascade do |t|
     t.string "jti", null: false
     t.string "aud"
@@ -21,6 +49,37 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
     t.bigint "user_id", null: false
     t.index ["jti"], name: "index_allowlisted_jwts_on_jti", unique: true
     t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
+  end
+
+  create_table "answers", id: false, force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "student_id", null: false
+    t.string "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id", "student_id"], name: "index_answers_on_question_id_and_student_id"
+    t.index ["student_id", "question_id"], name: "index_answers_on_student_id_and_question_id"
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cicles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cicles_questions", id: false, force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.bigint "cicle_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cicle_id", "question_id"], name: "index_cicles_questions_on_cicle_id_and_question_id"
+    t.index ["question_id", "cicle_id"], name: "index_cicles_questions_on_question_id_and_cicle_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -72,10 +131,35 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
     t.bigint "student_id", null: false
   end
 
+  create_table "grades", force: :cascade do |t|
+    t.bigint "cicle_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cicle_id"], name: "index_grades_on_cicle_id"
+  end
+
+  create_table "groups", force: :cascade do |t|
+    t.bigint "grade_id", null: false
+    t.string "name"
+    t.integer "year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grade_id"], name: "index_groups_on_grade_id"
+  end
+
   create_table "payment_methods", force: :cascade do |t|
     t.string "method"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.string "text"
+    t.bigint "category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_questions_on_category_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -129,6 +213,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "group_id"
+    t.bigint "cicle_id"
+    t.index ["cicle_id"], name: "index_students_on_cicle_id"
+    t.index ["group_id"], name: "index_students_on_group_id"
   end
 
   create_table "type_scholarships", force: :cascade do |t|
@@ -161,5 +249,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
     t.index ["user_id"], name: "index_users_roles_on_user_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
+  add_foreign_key "grades", "cicles"
+  add_foreign_key "groups", "grades"
+  add_foreign_key "questions", "categories"
+  add_foreign_key "students", "cicles"
+  add_foreign_key "students", "groups"
 end
