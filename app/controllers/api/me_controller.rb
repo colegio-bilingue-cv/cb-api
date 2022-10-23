@@ -19,6 +19,8 @@ class Api::MeController < Api::BaseController
     render json: response, status: :ok
   end
 
+  private
+  
   def me_params
     params.require(:user).permit(:birthdate, :name, :surname, :ci, :address)
   end
