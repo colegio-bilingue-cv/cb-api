@@ -33,6 +33,6 @@ Rails.application.routes.draw do
     resources :student_payment_methods, only: [:create, :update]
 
     resource :me, only: [:show], controller: :me
-    
+
   end
 end
