@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     resources :payment_methods, except: [:delete]
     resources :student_payment_methods, only: [:create, :update]
 
-    resources :me, only: [:show]
+    get :me, to: 'me#show'
 
   end
 end
