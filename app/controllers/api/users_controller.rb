@@ -1,9 +1,9 @@
 class Api::UsersController < Api::BaseController
 
   def create
-    user = User.new(users_params.except(:role))
-    user.add_role(users_params[:role])
-    user.save!
+    user = User.create!(users_params.except(:role)) do |user|
+      user.add_role(users_params[:role])
+    end
 
     response = Panko::Response.create do |r|
       { user: r.serializer(user, UserSerializer) }
