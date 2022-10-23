@@ -22,7 +22,7 @@ class Api::GroupsController < Api::BaseController
 
   def update
     grade = Grade.find(params[:grade_id])
-    group = grade.find(params[:id])
+    group = grade.groups.find(params[:id])
 
     group.update!(group_params)
 

@@ -23,6 +23,8 @@ class Student < ApplicationRecord
 
   validates :medical_assurance, :emergency, :vaccine_expiration, presence: true
 
+  validates :reference_number, allow_blank: true, uniqueness: true
+
   def activate!
     raise StudentsActivation::IncompleteBasicInfoError unless completed_basic_info?
     raise StudentsActivation::IncompleteFamilyMembersError unless has_family_members?
@@ -41,7 +43,7 @@ class Student < ApplicationRecord
   private
 
   def completed_basic_info?
-    schedule_start && schedule_end && tuition && office && emergency && vaccine_name && vaccine_expiration && phone_number && inscription_date && starting_date && contact && contact_phone
+    reference_number && schedule_start && schedule_end && tuition && office && emergency && vaccine_name && vaccine_expiration && phone_number && inscription_date && starting_date && contact && contact_phone
   end
 
   def has_family_members?

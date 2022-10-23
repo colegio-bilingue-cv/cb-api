@@ -53,5 +53,9 @@ FactoryBot.define do
     trait :with_discount do
       discounts { FactoryBot.create_list(:discount, 1) }
     end
+
+    trait :without_reference_number do
+      reference_number { nil }
+    end
   end
 end

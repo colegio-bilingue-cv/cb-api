@@ -109,8 +109,8 @@ class Api::StudentsController < Api::BaseController
   def activate
     student = Student.find(params[:student_id])
 
+    student.update!(activate_params)
     student.activate!
-    student.reload
 
     response = Panko::Response.create do |r|
       { student: r.serializer(student, StudentSerializer) }
@@ -136,5 +136,9 @@ class Api::StudentsController < Api::BaseController
       :inscription_date, :starting_date, :contact, :contact_phone,
       payment_methods: [ :year ]
     )
+  end
+
+  def activate_params
+    params.require(:student).permit(:reference_number)
   end
 end

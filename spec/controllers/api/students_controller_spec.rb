@@ -485,7 +485,7 @@ RSpec.describe Api::StudentsController do
             }]})
           end
         end
-        
+
         context 'with non blank description' do
           let(:student) { FactoryBot.create(:student, :with_type_scholarship_with_description) }
           let(:type_scholarship) { student.type_scholarships.first }
@@ -712,12 +712,14 @@ RSpec.describe Api::StudentsController do
         end
 
         let(:student_with_full_information) do
-          FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+          FactoryBot.create(:student, :pending, :with_family_member, :without_reference_number, cicle: cicle) do |student|
             student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
           end
         end
 
-        let(:params) { {student_id: student_with_full_information.id, format: :json} }
+        let(:activate_params) { {reference_number: Faker::Number.number(digits: 4)} }
+
+        let(:params) { {student_id: student_with_full_information.id, student: activate_params, format: :json} }
 
         its(:status) { should eq(200) }
 
@@ -732,7 +734,7 @@ RSpec.describe Api::StudentsController do
             schedule_start: student_with_full_information.schedule_start,
             schedule_end: student_with_full_information.schedule_end,
             tuition: student_with_full_information.tuition,
-            reference_number: student_with_full_information.reference_number,
+            reference_number: activate_params[:reference_number],
             office: student_with_full_information.office,
             status: 'active',
             first_language: student_with_full_information.first_language,
@@ -768,7 +770,7 @@ RSpec.describe Api::StudentsController do
           end
         end
 
-        let(:params) { {student_id: student_without_full_information.id, format: :json} }
+        let(:params) { {student_id: student_without_full_information.id, student: {reference_number: Faker::Number.number(digits: 4)}, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -797,7 +799,7 @@ RSpec.describe Api::StudentsController do
           end
         end
 
-        let(:params) { {student_id: student_without_family_members.id, format: :json} }
+        let(:params) { {student_id: student_without_family_members.id, student: {reference_number: Faker::Number.number(digits: 4)}, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -822,7 +824,7 @@ RSpec.describe Api::StudentsController do
 
         let(:student_without_answered_questions) { FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) }
 
-        let(:params) { {student_id: student_without_answered_questions.id, format: :json} }
+        let(:params) { {student_id: student_without_answered_questions.id, student: {reference_number: Faker::Number.number(digits: 4)}, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -851,7 +853,7 @@ RSpec.describe Api::StudentsController do
           end
         end
 
-        let(:params) { {student_id: student_without_valid_payment_method.id, format: :json} }
+        let(:params) { {student_id: student_without_valid_payment_method.id, student: {reference_number: Faker::Number.number(digits: 4)}, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -868,7 +870,7 @@ RSpec.describe Api::StudentsController do
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student, :with_discount) }
 
-      let(:params) { {student_id: student.id, format: :json} }
+      let(:params) { {student_id: student.id, student: {reference_number: Faker::Number.number(digits: 4)}, format: :json} }
 
       subject do
         post :activate, params: params
