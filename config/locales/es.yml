@@ -250,5 +250,8 @@ es:
   discount:
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
+  intermediate_evalution:
+    errors:
+      starting_month: "El mes de inicio no puede ser posterior al mes final"
   grade:
     not_found: 'Grado no encontrado'
