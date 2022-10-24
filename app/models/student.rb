@@ -12,6 +12,7 @@ class Student < ApplicationRecord
   has_many :answers
   belongs_to :cicle, optional: true
   has_many :questions, through: :answers
+  has_many :evaluations
 
   accepts_nested_attributes_for :student_payment_methods
 
