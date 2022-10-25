@@ -36,5 +36,7 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: :me do
       patch :password
     end
+
+    get '/teachers', to: 'teachers#index'
   end
 end
