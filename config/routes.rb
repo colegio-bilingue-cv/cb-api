@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :family_members, only: [:create, :update]
       resources :comments, only: [:create, :update]
       resources :intermediate_evaluation, only: [:create]
+      resources :final_evaluation, only: [:create]
 
       get :family_members
       get :type_scholarships

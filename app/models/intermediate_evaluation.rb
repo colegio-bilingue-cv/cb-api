@@ -9,7 +9,7 @@ class IntermediateEvaluation < ApplicationRecord
   delegate :name, :year, to: :group, prefix: true
 
   private
-  
+
   def month_period
     if starting_month.to_s != '' && ending_month.to_s != ''
       if starting_month.month > ending_month.month
