@@ -33,10 +33,10 @@ Rails.application.routes.draw do
       resources :groups, only: [:create, :update]
     end
 
-    resource :me, only: [:show, :update], controller: :me do
+    resources :me, only: [:show, :update], controller: :me do
       patch :password
     end
 
-    get '/teachers', to: 'teachers#index'
+    resources :teachers, only:[:index], controller: :teachers
   end
 end

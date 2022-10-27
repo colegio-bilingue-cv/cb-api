@@ -3,6 +3,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :validatable
 
   has_many :allowlisted_jwts, dependent: :destroy
+  has_many :user_groups
   has_many :groups, through: :user_groups
 
   validates :name, :surname, :email, presence: true
