@@ -6,7 +6,7 @@ class IntermediateEvaluation < ApplicationRecord
   validate :month_period
 
   private
-  
+
   def month_period
     if starting_month.month > ending_month.month
       errors.add(:starting_month, I18n.t('intermediate_evalution.errors.starting_month'))
