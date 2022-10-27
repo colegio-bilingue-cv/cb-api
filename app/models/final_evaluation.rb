@@ -4,6 +4,6 @@ class FinalEvaluation < ApplicationRecord
 
   enum status: [:pending, :passed, :failed], _default: :pending
 
-  validate :status, presence: true
+  validates :status, presence: true
 
 end
