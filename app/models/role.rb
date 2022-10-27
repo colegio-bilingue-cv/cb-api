@@ -1,5 +1,5 @@
 class Role < ApplicationRecord
-  AVAILABLE_ROLES = %w[teacher support_teacher principal administrative]
+  AVAILABLE_ROLES = %w[teacher support_teacher principal administrative administrator reception]
 
   has_and_belongs_to_many :users, join_table: :users_roles
 
