@@ -9,8 +9,7 @@ RSpec.describe Api::FinalEvaluationController do
       let(:student) { FactoryBot.create(:student) }
       let(:group) { FactoryBot.create(:group) }
 
-      let(:final_evaluation) { FactoryBot.create(:final_evaluation, :passed, student_id: student.id, group_id: group.id) }
-      let(:final_evaluation_attrs) { final_evaluation.attributes }
+      let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, group_id: group.id, student_id: student.id) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -20,15 +19,15 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with valid data' do
-        let(:params) { { student_id: student.id, final_evaluation: final_evaluation_attrs, format: :json} }
+        let(:params) { { student_id: student.id, final_evaluation: final_evaluation_attrs , format: :json} }
 
         its(:status) { should eq(201) }
 
         its(:body) do
-          should include_json(final_evaluation: {
+          should include_json(final_evaluation:{
             student_id: student.id,
             group_id: group.id,
-            status: final_evaluation.status,
+            status: final_evaluation_attrs[:status],
             group_name: group.name,
             year: group.year
           })
@@ -36,7 +35,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: student.id, final_evaluation: {student_id: -1, group_id: group.id, status: final_evaluation.status}, format: :json} }
+        let(:params) { {student_id: student.id, final_evaluation: {student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status]}, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -49,7 +48,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with invalid group id' do
-        let(:params) { {student_id: student.id, final_evaluation: {student_id: student.id, group_id: -1, status: final_evaluation.status}, format: :json} }
+        let(:params) { {student_id: student.id, final_evaluation: {student_id: student.id, group_id: -1, status: final_evaluation_attrs[:status]}, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -63,13 +62,11 @@ RSpec.describe Api::FinalEvaluationController do
     end
 
     context 'when user is not signed in' do
+
       let(:student) { FactoryBot.create(:student) }
-      let(:group) { FactoryBot.create(:group) }
+      let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, :with_group, student_id: student.id) }
 
-      let(:final_evaluation) { FactoryBot.create(:final_evaluation, :passed, student_id: student.id, group_id: group.id) }
-      let(:final_evaluation_attrs) { final_evaluation.attributes }
-
-      let(:params) { {student_id: student.id, final_evaluation: final_evaluation_attrs, format: :json} }
+      let(:params) { {student_id: final_evaluation_attrs[:student_id], final_evaluation: final_evaluation_attrs, format: :json} }
 
       subject do
         post :create, params: params
