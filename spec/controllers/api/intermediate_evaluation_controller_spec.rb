@@ -9,7 +9,7 @@ RSpec.describe Api::IntermediateEvaluationController do
       let(:student) { FactoryBot.create(:student) }
       let(:group) { FactoryBot.create(:group) }
 
-      let(:intermediate_evaluation_attrs) { FactoryBot.attributes_for(:intermediate_evaluation, group_id: group.id, student_id: student.id) }
+      let(:intermediate_evaluation_attrs) { FactoryBot.attributes_for(:intermediate_evaluation, group_id: group.id) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -53,7 +53,7 @@ RSpec.describe Api::IntermediateEvaluationController do
 
 
       context 'with invalid student id' do
-        let(:params) { {student_id: student.id, intermediate_evaluation: {student_id: -1, group_id: group.id, starting_month: intermediate_evaluation_attrs[:starting_month], ending_month: intermediate_evaluation_attrs[:ending_month]}, format: :json} }
+        let(:params) { {student_id: -1, intermediate_evaluation: { group_id: group.id, starting_month: intermediate_evaluation_attrs[:starting_month], ending_month: intermediate_evaluation_attrs[:ending_month]}, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -66,7 +66,7 @@ RSpec.describe Api::IntermediateEvaluationController do
       end
 
       context 'with invalid group id' do
-        let(:params) { {student_id: student.id, intermediate_evaluation: {student_id: student.id, group_id: -1, starting_month: intermediate_evaluation_attrs[:starting_month], ending_month: intermediate_evaluation_attrs[:ending_month]}, format: :json} }
+        let(:params) { {student_id: student.id, intermediate_evaluation: { group_id: -1, starting_month: intermediate_evaluation_attrs[:starting_month], ending_month: intermediate_evaluation_attrs[:ending_month]}, format: :json} }
 
         its(:status) { should eq(404) }
 

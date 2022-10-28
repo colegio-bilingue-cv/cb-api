@@ -11,10 +11,8 @@ class IntermediateEvaluation < ApplicationRecord
   private
 
   def month_period
-    if starting_month.to_s != '' && ending_month.to_s != ''
-      if starting_month.month > ending_month.month
-        errors.add(:starting_month, I18n.t('intermediate_evalution.errors.starting_month'))
-      end
+    if starting_month&.month &.> ending_month&.month
+      errors.add(:starting_month, I18n.t('intermediate_evalution.errors.starting_month'))
     end
   end
 end
