@@ -33,10 +33,10 @@ Rails.application.routes.draw do
       resources :groups, only: [:create, :update]
     end
 
-    resources :me, only: [:show, :update], controller: :me do
+    resource :me, only: [:show, :update], controller: :me do
       patch :password
     end
 
-    resources :teachers, only:[:index], controller: :teachers
+    resources :teachers, only: [:index]
   end
 end

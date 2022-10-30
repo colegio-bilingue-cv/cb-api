@@ -1,7 +1,7 @@
 class Api::TeachersController < Api::BaseController
   def index
-    teachers = User.by_role_name("teacher")
-    
+    teachers = User.with_role(:teacher)
+
     response = Panko::Response.new(
       teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherSerializer)
     )
@@ -9,4 +9,3 @@ class Api::TeachersController < Api::BaseController
     render json: response, status: :ok
   end
 end
-

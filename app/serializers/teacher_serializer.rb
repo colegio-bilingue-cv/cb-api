@@ -1,8 +1,5 @@
 class TeacherSerializer < Panko::Serializer
-  attributes :id, :name, :surname, :groups
+  attributes :id, :name, :surname
 
-  def groups
-    groupsByTeacher = object.groups()
-    Panko::ArraySerializer.new(groupsByTeacher, each_serializer: GroupSerializer).to_a
-  end
+  has_many :groups
 end

@@ -18,11 +18,4 @@ class User < ApplicationRecord
       raise InvalidCredentialsError
     end
   end
-
-  def self.by_role_id(role_id)
-    Role.find(role_id).users
-  end
-  def self.by_role_name(role)
-    Role.find_by(name: role).users
-  end
 end
