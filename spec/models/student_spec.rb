@@ -42,7 +42,7 @@ RSpec.describe Student, type: :model do
 
     context 'with full information' do
       let(:student_with_full_information) do
-        FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+        FactoryBot.create(:student, :pending, :with_family_member, :with_reference_number, cicle: cicle) do |student|
           student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
         end
       end
@@ -94,7 +94,7 @@ RSpec.describe Student, type: :model do
 
     context 'without family members' do
       let(:student_without_family_members) do
-        FactoryBot.create(:student, :pending, cicle: cicle) do |student|
+        FactoryBot.create(:student, :with_reference_number, :pending, cicle: cicle) do |student|
           student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
         end
       end
@@ -119,7 +119,7 @@ RSpec.describe Student, type: :model do
     end
 
     context 'without answered questions' do
-      let(:student_without_answered_questions) { FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) }
+      let(:student_without_answered_questions) { FactoryBot.create(:student, :pending, :with_reference_number, :with_family_member, cicle: cicle) }
 
       before do
         payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
@@ -142,7 +142,7 @@ RSpec.describe Student, type: :model do
 
     context 'without valid payment method' do
       let(:student_without_valid_payment_method) do
-        FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+        FactoryBot.create(:student, :pending, :with_reference_number, :with_family_member, cicle: cicle) do |student|
           student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
         end
       end

@@ -6,7 +6,6 @@ FactoryBot.define do
     schedule_start { Faker::Lorem.word }
     schedule_end { Faker::Lorem.word }
     tuition { Faker::Number.number(digits: 8) }
-    reference_number { Faker::Number.number(digits: 8) }
     birthplace { Faker::Address.full_address }
     birthdate { Date.today }
     nationality { Faker::Address.country }
@@ -54,8 +53,8 @@ FactoryBot.define do
       discounts { FactoryBot.create_list(:discount, 1) }
     end
 
-    trait :without_reference_number do
-      reference_number { nil }
+    trait :with_reference_number do
+      reference_number { Faker::Number.number(digits: 8) }
     end
   end
 end

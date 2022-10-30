@@ -113,7 +113,7 @@ RSpec.describe Api::StudentsController do
             schedule_start: student.schedule_start,
             schedule_end: student.schedule_end,
             tuition: student.tuition,
-            reference_number: student.reference_number,
+            reference_number: nil,
             office: student.office,
             status: student.status,
             first_language: student.first_language,
@@ -712,7 +712,7 @@ RSpec.describe Api::StudentsController do
         end
 
         let(:student_with_full_information) do
-          FactoryBot.create(:student, :pending, :with_family_member, :without_reference_number, cicle: cicle) do |student|
+          FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
             student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
           end
         end
