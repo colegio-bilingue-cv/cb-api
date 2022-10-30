@@ -1,5 +1,5 @@
 class IntermediateEvaluationSerializer < Panko::Serializer
-  attributes :id, :student_id, :group_id, :group_name, :year, :starting_month, :ending_month
+  attributes :id, :student_id, :group_id, :group_name, :year, :starting_month, :ending_month, :report_card_url
 
   def group_name
     object.group_name
@@ -9,4 +9,7 @@ class IntermediateEvaluationSerializer < Panko::Serializer
     object.group_year
   end
 
+  def report_card_url
+    object.report_card.url if object.report_card.attached?
+  end
 end
