@@ -133,7 +133,7 @@ class Api::StudentsController < Api::BaseController
       :reference_number, :office,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
-      :inscription_date, :starting_date, :contact, :contact_phone,
+      :inscription_date, :starting_date, :contact, :contact_phone, :enrollment_commitment,
       payment_methods: [ :year ]
     )
   end

@@ -2,6 +2,8 @@ class IntermediateEvaluation < ApplicationRecord
   belongs_to :student
   belongs_to :group
 
+  has_one_attached :report_card
+
   validates :starting_month, :ending_month, presence: true
 
   validate :month_period

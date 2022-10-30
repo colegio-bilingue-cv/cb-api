@@ -25,6 +25,6 @@ class Api::DiscountsController < Api::BaseController
   private
 
   def discount_params
-    params.require(:discount).permit(:percentage, :explanation, :start_date, :end_date, :resolution_description, :administrative_type)
+    params.require(:discount).permit(:percentage, :explanation, :start_date, :end_date, :resolution_description, :administrative_type, :resolution, :administrative_info)
   end
 end
