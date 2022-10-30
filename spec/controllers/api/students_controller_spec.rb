@@ -710,24 +710,28 @@ RSpec.describe Api::StudentsController do
 
         its(:body) do
           should include_json(student: {
-              final_evaluation:[ {
+              final_evaluations:[ {
                 "id": final_evaluation.id,
                 "student_id": student.id,
-                "group_id": final_evaluation.group_id,
                 "status": final_evaluation.status,
-                "group_name": final_evaluation.group_name ,
-                "year": final_evaluation.group.year,
-                "grade_name": final_evaluation.group.grade_name
+                group: {
+                  "id": final_evaluation.group_id,
+                  "year": final_evaluation.group.year,
+                  "name": final_evaluation.group.name,
+                  "grade_name": final_evaluation.group.grade_name
+                }
               }],
-              intermediate_evaluation: [{
+              intermediate_evaluations: [{
                 "id": intermediate_evaluation.id,
                 "student_id": student.id,
-                "group_id": intermediate_evaluation.group_id,
                 "starting_month": intermediate_evaluation.starting_month.to_s,
                 "ending_month": intermediate_evaluation.ending_month.to_s,
-                "group_name": intermediate_evaluation.group_name,
-                "year": intermediate_evaluation.group.year,
-                "grade_name": intermediate_evaluation.group.grade_name
+                group:  {
+                  "id": intermediate_evaluation.group_id,
+                  "name": intermediate_evaluation.group.name,
+                  "year": intermediate_evaluation.group.year,
+                  "grade_name": intermediate_evaluation.group.grade_name
+                }
               }]
           })
         end
@@ -741,7 +745,7 @@ RSpec.describe Api::StudentsController do
         its(:status) { should eq(200)}
 
         its(:body) do
-          should include_json(student: {final_evaluation: [], intermediate_evaluation: []})
+          should include_json(student: {final_evaluations: [], intermediate_evaluations: []})
         end
       end
 

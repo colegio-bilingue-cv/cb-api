@@ -7,7 +7,4 @@ class FinalEvaluation < ApplicationRecord
   enum status: [:pending, :passed, :failed], _default: :pending
 
   validates :status, presence: true
-
-  delegate :name, :year, :grade_name, to: :group, prefix: true
-
 end

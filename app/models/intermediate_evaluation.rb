@@ -8,9 +8,6 @@ class IntermediateEvaluation < ApplicationRecord
 
   validate :month_period
 
-  delegate :name, :year, :grade_name, to: :group, prefix: true
-
-
   private
 
   def month_period

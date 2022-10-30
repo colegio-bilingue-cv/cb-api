@@ -132,8 +132,8 @@ class Api::StudentsController < Api::BaseController
 
     response = Panko::Response.new(
       student: {
-        final_evaluation: Panko::ArraySerializer.new(final_evaluation, each_serializer: FinalEvaluationSerializer),
-        intermediate_evaluation: Panko::ArraySerializer.new(intermediate_evaluation, each_serializer: IntermediateEvaluationSerializer)
+        final_evaluations: Panko::ArraySerializer.new(final_evaluation, each_serializer: FinalEvaluationSerializer),
+        intermediate_evaluations: Panko::ArraySerializer.new(intermediate_evaluation, each_serializer: IntermediateEvaluationSerializer)
       }
     )
 
