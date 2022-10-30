@@ -111,7 +111,7 @@ task generate_cicles_questions: :environment do
     categoryInterests.questions.create!(text: '¿Practicas algún deporte, idioma, actividad musical, etc.? ¿Dónde?', cicles: [secondary])
     categoryInterests.questions.create!(text: 'En tu tiempo libre: ¿Miras T,V.? ¿Escuchas radio?¿Lees?¿Chateas?', cicles: [secondary])
     categoryInterests.questions.create!(text: '¿A partir de qué hora te encuentras en casa con tu familia?', cicles: [secondary])
-    categoryInterests.questions.create!(text: '¿En qué actividades has obtenido la mayor satisfacción?', cicles: secondary)
+    categoryInterests.questions.create!(text: '¿En qué actividades has obtenido la mayor satisfacción?', cicles: [secondary])
     categoryInterests.questions.create!(text: '¿En qué actividades te has sentido derrotado?', cicles: [secondary])
     categoryInterests.questions.create!(text: '¿Tienes alguna preocupación actual?', cicles: [secondary])
     categoryInterests.questions.create!(text: '¿Qué cosas te hacen enojar?', cicles: [secondary])
