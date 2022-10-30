@@ -10,7 +10,7 @@ Rails.application.routes.draw do
     resources :students, except: [:destroy] do
       resources :family_members, only: [:create, :update]
       resources :comments, only: [:create, :update]
-      resources :intermediate_evaluation, only: [:create]
+      resources :intermediate_evaluation, only: [:create, :update]
       resources :final_evaluation, only: [:create]
 
       get :family_members
