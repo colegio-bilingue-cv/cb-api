@@ -26,7 +26,8 @@ RSpec.describe Api::GroupsController do
         its(:body) do
           should include_json(groups: [{
             id: group.id,
-            name: group.name
+            name: group.name,
+            grade_name: group.grade_name
           }])
         end
 
@@ -81,7 +82,8 @@ RSpec.describe Api::GroupsController do
             should include_json(grade: {
               group: {
                 name: group_attrs[:name],
-                year: group_attrs[:year]
+                year: group_attrs[:year],
+                grade_name: grade.name
               }
             })
           end

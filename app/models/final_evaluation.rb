@@ -8,5 +8,6 @@ class FinalEvaluation < ApplicationRecord
 
   validates :status, presence: true
 
-  delegate :name, :year, to: :group, prefix: true
+  delegate :name, :year, :grade_name, to: :group, prefix: true
+
 end

@@ -4,4 +4,6 @@ class Group < ApplicationRecord
   has_many :evaluations
 
   validates :name, :year, presence: true
+
+  delegate :name, to: :grade, prefix: true
 end
