@@ -16,7 +16,7 @@ task generate_cicles_questions: :environment do
     category_illness = Category.create!(name: 'Enfermedades')
     category_interconsulting = Category.create!(name: 'interconsultas')
     category_observation = Category.create!(name: 'Observaciones de importancia')
-    category_education_proyect = Category.create!(name: 'Proyecto Educativo')
+    category_education_project = Category.create!(name: 'Projecto Educativo')
     category_authorization_image = Category.create!(name: 'Autorización de imagen')
 
     #CYCLES
@@ -67,7 +67,7 @@ task generate_cicles_questions: :environment do
     category_family.questions.create!(text: '¿Tiene vínculos con tíos,  primos, abuelos?', cicles: [maternal, primary, secondary])
     category_family.questions.create!(text: 'Hecho o situación familiar que amerite informar', cicles: [maternal, primary, secondary])
 
-    #TECHLOOGY
+    #TECHNOLOGY
     category_technology.questions.create!(text: '¿Cuántas laptops hay en la vivienda? (No incluir ceibal)', cicles: [maternal, primary, secondary])
     category_technology.questions.create!(text: '¿Cuántas pc fijas hay en la vivienda?', cicles: [maternal, primary, secondary])
     category_technology.questions.create!(text: '¿Cuántas tablets hay en la vivienda? (No incluir ceibal)', cicles: [maternal, primary, secondary])
@@ -105,7 +105,7 @@ task generate_cicles_questions: :environment do
     category_study.questions.create!(text: '¿Cómo organizas el tiempo para las tareas domiciliarias?', cicles: [secondary])
     category_study.questions.create!(text: '¿Quieres agregar algo que a tu juicio favorezca o dificulte tu aprendizaje?', cicles: [secondary])
     
-    #INTERSTS
+    #INTERESTS
     category_interests.questions.create!(text: '¿A qué lugares de reunión concurres habitualmente?', cicles: [secondary])
     category_interests.questions.create!(text: '¿Tienes amigos? ¿De dónde son?', cicles: [secondary])
     category_interests.questions.create!(text: '¿Practicas algún deporte, idioma, actividad musical, etc.? ¿Dónde?', cicles: [secondary])
@@ -127,7 +127,7 @@ task generate_cicles_questions: :environment do
     category_parents_vision.questions.create!(text: '¿Le tiene miedo a algo?', cicles: [maternal, primary])
     category_parents_vision.questions.create!(text: '¿Uso de pantallas? ¿cuántas horas? ¿qué mira?', cicles: [maternal, primary])
     category_parents_vision.questions.create!(text: '¿Comunica lo que siente?', cicles: [primary])
-    category_parents_vision.questions.create!(text: 'Cómo negocian  los NO en el hogar?', cicles: [primary])
+    category_parents_vision.questions.create!(text: 'Cómo negocian los NO en el hogar?', cicles: [primary])
     
     #FEEDING
     category_feeding.questions.create!(text: 'Los primeros tiempos fue ¿lactancia exclusiva?', cicles: [maternal])
@@ -176,7 +176,7 @@ task generate_cicles_questions: :environment do
     category_interconsulting.questions.create!(text: 'Comentarios Director', cicles: [maternal, primary, secondary])
     category_interconsulting.questions.create!(text: 'Adjuntar informes', cicles: [maternal, primary, secondary])
 
-    #OBSEVARTIONS
+    #OBSERVATIONS
     category_observation.questions.create!(text: 'Respecto a los cuidados diarios ¿quién se ocupa de qué? ¿baño? ¿sueño?', cicles: [maternal])
     category_observation.questions.create!(text: 'Relación con otros miembros de la familia', cicles: [maternal])
     category_observation.questions.create!(text: 'Preocupaciones entorno a la crianza y el desarrollo de su hijo/a', cicles: [maternal, primary, secondary])
@@ -186,15 +186,15 @@ task generate_cicles_questions: :environment do
     category_observation.questions.create!(text: '¿Qué talento presenta?', cicles: [primary, secondary])
     category_observation.questions.create!(text: '¿Cómo define a su hijo? Mi hijo/a es…', cicles: [maternal, primary, secondary])
 
-    #EDUCATION PROYECT
-    category_education_proyect.questions.create!(text: '¿Cómo llegó a conocer nuestra institución?', cicles: [maternal, primary, secondary])
-    category_education_proyect.questions.create!(text: '¿Qué conocimientos, habilidades y/o actutydes fundamentales cree que deben desarrollarse en el proceso de aprendizaje de su hijo/a para lograr un  alto desempeño en la complejidad y desafíos del mundo actual?', cicles: [maternal, primary, secondary])
-    category_education_proyect.questions.create!(text: '¿Por qué considera importante una propuesta bilingüe en la formación de su hijo/a?', cicles: [maternal, primary, secondary])
-    category_education_proyect.questions.create!(text: 'Detalle aquí otra información que crea importante y que pueda contribuir a una atención eficiente e integral del alumno/a:', cicles: [maternal, primary, secondary])
-    category_education_proyect.questions.create!(text: '¿Qué expectativa pedagógica, vincular, etc, tiene la familia respecto a la Institución Educativa?', cicles: [maternal, primary, secondary])
-    category_education_proyect.questions.create!(text: '¿Qué no puede faltar en el vínculo con la Institución?', cicles: [primary])
-    category_education_proyect.questions.create!(text: '¿Qué opina de los grupos de WhatsApp de padres?', cicles: [primary])
-    category_education_proyect.questions.create!(text: '¿Qué expectativa pedagógica, vincular, etc, tiene la familia respecto a la Institución Educativa?', cicles: [secondary])
+    #EDUCATION PROJECT
+    category_education_project.questions.create!(text: '¿Cómo llegó a conocer nuestra institución?', cicles: [maternal, primary, secondary])
+    category_education_project.questions.create!(text: '¿Qué conocimientos, habilidades y/o actitudes fundamentales cree que deben desarrollarse en el proceso de aprendizaje de su hijo/a para lograr un  alto desempeño en la complejidad y desafíos del mundo actual?', cicles: [maternal, primary, secondary])
+    category_education_project.questions.create!(text: '¿Por qué considera importante una propuesta bilingüe en la formación de su hijo/a?', cicles: [maternal, primary, secondary])
+    category_education_project.questions.create!(text: 'Detalle aquí otra información que crea importante y que pueda contribuir a una atención eficiente e integral del alumno/a:', cicles: [maternal, primary, secondary])
+    category_education_project.questions.create!(text: '¿Qué expectativa pedagógica, vincular, etc, tiene la familia respecto a la Institución Educativa?', cicles: [maternal, primary, secondary])
+    category_education_project.questions.create!(text: '¿Qué no puede faltar en el vínculo con la Institución?', cicles: [primary])
+    category_education_project.questions.create!(text: '¿Qué opina de los grupos de WhatsApp de padres?', cicles: [primary])
+    category_education_project.questions.create!(text: '¿Qué expectativa pedagógica, vincular, etc, tiene la familia respecto a la Institución Educativa?', cicles: [secondary])
     
     #AUTHORIZATION IMAGE
     category_authorization_image.questions.create!(text: '¿Autoriza imagen?', cicles: [maternal, primary, secondary])
