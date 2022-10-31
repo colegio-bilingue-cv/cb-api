@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_23_235929) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -131,6 +131,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
     t.bigint "student_id", null: false
   end
 
+  create_table "final_evaluations", force: :cascade do |t|
+    t.bigint "student_id"
+    t.bigint "group_id"
+    t.integer "status", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_final_evaluations_on_group_id"
+    t.index ["student_id"], name: "index_final_evaluations_on_student_id"
+  end
+
   create_table "grades", force: :cascade do |t|
     t.bigint "cicle_id", null: false
     t.string "name"
@@ -146,6 +156,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_201423) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["grade_id"], name: "index_groups_on_grade_id"
+  end
+
+  create_table "intermediate_evaluations", force: :cascade do |t|
+    t.bigint "student_id"
+    t.bigint "group_id"
+    t.date "starting_month"
+    t.date "ending_month"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_intermediate_evaluations_on_group_id"
+    t.index ["student_id"], name: "index_intermediate_evaluations_on_student_id"
   end
 
   create_table "payment_methods", force: :cascade do |t|
