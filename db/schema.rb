@@ -213,7 +213,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_23_235929) do
     t.string "schedule_start"
     t.string "schedule_end"
     t.string "tuition"
-    t.integer "reference_number"
+    t.string "reference_number"
     t.string "birthplace"
     t.date "birthdate"
     t.string "nationality"

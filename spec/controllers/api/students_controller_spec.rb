@@ -734,7 +734,7 @@ RSpec.describe Api::StudentsController do
             schedule_start: student_with_full_information.schedule_start,
             schedule_end: student_with_full_information.schedule_end,
             tuition: student_with_full_information.tuition,
-            reference_number: activate_params[:reference_number],
+            reference_number: activate_params[:reference_number].to_s,
             office: student_with_full_information.office,
             status: 'active',
             first_language: student_with_full_information.first_language,
