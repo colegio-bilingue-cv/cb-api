@@ -26,10 +26,12 @@ RSpec.describe Api::FinalEvaluationController do
         its(:body) do
           should include_json(final_evaluation:{
             student_id: student.id,
-            group_id: group.id,
             status: final_evaluation_attrs[:status],
-            group_name: group.name,
-            year: group.year
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year
+            }
           })
         end
       end
@@ -110,10 +112,12 @@ RSpec.describe Api::FinalEvaluationController do
         its(:body) do
           should include_json(final_evaluation:{
             student_id: student.id,
-            group_id: group.id,
             status: final_evaluation_attrs[:status],
-            group_name: group.name,
-            year: group.year
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year
+            }
           })
         end
       end

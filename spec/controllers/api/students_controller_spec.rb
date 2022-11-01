@@ -687,6 +687,106 @@ RSpec.describe Api::StudentsController do
 
   end
 
+  describe 'GET evaluations' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :evaluations, params: params
+
+        response
+      end
+
+      context 'with valid id' do
+        let(:student) { FactoryBot.create(:student, :with_evaluation) }
+
+        let(:final_evaluation) { student.final_evaluations.first }
+        let(:intermediate_evaluation) { student.intermediate_evaluations.first }
+
+        let(:params) { {student_id: student.id, format: :json} }
+
+        its(:status) { should eq(200)}
+
+        its(:body) do
+          should include_json(student: {
+              final_evaluations:[ {
+                "id": final_evaluation.id,
+                "student_id": student.id,
+                "status": final_evaluation.status,
+                group: {
+                  "id": final_evaluation.group_id,
+                  "year": final_evaluation.group.year,
+                  "name": final_evaluation.group.name,
+                  "grade_name": final_evaluation.group.grade_name
+                }
+              }],
+              intermediate_evaluations: [{
+                "id": intermediate_evaluation.id,
+                "student_id": student.id,
+                "starting_month": intermediate_evaluation.starting_month.to_s,
+                "ending_month": intermediate_evaluation.ending_month.to_s,
+                group:  {
+                  "id": intermediate_evaluation.group_id,
+                  "name": intermediate_evaluation.group.name,
+                  "year": intermediate_evaluation.group.year,
+                  "grade_name": intermediate_evaluation.group.grade_name
+                }
+              }]
+          })
+        end
+      end
+
+      context 'without evaluations' do
+        let(:student_without_evaluations) { FactoryBot.create(:student) }
+
+        let(:params) { {student_id: student_without_evaluations.id, format: :json} }
+
+        its(:status) { should eq(200)}
+
+        its(:body) do
+          should include_json(student: {final_evaluations: [], intermediate_evaluations: []})
+        end
+      end
+
+      context 'with invalid id' do
+        let(:params) { { student_id: -1, format: :json } }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:student) { FactoryBot.create(:student, :with_evaluation) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        get :evaluations, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+
   describe 'POST activate' do
     let(:user) { FactoryBot.create(:user) }
     let(:student) { FactoryBot.create(:student) }

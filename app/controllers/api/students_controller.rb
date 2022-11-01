@@ -125,6 +125,21 @@ class Api::StudentsController < Api::BaseController
     render json: response, status: :unprocessable_entity
   end
 
+  def evaluations
+    student = Student.find(params[:student_id])
+    final_evaluation = student.final_evaluations
+    intermediate_evaluation = student.intermediate_evaluations
+
+    response = Panko::Response.new(
+      student: {
+        final_evaluations: Panko::ArraySerializer.new(final_evaluation, each_serializer: FinalEvaluationSerializer),
+        intermediate_evaluations: Panko::ArraySerializer.new(intermediate_evaluation, each_serializer: IntermediateEvaluationSerializer)
+      }
+    )
+
+    render json: response, status: :ok
+  end
+
   private
 
   def student_params

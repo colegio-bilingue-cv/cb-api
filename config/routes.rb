@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       get :payment_methods
       get :comments
       get :discounts
+      get :evaluations
 
       resources :discounts, only: [:create, :update]
       post :activate

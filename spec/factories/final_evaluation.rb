@@ -8,7 +8,7 @@ FactoryBot.define do
     end
 
     trait :with_group do
-      group { FactoryBot.create_list(:group, 1) }
+      group { FactoryBot.create(:group) }
     end
 
     trait :with_invalid_data do

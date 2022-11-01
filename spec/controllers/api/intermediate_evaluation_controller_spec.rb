@@ -26,11 +26,13 @@ RSpec.describe Api::IntermediateEvaluationController do
         its(:body) do
           should include_json(intermediate_evaluation:{
             student_id: student.id,
-            group_id: group.id,
             starting_month: intermediate_evaluation_attrs[:starting_month].to_s,
             ending_month: intermediate_evaluation_attrs[:ending_month].to_s,
-            group_name: group.name,
-            year: group.year
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year
+            }
           })
         end
       end
@@ -129,11 +131,13 @@ RSpec.describe Api::IntermediateEvaluationController do
         its(:body) do
           should include_json(intermediate_evaluation:{
             student_id: student.id,
-            group_id: group.id,
             starting_month: intermediate_evaluation_attrs[:starting_month].to_s,
             ending_month: intermediate_evaluation_attrs[:ending_month].to_s,
-            group_name: group.name,
-            year: group.year
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year
+            }
           })
         end
       end
