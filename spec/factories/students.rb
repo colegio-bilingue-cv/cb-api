@@ -57,5 +57,10 @@ FactoryBot.define do
     trait :without_reference_number do
       reference_number { nil }
     end
+
+    trait :with_evaluation do
+      final_evaluations { FactoryBot.create_list(:final_evaluation, 1, :with_group, :with_student) }
+      intermediate_evaluations { FactoryBot.create_list(:intermediate_evaluation, 1, :with_group, :with_student) }
+    end
   end
 end

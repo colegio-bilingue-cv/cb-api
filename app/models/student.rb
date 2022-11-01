@@ -12,7 +12,11 @@ class Student < ApplicationRecord
   has_many :answers
   belongs_to :cicle, optional: true
   has_many :questions, through: :answers
-  has_many :evaluations
+  has_many :final_evaluations
+  has_many :intermediate_evaluations
+
+
+  has_one_attached :enrollment_commitment
 
   accepts_nested_attributes_for :student_payment_methods
 

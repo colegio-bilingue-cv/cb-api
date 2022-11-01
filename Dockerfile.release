@@ -9,7 +9,7 @@ FROM ruby:3.1.2-alpine
 ##########################
 
 # Install base packages and other software
-RUN apk add --no-cache build-base libxml2-dev libxslt-dev postgresql-dev
+RUN apk add --no-cache build-base libxml2-dev libxslt-dev postgresql-dev imagemagick
 
 ##########################
 # Set working directory  #

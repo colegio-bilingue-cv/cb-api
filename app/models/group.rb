@@ -6,4 +6,6 @@ class Group < ApplicationRecord
   has_many :users, through: :user_groups
 
   validates :name, :year, presence: true
+
+  delegate :name, to: :grade, prefix: true
 end

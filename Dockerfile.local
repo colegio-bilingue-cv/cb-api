@@ -9,14 +9,13 @@ FROM ruby:3.1.2-alpine
 ###########################
 
 # Install base packages and other software
-RUN apk add --no-cache build-base libxml2-dev libxslt-dev postgresql-dev tzdata
+RUN apk add --no-cache build-base libxml2-dev libxslt-dev postgresql-dev tzdata imagemagick
 
 ###########################
 # Set working directory   #
 ###########################
 
-# Set working directory this directoy is going to
-# be used by default
+# Set working directory this directoy is going to be used by default
 WORKDIR /cb-api
 
 ###########################
