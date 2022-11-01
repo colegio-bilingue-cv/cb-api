@@ -247,6 +247,7 @@ es:
     not_found: 'Método de pago no encontrado'
   family_member:
     not_found: 'Tutor no encontrado'
+    edited: 'Se actualizaron los datos del familiar'
   discount:
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'

@@ -39,7 +39,38 @@ RSpec.describe Api::FamilyMembersController do
             occupation: family_member.occupation,
             workplace: family_member.workplace,
             workplace_neighbourhood: family_member.workplace_neighbourhood.to_s,
-            workplace_phone: family_member.workplace_phone
+            workplace_phone: family_member.workplace_phone,
+            edited_family_member_message: nil
+          })
+        end
+      end
+
+      context 'with valid data while updating an existing family member' do
+        let(:old_family_member) { FactoryBot.create(:family_member, ci: family_member.ci) }
+        let(:params) { {student_id: student.id, family_member: family_member_attrs, format: :json} }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(family_member: {
+            ci: family_member.ci,
+            role: family_member.role,
+            full_name: family_member.full_name,
+            birthplace: family_member.birthplace.to_s,
+            birthdate: family_member.birthdate.to_s,
+            nationality: family_member.nationality,
+            first_language: family_member.first_language,
+            marital_status: family_member.marital_status,
+            cellphone: family_member.cellphone,
+            email: family_member.email,
+            address: family_member.address,
+            neighborhood: family_member.neighborhood,
+            education_level: family_member.education_level,
+            occupation: family_member.occupation,
+            workplace: family_member.workplace,
+            workplace_neighbourhood: family_member.workplace_neighbourhood.to_s,
+            workplace_phone: family_member.workplace_phone,
+            edited_family_member_message: I18n.t('family_member.edited')
           })
         end
       end
