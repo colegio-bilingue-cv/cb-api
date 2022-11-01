@@ -28,7 +28,13 @@ Rails.application.routes.draw do
     resources :student_payment_methods, only: [:create, :update]
     resources :cicles, only: [:index]
 
-    resources :groups, only: [:index]
+    resources :groups, only: [:index] do
+      get '/teachers', to: 'teachers#index'
+      post '/teachers', to: 'teachers#assign'
+      delete '/teachers', to: 'teachers#dismiss'
+
+    end
+
     resources :grades, only: [:index, :show] do
       resources :groups, only: [:create, :update]
     end
