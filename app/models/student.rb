@@ -26,7 +26,7 @@ class Student < ApplicationRecord
   validates :address, :neighborhood,
     :name, :birthplace, :birthdate, :nationality, :first_language, presence: true
 
-  validates :medical_assurance, :emergency, :vaccine_expiration, presence: true
+  validates :medical_assurance, :vaccine_expiration, presence: true
 
   validates :reference_number, allow_blank: true, uniqueness: true
 
