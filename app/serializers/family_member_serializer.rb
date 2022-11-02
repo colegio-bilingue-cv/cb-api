@@ -5,8 +5,9 @@ class FamilyMemberSerializer < Panko::Serializer
     :workplace_neighbourhood, :workplace_phone, :workplace_address, :edited_family_member_message
 
     def edited_family_member_message
+      p context
       p 'antes del object new record'
-      if !(object.new_record?)
+      unless context[:new_record]
         p 'despues del object new record'
         edited_family_member_message = I18n.t('family_member.edited')
       end

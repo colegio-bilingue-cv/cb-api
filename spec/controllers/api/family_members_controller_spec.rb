@@ -47,7 +47,7 @@ RSpec.describe Api::FamilyMembersController do
 
       context 'with valid data while updating an existing family member' do
         let(:old_family_member) { FactoryBot.create(:family_member, ci: family_member.ci) }
-        let(:params) { {student_id: student.id, family_member: family_member_attrs, format: :json} }
+        let(:params) { {student_id: student.id, family_member: family_member_attrs.merge({full_name: 'Guille Chao'}), format: :json} }
 
         its(:status) { should eq(201) }
 

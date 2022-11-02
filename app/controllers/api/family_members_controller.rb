@@ -4,13 +4,14 @@ class Api::FamilyMembersController < Api::BaseController
     student = Student.find(params[:student_id])
     family_member = FamilyMember.find_or_initialize_by(ci: family_member_params[:ci])
     family_member.assign_attributes(family_member_params)
-
+    new_family_member = family_member.new_record?
     family_member.save!
 
     student.family_members << family_member
 
     response = Panko::Response.create do |r|
-      { family_member: r.serializer(family_member, FamilyMemberSerializer) }
+      { family_member: r.serializer(family_member, FamilyMemberSerializer,
+        context: {new_record: new_family_member}) }
     end
 
     render json: response, status: :created
