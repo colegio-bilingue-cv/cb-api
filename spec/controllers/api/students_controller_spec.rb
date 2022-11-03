@@ -98,7 +98,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid data' do
-        let(:params) { {student: student_attrs, format: :json} }
+        let(:params) { student_attrs.merge({format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -133,7 +133,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid data' do
-        let(:params) { {student: invalid_student_attrs, format: :json} }
+        let(:params) { invalid_student_attrs.merge({format: :json}) }
 
         its(:status) { should eq(422) }
 
@@ -149,7 +149,7 @@ RSpec.describe Api::StudentsController do
     end
 
     context 'when user is not signed in' do
-      let(:params) { {student: student_attrs, format: :json} }
+      let(:params) { student_attrs.merge({format: :json}) }
 
       subject do
         post :create, params: params
@@ -182,7 +182,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid id' do
-        let(:params) { { id: student.id, format: :json } }
+        let(:params) { {id: student.id, format: :json} }
         its(:status) { should eq(200) }
 
         its(:body) do
@@ -216,7 +216,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid id' do
-        let(:params) { { id: -1, format: :json } }
+        let(:params) { {id: -1, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -231,7 +231,7 @@ RSpec.describe Api::StudentsController do
 
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
-      let(:params) { { id: student.id, format: :json } }
+      let(:params) { {id: student.id, format: :json} }
 
       subject do
         get :show, params: params
@@ -264,9 +264,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid data' do
-        let(:params) do
-          { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: student.id, format: :json }
-        end
+        let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: student.id, format: :json} }
 
         it 'changes the name and surname' do
           expect {
@@ -310,9 +308,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid id' do
-        let(:params) do
-          { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: -1, format: :json }
-        end
+        let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: -1, format: :json } }
 
         its(:status) { should eq(404) }
 
@@ -325,7 +321,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid data' do
-        let(:params) { { student: {ci: 123, name: ''}, id: student.id, format: :json } }
+        let(:params) { {ci: 123, name: '', id: student.id, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -344,7 +340,7 @@ RSpec.describe Api::StudentsController do
     context 'when user is not signed in' do
       let(:student) { FactoryBot.create(:student) }
 
-      let(:params) { { student: {name: 'Changed Name', surname: 'Changed Surname'}, id: student.id, format: :json } }
+      let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: student.id, format: :json} }
 
       subject do
         patch :update, params: params
@@ -421,7 +417,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid id' do
-        let(:params) { { student_id: -1, format: :json } }
+        let(:params) { {student_id: -1, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -517,7 +513,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid id' do
-        let(:params) { { student_id: -1, format: :json } }
+        let(:params) { {student_id: -1, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -579,7 +575,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid id' do
-        let(:params) { { student_id: -1, format: :json } }
+        let(:params) { {student_id: -1, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -649,7 +645,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with invalid id' do
-        let(:params) { { student_id: -1, format: :json } }
+        let(:params) { {student_id: -1, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -790,7 +786,6 @@ RSpec.describe Api::StudentsController do
   describe 'POST activate' do
     let(:user) { FactoryBot.create(:user) }
     let(:student) { FactoryBot.create(:student) }
-
 
     context 'when the user is signed in' do
       subject do
