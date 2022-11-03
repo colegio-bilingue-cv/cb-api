@@ -21,9 +21,10 @@ task generate_cicles_questions: :environment do
     category_authorization_image = Category.create!(name: 'Autorización de imagen')
 
     #CYCLES
-    maternal = Cicle.create!(name: "Maternal")
-    primary = Cicle.create!(name: "Inicial/Primaria")
-    secondary = Cicle.create!(name: "Secundaria")
+    pre_inscription = Cicle.create!(name: 'Pre Inscripción')
+    maternal = Cicle.create!(name: 'Maternal')
+    primary = Cicle.create!(name: 'Inicial/Primaria')
+    secondary = Cicle.create!(name: 'Secundaria')
 
     #GRADES
     Grade.create!(name: 'Nivel 0', cicle: maternal)
@@ -44,44 +45,43 @@ task generate_cicles_questions: :environment do
 
     #QUESTIONS
 
-
     #PREINSCRIPTION
-    category_pre_inscription.questions.create!(text: '¿Con quién/quiénes vive el alumno/a?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Tiene hermanos?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Concurren a nuestra Institución?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Ubicación del alumno/a a inscribir en el orden de los hermanos', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Cuántas laptops hay en la vivienda? (No incluir laptops de CEIBAL)', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Cuántas pc fijas hay en la vivienda?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Cuántas tablets hay en la vivienda? (No incluir tablets de CEIBAL)', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Cuántas laptop/tablet CEIBAL hay en la vivienda?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿En el hogar hay acceso a internet?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Tiene smartphone o celular inteligente con acceso a internet desde su hogar?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Asistió a Instituciones anteriores?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Desde qué edad asistió a otras Instituciones?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Nombre de instituciones anteriores:', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Escarlatina', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Sarampión', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Varicela', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Rubeola', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Paperas', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Tos convulsa', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Tuvo o tiene enfermedades importantes? ¿Cuáles?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Sufre enfermedades crónicas? ¿Cuáles?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Toma medicamentos regularmente? ¿Cuáles?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Existen consecuencias de accidentes? ¿Cuáles?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Alergias o intolerancia a algún alimento:', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Otra información que desee aclarar:', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Foniatra', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Psicomotricista', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Psicopedagogo', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Psicólogo', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Psiquiatra', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Neuropediatra', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Desea realizar algún comentario al respecto?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Cómo llegó a conocer nuestra Institución?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Qué conocimientos, habilidades y/o actitudes fundamentales cree que deben desarrollarse en el proceso de aprendizaje de su hijo/a para lograr un alto desempeño en la complejidad y desafíos del mu...', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: '¿Porque considera importante una propuesta bilingüe en la formación de su hijo/a?', cicles: [maternal, primary, secondary])
-    category_pre_inscription.questions.create!(text: 'Detalle aquí otra información que crea importante y que pueda contribuir a una atención eficiente e integral del alumno/a:', cicles: [maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Con quién/quiénes vive el alumno/a?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Tiene hermanos?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Concurren a nuestra Institución?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Ubicación del alumno/a a inscribir en el orden de los hermanos', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Cuántas laptops hay en la vivienda? (No incluir laptops de CEIBAL)', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Cuántas pc fijas hay en la vivienda?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Cuántas tablets hay en la vivienda? (No incluir tablets de CEIBAL)', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Cuántas laptop/tablet CEIBAL hay en la vivienda?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿En el hogar hay acceso a internet?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Tiene smartphone o celular inteligente con acceso a internet desde su hogar?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Asistió a Instituciones anteriores?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Desde qué edad asistió a otras Instituciones?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Nombre de instituciones anteriores:', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Escarlatina', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Sarampión', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Varicela', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Rubeola', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Paperas', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Tos convulsa', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Tuvo o tiene enfermedades importantes? ¿Cuáles?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Sufre enfermedades crónicas? ¿Cuáles?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Toma medicamentos regularmente? ¿Cuáles?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Existen consecuencias de accidentes? ¿Cuáles?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Alergias o intolerancia a algún alimento:', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Otra información que desee aclarar:', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Foniatra', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Psicomotricista', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Psicopedagogo', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Psicólogo', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Psiquiatra', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Neuropediatra', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Desea realizar algún comentario al respecto?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Cómo llegó a conocer nuestra Institución?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Qué conocimientos, habilidades y/o actitudes fundamentales cree que deben desarrollarse en el proceso de aprendizaje de su hijo/a para lograr un alto desempeño en la complejidad y desafíos del mu...', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: '¿Porque considera importante una propuesta bilingüe en la formación de su hijo/a?', cicles: [pre_inscription, maternal, primary, secondary])
+    category_pre_inscription.questions.create!(text: 'Detalle aquí otra información que crea importante y que pueda contribuir a una atención eficiente e integral del alumno/a:', cicles: [pre_inscription, maternal, primary, secondary])
 
     #BASICS
     category_basic.questions.create!(text: 'Nombre completo:', cicles: [maternal, primary, secondary])
@@ -94,7 +94,7 @@ task generate_cicles_questions: :environment do
     category_basic.questions.create!(text: '¿Lo cuida o cuidó una persona en casa que no sea mamá o papá? ', cicles: [maternal])
     category_basic.questions.create!(text: '¿Se realizó test o diagnóstico?', cicles: [secondary])
     category_basic.questions.create!(text: 'Escolaridad / Comentarios Director', cicles: [primary, secondary])
-    
+
     #FAMILY
     category_family.questions.create!(text: '¿Con quién vive el alumno/a?', cicles:[maternal, primary, secondary])
     category_family.questions.create!(text: '¿Tiene hermanos?', cicles: [maternal, primary, secondary])
@@ -144,7 +144,7 @@ task generate_cicles_questions: :environment do
     category_study.questions.create!(text: '¿Dispones de textos, materiales, P.C, etc?', cicles: [secondary])
     category_study.questions.create!(text: '¿Cómo organizas el tiempo para las tareas domiciliarias?', cicles: [secondary])
     category_study.questions.create!(text: '¿Quieres agregar algo que a tu juicio favorezca o dificulte tu aprendizaje?', cicles: [secondary])
-    
+
     #INTERESTS
     category_interests.questions.create!(text: '¿A qué lugares de reunión concurres habitualmente?', cicles: [secondary])
     category_interests.questions.create!(text: '¿Tienes amigos? ¿De dónde son?', cicles: [secondary])
@@ -168,7 +168,7 @@ task generate_cicles_questions: :environment do
     category_parents_vision.questions.create!(text: '¿Uso de pantallas? ¿cuántas horas? ¿qué mira?', cicles: [maternal, primary])
     category_parents_vision.questions.create!(text: '¿Comunica lo que siente?', cicles: [primary])
     category_parents_vision.questions.create!(text: 'Cómo negocian los NO en el hogar?', cicles: [primary])
-    
+
     #FEEDING
     category_feeding.questions.create!(text: 'Los primeros tiempos fue ¿lactancia exclusiva?', cicles: [maternal])
     category_feeding.questions.create!(text: 'Si dejó el pecho, ¿cuándo lo hizo?', cicles: [maternal])
@@ -235,9 +235,8 @@ task generate_cicles_questions: :environment do
     category_education_project.questions.create!(text: '¿Qué no puede faltar en el vínculo con la Institución?', cicles: [primary])
     category_education_project.questions.create!(text: '¿Qué opina de los grupos de WhatsApp de padres?', cicles: [primary])
     category_education_project.questions.create!(text: '¿Qué expectativa pedagógica, vincular, etc, tiene la familia respecto a la Institución Educativa?', cicles: [secondary])
-    
+
     #AUTHORIZATION IMAGE
     category_authorization_image.questions.create!(text: '¿Autoriza imagen?', cicles: [maternal, primary, secondary])
     category_authorization_image.questions.create!(text: 'Adjuntar documento firmado', cicles: [maternal, primary, secondary])
-
 end
