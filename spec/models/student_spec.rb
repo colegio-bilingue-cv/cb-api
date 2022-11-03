@@ -13,7 +13,6 @@ RSpec.describe Student, type: :model do
     it { should validate_presence_of(:birthplace) }
     it { should validate_presence_of(:nationality) }
     it { should validate_presence_of(:medical_assurance) }
-    it { should validate_presence_of(:emergency) }
     it { should validate_presence_of(:vaccine_expiration) }
     it { should validate_presence_of(:medical_assurance) }
     it { should validate_presence_of(:medical_assurance) }
