@@ -30,6 +30,6 @@ class Api::FinalEvaluationController < Api::BaseController
   private
 
   def final_evaluation_params
-    params.require(:final_evaluation).permit(:student_id, :group_id, :status, :report_card)
+    params.permit(:status, :group_id, :report_card, :student_id)
   end
 end

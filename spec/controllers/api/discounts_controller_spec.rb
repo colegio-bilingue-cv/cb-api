@@ -17,7 +17,7 @@ RSpec.describe Api::DiscountsController do
       end
 
       context 'with valid student id' do
-        let(:params) { {student_id: student.id, discount: discount_attrs, format: :json} }
+        let(:params) { discount_attrs.merge({student_id: student.id, format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -85,7 +85,7 @@ RSpec.describe Api::DiscountsController do
       end
 
       context 'with valid student id' do
-        let(:params) { {student_id: student.id, id: discount.id, discount: {explanation:'resolution', percentage:'30'}, format: :json} }
+        let(:params) { {student_id: student.id, id: discount.id, explanation:'resolution', percentage:'30', format: :json} }
 
         it 'changes the explanation and percentage' do
           expect {
@@ -110,7 +110,7 @@ RSpec.describe Api::DiscountsController do
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: -1, id: discount.id, discount: {explanation:'resolution'}, format: :json} }
+        let(:params) { {student_id: -1, id: discount.id, explanation:'resolution', format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -127,7 +127,7 @@ RSpec.describe Api::DiscountsController do
       let(:student) { FactoryBot.create(:student, :with_discount) }
       let(:discount) { student.discounts.first }
       let(:discount_attrs) { discount.attributes }
-      let(:params) { {student_id: student.id, id: discount.id, discount: {explanation:'1'}, format: :json} }
+      let(:params) { {student_id: student.id, id: discount.id, explanation: '1', format: :json} }
 
       subject do
         patch :update, params: params

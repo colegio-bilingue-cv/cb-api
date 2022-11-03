@@ -19,7 +19,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with valid data' do
-        let(:params) { { student_id: student.id, final_evaluation: final_evaluation_attrs , format: :json} }
+        let(:params) { final_evaluation_attrs.merge({student_id: student.id, format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -37,7 +37,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: student.id, final_evaluation: {student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status]}, format: :json} }
+        let(:params) { {student_id: student.id, student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status], format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -50,7 +50,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with invalid group id' do
-        let(:params) { {student_id: student.id, final_evaluation: {student_id: student.id, group_id: -1, status: final_evaluation_attrs[:status]}, format: :json} }
+        let(:params) { {student_id: student.id, student_id: student.id, group_id: -1, status: final_evaluation_attrs[:status], format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -68,7 +68,7 @@ RSpec.describe Api::FinalEvaluationController do
       let(:student) { FactoryBot.create(:student) }
       let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, :with_group, student_id: student.id) }
 
-      let(:params) { {student_id: final_evaluation_attrs[:student_id], final_evaluation: final_evaluation_attrs, format: :json} }
+      let(:params) { final_evaluation_attrs.merge({format: :json}) }
 
       subject do
         post :create, params: params
@@ -105,7 +105,7 @@ RSpec.describe Api::FinalEvaluationController do
 
       context 'with valid data' do
         let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, group_id: group.id, student_id: student.id) }
-        let(:params) { {id: final_evaluation.id, student_id: student.id, final_evaluation: final_evaluation_attrs, format: :json} }
+        let(:params) { final_evaluation_attrs.merge({id: final_evaluation.id, student_id: student.id, format: :json}) }
 
         its(:status) { should eq(200) }
 
@@ -124,7 +124,7 @@ RSpec.describe Api::FinalEvaluationController do
 
       context 'with invalid student id' do
         let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, group_id: group.id, student_id: student.id) }
-        let(:params) { {id: final_evaluation.id, student_id: student.id, final_evaluation: {student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status]}, format: :json} }
+        let(:params) { {id: final_evaluation.id, student_id: student.id, student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status], format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -138,7 +138,7 @@ RSpec.describe Api::FinalEvaluationController do
 
       context 'with invalid group id' do
         let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, group_id: -1, student_id: student.id) }
-        let(:params) { {id: final_evaluation.id, student_id: student.id, final_evaluation: final_evaluation_attrs, format: :json} }
+        let(:params) { final_evaluation_attrs.merge({id: final_evaluation.id, student_id: student.id, format: :json}) }
 
         its(:status) { should eq(404) }
 
@@ -153,7 +153,6 @@ RSpec.describe Api::FinalEvaluationController do
     end
 
     context 'when user is not signed in' do
-
       let(:user) { FactoryBot.create(:user) }
 
       let(:student) { FactoryBot.create(:student) }
@@ -161,7 +160,7 @@ RSpec.describe Api::FinalEvaluationController do
       let(:final_evaluation) { FactoryBot.create(:final_evaluation, :passed, group_id: group.id, student_id: student.id) }
       let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, group_id: group.id, student_id: student.id) }
 
-      let(:params) { {id: final_evaluation.id, student_id: student.id, group_id: group.id, final_evaluation: final_evaluation_attrs, format: :json} }
+      let(:params) { final_evaluation_attrs.merge({id: final_evaluation.id, student_id: student.id, group_id: group.id, format: :json}) }
 
       subject do
         patch :update, params: params
