@@ -11,11 +11,11 @@ RSpec.describe Api::TeachersController do
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
         get :index, params: params
-        
+
         response
       end
 
-      context 'with teachers' do        
+      context 'with teachers' do
         its(:status) { should eq(200) }
 
         its(:body) do
@@ -27,12 +27,12 @@ RSpec.describe Api::TeachersController do
                 {
                   "name": user.groups.first.name,
                   "year": user.groups.first.year,
-                  "grade": user.groups.first.grade.name
+                  "grade_name": user.groups.first.grade_name
                 }
               ]
             }
           ])
-        end        
+        end
       end
 
       context 'without teachers' do
