@@ -190,26 +190,6 @@ RSpec.describe Api::TeachersController do
         end
       end
     end
-=begin
-    context 'when user is not signed in' do
-      let(:params) { { format: :json } }
-
-      subject do
-        post :assign, params: params
-
-        response
-      end
-
-      its(:status) { should eq(403) }
-
-      its(:body) do
-        should include_json(error: {
-          key: 'forbidden.required_signed_in',
-          description: I18n.t('errors.forbidden.required_signed_in')
-        })
-      end
-    end
-=end
   end
 
   describe "DELETE dismiss" do
@@ -275,26 +255,6 @@ RSpec.describe Api::TeachersController do
         end
       end
     end
-=begin
-    context 'when user is not signed in' do
-      let(:params) { { format: :json } }
-
-      subject do
-        delete :dismiss, params: params
-
-        response
-      end
-
-      its(:status) { should eq(403) }
-
-      its(:body) do
-        should include_json(error: {
-          key: 'forbidden.required_signed_in',
-          description: I18n.t('errors.forbidden.required_signed_in')
-        })
-      end
-    end
-=end
   end
 
 end
