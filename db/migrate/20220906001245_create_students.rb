@@ -7,7 +7,7 @@ class CreateStudents < ActiveRecord::Migration[7.0]
       t.string :schedule_start
       t.string :schedule_end
       t.string :tuition
-      t.string :reference_number
+      t.integer :reference_number
       t.string :birthplace
       t.datetime :birthdate
       t.string :nationality
