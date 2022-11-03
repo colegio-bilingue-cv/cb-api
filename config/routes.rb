@@ -39,5 +39,7 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: :me do
       patch :password
     end
+
+    resources :teachers, only: [:index]
   end
 end

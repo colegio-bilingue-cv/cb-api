@@ -1,8 +1,7 @@
 class GroupSerializer < Panko::Serializer
-  attributes :id, :name, :year, :grade_name
+  attributes :id, :name, :year, :grade
 
-  def grade_name
+  def grade
     object.grade.name
   end
-
 end

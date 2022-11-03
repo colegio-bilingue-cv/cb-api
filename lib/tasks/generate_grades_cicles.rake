@@ -1,0 +1,21 @@
+desc "Generate grades and cicles(due to dependecies)"
+task generate_grades_cicles: :environment do
+  maternal = Cicle.create!(name: 'Maternal')
+  inicial_primaria = Cicle.create!(name: 'Inicial/Primaria')
+  secundaria = Cicle.create!(name: 'Secundaria')
+  Grade.create!(name: 'Nivel 0', cicle: maternal)
+  Grade.create!(name: 'Nivel 1', cicle: maternal)
+  Grade.create!(name: 'Nivel 2', cicle: maternal)
+  Grade.create!(name: 'Nivel 3', cicle: inicial_primaria)
+  Grade.create!(name: 'Nivel 4', cicle: inicial_primaria)
+  Grade.create!(name: 'Nivel 5', cicle: inicial_primaria)
+  Grade.create!(name: '1ero', cicle: inicial_primaria)
+  Grade.create!(name: '2do', cicle: inicial_primaria)
+  Grade.create!(name: '3ero', cicle: inicial_primaria)
+  Grade.create!(name: '4to', cicle: inicial_primaria)
+  Grade.create!(name: '5to', cicle: inicial_primaria)
+  Grade.create!(name: '6to', cicle: inicial_primaria)
+  Grade.create!(name: '1 CBU', cicle: secundaria)
+  Grade.create!(name: '2 CBU', cicle: secundaria)
+  Grade.create!(name: '3 CBU', cicle: secundaria)
+end

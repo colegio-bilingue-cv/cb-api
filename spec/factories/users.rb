@@ -14,6 +14,10 @@ FactoryBot.define do
       name = nil
     end
 
+    trait :with_group do
+      after(:create){ |user| FactoryBot.create(:user_group, :teacher, :with_group, user_id: user.id) }
+    end
+
     after(:create) { |user| user.add_role(:teacher) }
   end
 end
