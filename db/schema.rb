@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_23_235929) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_03_002236) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -213,7 +213,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_23_235929) do
     t.string "schedule_start"
     t.string "schedule_end"
     t.string "tuition"
-    t.integer "reference_number"
+    t.string "reference_number"
     t.string "birthplace"
     t.date "birthdate"
     t.string "nationality"
