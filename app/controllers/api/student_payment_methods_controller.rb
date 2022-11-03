@@ -18,7 +18,7 @@ class Api::StudentPaymentMethodsController < Api::BaseController
 
     student_payment_method = StudentPaymentMethod.find(params[:id])
     student_payment_method.update!(student_payment_method_params)
-    
+
     response = Panko::Response.create do |r|
       { student_payment_method: r.serializer(student_payment_method, StudentPaymentMethodSerializer) }
     end
@@ -27,6 +27,6 @@ class Api::StudentPaymentMethodsController < Api::BaseController
   end
 
   def student_payment_method_params
-    params.require(:student_payment_method).permit(:year, :payment_method_id, :student_id)
+    params.permit(:year, :payment_method_id, :student_id, :annual_payment)
   end
 end
