@@ -32,7 +32,6 @@ Rails.application.routes.draw do
       get '/teachers', to: 'teachers#index'
       post '/teachers', to: 'teachers#assign'
       delete '/teachers', to: 'teachers#dismiss'
-
     end
 
     resources :grades, only: [:index, :show] do
