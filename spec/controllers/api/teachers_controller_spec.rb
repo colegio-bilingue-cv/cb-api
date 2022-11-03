@@ -212,4 +212,89 @@ RSpec.describe Api::TeachersController do
 =end
   end
 
+  describe "DELETE dismiss" do
+    let(:user) { FactoryBot.create(:user, :with_group) }
+
+    context 'when user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :dismiss, params: params
+
+        response
+      end
+
+      context 'when everything is right for the disassosiation' do
+        let(:params) { { teacher: { user_id: user.id } , group_id: user.groups.first.id, format: :json } }
+
+        its(:status) { should eq(200) }
+      end
+
+      context 'when assosiation does not exist' do
+        let(:user2) { FactoryBot.create(:user) }
+        let(:params) { { teacher: { user_id: user2.id } , group_id: user.groups.first.id, format: :json } }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(
+            error: {
+              key: "user_group.not_found",
+              description: "Usuario no perteneciente al grupo"
+            }
+        )
+        end
+      end
+
+      context 'when group does not exist' do
+        let(:params) { { teacher: { user_id: user.id } , group_id: -1, format: :json } }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(
+            error: {
+                key: "group.not_found",
+                description: "Grupo no encontrado"
+            }
+        )
+        end
+      end
+
+      context 'when user does not exist' do
+        let(:params) { { teacher: { user_id: -1 } , group_id: user.groups.first.id, format: :json } }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(
+            error: {
+              key: "user.not_found",
+              description: "Usuario no encontrado"
+            }
+        )
+        end
+      end
+    end
+=begin
+    context 'when user is not signed in' do
+      let(:params) { { format: :json } }
+
+      subject do
+        delete :dismiss, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+=end
+  end
+
 end
