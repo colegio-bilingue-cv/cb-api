@@ -59,6 +59,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :created
   end
 
+  def students
+    group = current_user.groups.find(params[:group_id])
+
+    response = Panko::Response.create do |r|
+      { group: r.serializer(group, GroupWithStudentsSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+
   private
 
   def me_params
