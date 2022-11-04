@@ -153,6 +153,15 @@ class Api::StudentsController < Api::BaseController
 
   def active
     students = Student.active
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
+  def pending
+    students = Student.pending
 
     response = Panko::Response.new(
       students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
@@ -160,6 +169,7 @@ class Api::StudentsController < Api::BaseController
 
     render json: response, status: :ok
   end
+
 
   def deactivate
     student = Student.find(params[:student_id])

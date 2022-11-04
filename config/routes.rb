@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     scope :students, controller: :students do
       get :active
       get :inactive
+      get :pending
     end
 
     resources :students, except: [:destroy] do
