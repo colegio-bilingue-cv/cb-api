@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :document do
-    document_type { Faker::Lorem.sentences }
+    document_type { 0 }
     upload_date { Date.today }
 
     user
