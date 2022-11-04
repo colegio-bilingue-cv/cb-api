@@ -48,6 +48,7 @@ Rails.application.routes.draw do
       post :documents, to:'me#create_document'
       post :complementary_informations, to: 'me#create_complementary_information'
       post :absences, to: 'me#create_absence'
+      get :groups
 
       scope :groups, controller: :me do
         get :students
