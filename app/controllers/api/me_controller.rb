@@ -39,6 +39,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :created
   end
 
+  def create_complementary_information
+    complementary_information = current_user.complementary_informations.create!(complementary_information_params)
+
+    response = Panko::Response.create do |r|
+      { complementary_information: r.serializer(complementary_information, ComplementaryInformationSerializer) }
+    end
+
+    render json: response, status: :created
+  end
+
   private
 
   def me_params
@@ -51,5 +61,9 @@ class Api::MeController < Api::BaseController
 
   def document_params
     params.permit(:document_type, :certificate, :upload_date)
+  end
+
+  def complementary_information_params
+    params.permit(:description, :date, :attachment)
   end
 end

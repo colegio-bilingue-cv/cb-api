@@ -46,6 +46,7 @@ Rails.application.routes.draw do
     resource :me, only: [:show, :update], controller: :me do
       patch :password
       post :documents, to:'me#create_document'
+      post :complementary_informations, to: 'me#create_complementary_information'
     end
 
     resources :teachers, only: [:index]
