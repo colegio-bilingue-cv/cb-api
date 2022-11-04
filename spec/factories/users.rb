@@ -19,5 +19,9 @@ FactoryBot.define do
     end
 
     after(:create) { |user| user.add_role(:teacher) }
+
+    trait :with_document do
+      documents { FactoryBot.create_list(:document, 1) }
+    end
   end
 end

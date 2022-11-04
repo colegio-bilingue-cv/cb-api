@@ -205,4 +205,54 @@ RSpec.describe Api::MeController do
       end
     end
   end
+
+  describe 'POST create_document' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document) }
+      let(:document) { user.documents.first }
+      let(:document_attrs) { document.attributes }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_document, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { document_attrs.merge({format: :json}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(document: {
+            document_type: document.document_type,
+            upload_date: document.upload_date.to_s,
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document) }
+      let(:document) { user.documents.first }
+      let(:document_attrs) { document.attributes }
+      let(:params) { document_attrs.merge({format: :json}) }
+
+      subject do
+        post :create_document, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end
