@@ -7,6 +7,10 @@ Rails.application.routes.draw do
 
     resources :users, only: [:create, :update, :index]
 
+    scope :students, controller: :students do
+      get :active
+    end
+
     resources :students, except: [:destroy] do
       resources :family_members, only: [:create, :update]
       resources :comments, only: [:create, :update]
