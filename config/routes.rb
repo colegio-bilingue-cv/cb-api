@@ -30,8 +30,6 @@ Rails.application.routes.draw do
 
     resources :groups, only: [:index] do
       get '/teachers', to: 'teachers#index'
-      post '/teachers', to: 'teachers#assign'
-      delete '/teachers', to: 'teachers#dismiss'
     end
 
     resources :grades, only: [:index, :show] do
@@ -43,5 +41,7 @@ Rails.application.routes.draw do
     end
 
     resources :teachers, only: [:index]
+
+    resource :user_groups, only: [:create, :destroy]
   end
 end
