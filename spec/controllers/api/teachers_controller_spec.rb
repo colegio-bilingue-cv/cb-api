@@ -27,7 +27,7 @@ RSpec.describe Api::TeachersController do
                 {
                   "name": user.groups.first.name,
                   "year": user.groups.first.year,
-                  "grade": user.groups.first.grade.name
+                  "grade_name": user.groups.first.grade_name
                 }
               ]
             }
@@ -76,12 +76,10 @@ RSpec.describe Api::TeachersController do
           should include_json(teachers: [])
         end
       end
-
     end
 
     context 'when user is not signed in' do
       let(:params) { { format: :json } }
-
       subject do
         get :index, params: params
 
@@ -98,7 +96,4 @@ RSpec.describe Api::TeachersController do
       end
     end
   end
-
-  
-
 end

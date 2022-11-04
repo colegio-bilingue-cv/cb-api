@@ -4,7 +4,10 @@ class Discount < ApplicationRecord
   enum explanation: [:sibling, :resolution]
   enum administrative_type: [:direction, :social_assistance]
 
-  validates :percentage, :explanation, :start_date, :end_date, presence: true
+  has_one_attached :resolution
+  has_one_attached :administrative_info
+
+  validates :percentage, :start_date, :end_date, presence: true
   validate :validation_date
 
   private

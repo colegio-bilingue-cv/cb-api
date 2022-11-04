@@ -12,9 +12,10 @@ class Student < ApplicationRecord
   has_many :answers
   belongs_to :cicle, optional: true
   has_many :questions, through: :answers
-  has_many :evaluations
+  has_many :final_evaluations
+  has_many :intermediate_evaluations
 
-  accepts_nested_attributes_for :student_payment_methods
+  has_one_attached :enrollment_commitment
 
   enum status: [:pending, :active, :inactive]
 
@@ -22,7 +23,7 @@ class Student < ApplicationRecord
   validates :address, :neighborhood,
     :name, :birthplace, :birthdate, :nationality, :first_language, presence: true
 
-  validates :medical_assurance, :emergency, :vaccine_expiration, presence: true
+  validates :medical_assurance, :vaccine_expiration, presence: true
 
   validates :reference_number, allow_blank: true, uniqueness: true
 

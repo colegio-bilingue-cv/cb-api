@@ -19,7 +19,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
 
       context 'with valid data' do
-        let(:params) { {student_payment_method: student_payment_method_attrs, format: :json} }
+        let(:params) { student_payment_method_attrs.merge({format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -33,7 +33,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
 
       context 'with invalid data' do
-        let(:params) { {student_payment_method: {student_id: student.id, payment_method_id: payment_method.id, year: nil}, format: :json} }
+        let(:params) { {student_id: student.id, payment_method_id: payment_method.id, year: nil, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -50,7 +50,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       context 'with invalid student id' do
         let(:invalid_student_payment_method_attrs) { {student_id: -1, payment_method_id: payment_method.id, year: student_payment_method.year} }
 
-        let(:params) { {student_payment_method: invalid_student_payment_method_attrs, format: :json} }
+        let(:params) { invalid_student_payment_method_attrs.merge({format: :json}) }
 
         its(:status) { should eq(404) }
 
@@ -65,7 +65,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       context 'with invalid payment_method id' do
         let(:invalid_student_payment_method_attrs) { {student_id: student.id, payment_method_id: -1, year: student_payment_method.year} }
 
-        let(:params) { {student_payment_method: invalid_student_payment_method_attrs, format: :json} }
+        let(:params) { invalid_student_payment_method_attrs.merge({format: :json}) }
 
         its(:status) { should eq(404) }
 
@@ -79,7 +79,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
     end
 
     context 'when user is not signed in' do
-      let(:params) { {student_payment_method: student_payment_method_attrs, format: :json} }
+      let(:params) { student_payment_method_attrs.merge({format: :json}) }
 
       subject do
         post :create, params: params
@@ -117,12 +117,12 @@ RSpec.describe Api::StudentPaymentMethodsController do
           FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id, year: Date.yesterday)
         end
 
-        let(:params) do
-          { student_payment_method: {year: second_student_payment_method.year,
-            student_id: student_payment_method.student_id,
-            payment_method_id: student_payment_method.payment_method_id },
-            id: student_payment_method.id,
-            format: :json }
+        let(:params) do {
+          year: second_student_payment_method.year,
+          student_id: student_payment_method.student_id,
+          payment_method_id: student_payment_method.payment_method_id,
+          id: student_payment_method.id, format: :json
+        }
         end
 
         its(:status) { should eq(422) }
@@ -138,12 +138,12 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
 
       context 'with valid data' do
-       let(:params) do
-          { student_payment_method: {year: Date.yesterday,
-            student_id: student_payment_method.student_id,
-            payment_method_id: student_payment_method.payment_method_id },
-            id: student_payment_method.id,
-            format: :json }
+       let(:params) do {
+          year: Date.yesterday,
+          student_id: student_payment_method.student_id,
+          payment_method_id: student_payment_method.payment_method_id,
+          id: student_payment_method.id,
+          format: :json }
         end
 
         it 'changes the year' do
@@ -167,11 +167,11 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
 
       context 'with invalid id' do
-        let(:params) do
-          { student_payment_method: {year: Date.yesterday,
-            student_id: student_payment_method.student_id,
-            payment_method_id: student_payment_method.payment_method_id}, id: -1,
-            format: :json }
+        let(:params) do {
+          year: Date.yesterday,
+          student_id: student_payment_method.student_id,
+          payment_method_id: student_payment_method.payment_method_id, id: -1,
+          format: :json }
         end
 
         its(:status) { should eq(404) }
@@ -185,9 +185,10 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
 
       context 'with invalid data' do
-        let(:params) do { student_payment_method: {year: '',
+        let(:params) do {
+          year: '',
           student_id: student_payment_method.student_id,
-          payment_method_id: student_payment_method.payment_method_id}, id: student_payment_method.id,
+          payment_method_id: student_payment_method.payment_method_id, id: student_payment_method.id,
           format: :json }
         end
 
@@ -210,12 +211,12 @@ RSpec.describe Api::StudentPaymentMethodsController do
 
       let(:student_payment_method) { FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
 
-      let(:params) do
-        { student_payment_method:{year: '01-01-1900',
-          student_id: student_payment_method.student_id,
-          payment_method_id: student_payment_method.payment_method_id },
-          id: student_payment_method.id,
-          format: :json }
+      let(:params) do {
+        year: '01-01-1900',
+        student_id: student_payment_method.student_id,
+        payment_method_id: student_payment_method.payment_method_id ,
+        id: student_payment_method.id,
+        format: :json }
       end
 
       subject do
