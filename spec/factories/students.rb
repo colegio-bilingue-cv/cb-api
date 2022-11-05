@@ -25,6 +25,10 @@ FactoryBot.define do
     contact_phone { Faker::Number.number(digits: 8) }
     email { Faker::Internet.email }
 
+    trait :with_group do
+      group
+    end
+
     trait :with_family_member do
       family_members { FactoryBot.create_list(:family_member, 1) }
     end

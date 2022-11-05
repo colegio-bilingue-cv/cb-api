@@ -7,6 +7,8 @@ class StudentSerializer < Panko::Serializer
     :inscription_date, :starting_date, :contact, :contact_phone,
     :enrollment_commitment_url
 
+  has_one :group
+
   def enrollment_commitment_url
     object.enrollment_commitment.url if object.enrollment_commitment.attached?
   end

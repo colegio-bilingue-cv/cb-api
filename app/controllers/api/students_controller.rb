@@ -21,6 +21,7 @@ class Api::StudentsController < Api::BaseController
   end
 
   def create
+    raise ActiveRecord::RecordNotFound.new('', Group.to_s) if student_params[:group_id].present? && !Group.exists?(student_params[:group_id])
     student = Student.create!(student_params)
 
     response = Panko::Response.create do |r|
@@ -31,6 +32,7 @@ class Api::StudentsController < Api::BaseController
   end
 
   def update
+    raise ActiveRecord::RecordNotFound.new('', Group.to_s) if student_params[:group_id].present? && !Group.exists?(student_params[:group_id])
     student = Student.find(params[:id])
     student.update!(student_params)
 
@@ -179,7 +181,7 @@ class Api::StudentsController < Api::BaseController
       :reference_number, :office,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
-      :inscription_date, :starting_date, :contact, :contact_phone, :enrollment_commitment
+      :inscription_date, :starting_date, :contact, :contact_phone, :enrollment_commitment, :group_id
     )
   end
 
