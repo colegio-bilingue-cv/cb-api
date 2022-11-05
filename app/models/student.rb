@@ -37,7 +37,7 @@ class Student < ApplicationRecord
     self.active!
   end
 
-  def inactivate!
+  def deactivate!
     self.inactive!
   end
 
