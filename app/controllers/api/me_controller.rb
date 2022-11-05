@@ -49,6 +49,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :created
   end
 
+  def create_absence
+    absence = current_user.absences.create!(absence_params)
+
+    response = Panko::Response.create do |r|
+      { absence: r.serializer(absence, AbsenceSerializer) }
+    end
+
+    render json: response, status: :created
+  end
+
   private
 
   def me_params
@@ -65,5 +75,9 @@ class Api::MeController < Api::BaseController
 
   def complementary_information_params
     params.permit(:description, :date, :attachment)
+  end
+
+  def absence_params
+    params.permit(:start_date, :end_date, :reason, :certificate)
   end
 end

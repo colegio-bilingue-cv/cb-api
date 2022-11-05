@@ -305,4 +305,53 @@ RSpec.describe Api::MeController do
       end
     end
   end
+
+  describe 'POST create_absences' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:absence_attrs) { FactoryBot.attributes_for(:absence) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :absences, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { absence_attrs.merge({user_id: user.id, format: :json}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(absence: {
+            start_date: absence_attrs[:start_date].to_s,
+            end_date: absence_attrs[:end_date].to_s,
+            reason: absence_attrs[:reason]
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:absence_attrs) { FactoryBot.attributes_for(:absence) }
+      let(:params) { absence_attrs.merge({user_id: user.id, format: :json}) }
+
+      subject do
+        post :absences, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end
