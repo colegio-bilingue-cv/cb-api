@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       patch :password
       post :documents, to:'me#create_document'
       post :complementary_informations, to: 'me#create_complementary_information'
+      resources :absences, only: [:create]
     end
 
     resources :teachers, only: [:index]

@@ -257,3 +257,6 @@ es:
     not_found: 'Grado no encontrado'
   role: 
     not_found: 'Rol no encontrado'
+  absence:
+    validations:
+      validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
