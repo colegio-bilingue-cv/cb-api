@@ -1078,10 +1078,31 @@ RSpec.describe Api::StudentsController do
       its(:status) { should eq(200) }
 
       its(:body) do
-        should include_json(motive_inactivate_student: {
-          motive: motive_inactivate_student_attrs[:motive],
-          last_day: motive_inactivate_student_attrs[:last_day].to_s,
-          description: motive_inactivate_student_attrs[:description],
+        should include_json(student: {
+          ci: student.ci,
+          name: student.name,
+          surname: student.surname,
+          birthplace: student.birthplace.to_s,
+          birthdate: student.birthdate.to_s,
+          nationality: student.nationality,
+          schedule_start: student.schedule_start,
+          schedule_end: student.schedule_end,
+          tuition: student.tuition,
+          reference_number: student.reference_number.to_s,
+          office: student.office,
+          status: 'inactive',
+          first_language: student.first_language,
+          address: student.address,
+          neighborhood: student.neighborhood,
+          medical_assurance: student.medical_assurance,
+          emergency: student.emergency,
+          vaccine_expiration: student.vaccine_expiration.to_s,
+          vaccine_name: student.vaccine_name,
+          phone_number: student.phone_number,
+          inscription_date: student.inscription_date.to_s,
+          starting_date: student.starting_date.to_s,
+          contact: student.contact,
+          contact_phone: student.contact_phone
         })
       end
     end

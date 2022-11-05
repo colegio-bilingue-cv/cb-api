@@ -156,7 +156,7 @@ class Api::StudentsController < Api::BaseController
     student.deactivate!
 
     response = Panko::Response.create do |r|
-      { motive_inactivate_student: r.serializer(motive_inactivate_student, MotiveInactivateStudentSerializer) }
+      { student: r.serializer(student, StudentSerializer) }
     end
 
     render json: response, status: :ok
