@@ -1058,4 +1058,55 @@ RSpec.describe Api::StudentsController do
       end
     end
   end
+
+  describe 'POST deactivate' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:student) { FactoryBot.create(:student, :pending, :with_family_member) }
+
+    context 'when the user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :deactivate, params: params
+
+        response
+      end
+
+      let(:motive_inactivate_student_attrs) { FactoryBot.attributes_for(:motive_inactivate_student) }
+
+      let(:params) { motive_inactivate_student_attrs.merge({ student_id: student.id, format: :json}) }
+
+      its(:status) { should eq(200) }
+
+      its(:body) do
+        should include_json(motive_inactivate_student: {
+          motive: motive_inactivate_student_attrs[:motive],
+          last_day: motive_inactivate_student_attrs[:last_day].to_s,
+          description: motive_inactivate_student_attrs[:description],
+        })
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_discount) }
+
+      let(:motive_inactivate_student_attrs) { FactoryBot.attributes_for(:motive_inactivate_student) }
+
+      let(:params) { motive_inactivate_student_attrs.merge({ student_id: student.id, format: :json}) }
+
+      subject do
+        post :deactivate, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end

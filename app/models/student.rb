@@ -14,6 +14,7 @@ class Student < ApplicationRecord
   has_many :questions, through: :answers
   has_many :final_evaluations
   has_many :intermediate_evaluations
+  has_many :motive_inactivate_students
 
   has_one_attached :enrollment_commitment
 
@@ -34,6 +35,10 @@ class Student < ApplicationRecord
     raise StudentsActivation::IncompletePaymentMethodError unless has_valid_payment_method?
 
     self.active!
+  end
+
+  def inactivate!
+    self.inactive!
   end
 
   def current_payment_method

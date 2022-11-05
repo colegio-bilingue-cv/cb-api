@@ -150,6 +150,18 @@ class Api::StudentsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def deactivate
+    student = Student.find(params[:student_id])
+    motive_inactivate_student = student.motive_inactivate_students.create!(deactivate_params)
+    student.deactivate!
+
+    response = Panko::Response.create do |r|
+      { motive_inactivate_student: r.serializer(motive_inactivate_student, MotiveInactivateStudentSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+
   private
 
   def student_params
@@ -165,4 +177,9 @@ class Api::StudentsController < Api::BaseController
   def activate_params
     params.require(:student).permit(:reference_number)
   end
+
+  def deactivate_params
+    params.permit(:motive, :last_day, :description)
+  end
+
 end
