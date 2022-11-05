@@ -140,6 +140,16 @@ class Api::StudentsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def active
+    students = Student.active
+
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
   private
 
   def student_params

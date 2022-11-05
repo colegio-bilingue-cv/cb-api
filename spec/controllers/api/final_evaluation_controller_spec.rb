@@ -37,7 +37,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: student.id, student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status], format: :json} }
+        let(:params) { {student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status], format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -50,7 +50,7 @@ RSpec.describe Api::FinalEvaluationController do
       end
 
       context 'with invalid group id' do
-        let(:params) { {student_id: student.id, student_id: student.id, group_id: -1, status: final_evaluation_attrs[:status], format: :json} }
+        let(:params) { {student_id: student.id, group_id: -1, status: final_evaluation_attrs[:status], format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -124,7 +124,7 @@ RSpec.describe Api::FinalEvaluationController do
 
       context 'with invalid student id' do
         let(:final_evaluation_attrs) { FactoryBot.attributes_for(:final_evaluation, :passed, group_id: group.id, student_id: student.id) }
-        let(:params) { {id: final_evaluation.id, student_id: student.id, student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status], format: :json} }
+        let(:params) { {id: final_evaluation.id, student_id: -1, group_id: group.id, status: final_evaluation_attrs[:status], format: :json} }
 
         its(:status) { should eq(404) }
 
