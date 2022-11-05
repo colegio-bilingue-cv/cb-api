@@ -129,9 +129,8 @@ class Api::StudentsController < Api::BaseController
     students = Student.inactive
 
     response = Panko::Response.new(
-      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentWithMotiveInactiveSerializer)
     )
-
     render json: response, status: :ok
   end
 

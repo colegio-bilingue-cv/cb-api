@@ -1137,13 +1137,14 @@ RSpec.describe Api::StudentsController do
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
-        get :index, params: { format: :json }
+        get :inactive, params: { format: :json }
 
         response
       end
 
       context 'with students' do
-        let(:student) { FactoryBot.create(:student, :inactive) }
+        let(:motive_inactivate) { FactoryBot.create(:motive_inactivate_student) }
+        let(:student) { motive_inactivate.student }
 
         its(:status) { should eq(200) }
 
@@ -1172,7 +1173,13 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            last_motive_inactivate: {
+              id: motive_inactivate.id,
+              motive: motive_inactivate.motive,
+              last_day: motive_inactivate.last_day.to_s,
+              description: motive_inactivate.description
+            }
           }])
         end
       end
