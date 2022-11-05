@@ -81,6 +81,7 @@ RSpec.describe Api::StudentsController do
   end
 
   describe 'POST create' do
+    let(:group) { FactoryBot.create(:group) }
     let(:student) { FactoryBot.build(:student) }
     let(:student_attrs) { student.attributes }
 
@@ -98,7 +99,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid data' do
-        let(:params) { student_attrs.merge({format: :json}) }
+        let(:params) { student_attrs.merge({ group_id: group.id, format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -127,7 +128,13 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year,
+              grade_name: group.grade_name
+            }
           })
         end
       end
@@ -210,7 +217,8 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            group: {}
           })
         end
       end
@@ -253,7 +261,8 @@ RSpec.describe Api::StudentsController do
 
   describe 'PATCH update' do
     context 'when user is signed in' do
-      let(:student) { FactoryBot.create(:student) }
+      let(:group) { FactoryBot.create(:group) }
+      let(:student) { FactoryBot.create(:student, :with_group) }
       let(:user) { FactoryBot.create(:user) }
 
       subject do
@@ -264,7 +273,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid data' do
-        let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: student.id, format: :json} }
+        let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: student.id, group_id: group.id, format: :json} }
 
         it 'changes the name and surname' do
           expect {
@@ -301,7 +310,13 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year,
+              grade_name: group.grade_name
+            }
           })
         end
 
