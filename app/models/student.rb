@@ -28,6 +28,10 @@ class Student < ApplicationRecord
 
   validates :reference_number, allow_blank: true, uniqueness: true
 
+  def last_motive_inactivate
+    motive_inactivate_students.last
+  end
+
   def activate!
     raise StudentsActivation::IncompleteBasicInfoError unless completed_basic_info?
     raise StudentsActivation::IncompleteFamilyMembersError unless has_family_members?
