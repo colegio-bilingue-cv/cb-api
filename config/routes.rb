@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
       resources :discounts, only: [:create, :update]
       post :activate
+      post :deactivate
     end
 
     resources :type_scholarships, only: [:create, :index, :update]

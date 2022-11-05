@@ -1058,4 +1058,76 @@ RSpec.describe Api::StudentsController do
       end
     end
   end
+
+  describe 'POST deactivate' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:student) { FactoryBot.create(:student, :pending, :with_family_member) }
+
+    context 'when the user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :deactivate, params: params
+
+        response
+      end
+
+      let(:motive_inactivate_student_attrs) { FactoryBot.attributes_for(:motive_inactivate_student) }
+
+      let(:params) { motive_inactivate_student_attrs.merge({ student_id: student.id, format: :json}) }
+
+      its(:status) { should eq(200) }
+
+      its(:body) do
+        should include_json(student: {
+          ci: student.ci,
+          name: student.name,
+          surname: student.surname,
+          birthplace: student.birthplace.to_s,
+          birthdate: student.birthdate.to_s,
+          nationality: student.nationality,
+          schedule_start: student.schedule_start,
+          schedule_end: student.schedule_end,
+          tuition: student.tuition,
+          reference_number: student.reference_number.to_s,
+          office: student.office,
+          status: 'inactive',
+          first_language: student.first_language,
+          address: student.address,
+          neighborhood: student.neighborhood,
+          medical_assurance: student.medical_assurance,
+          emergency: student.emergency,
+          vaccine_expiration: student.vaccine_expiration.to_s,
+          vaccine_name: student.vaccine_name,
+          phone_number: student.phone_number,
+          inscription_date: student.inscription_date.to_s,
+          starting_date: student.starting_date.to_s,
+          contact: student.contact,
+          contact_phone: student.contact_phone
+        })
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_discount) }
+
+      let(:motive_inactivate_student_attrs) { FactoryBot.attributes_for(:motive_inactivate_student) }
+
+      let(:params) { motive_inactivate_student_attrs.merge({ student_id: student.id, format: :json}) }
+
+      subject do
+        post :deactivate, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end
