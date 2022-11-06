@@ -18,6 +18,10 @@ FactoryBot.define do
       after(:create){ |user| FactoryBot.create(:user_group, :teacher, :with_group, user_id: user.id) }
     end
 
+    trait :with_complementary_information do
+      complementary_informations { FactoryBot.create_list(:complementary_information, 1) }
+    end
+
     after(:create) { |user| user.add_role(:teacher) }
 
     trait :with_document do

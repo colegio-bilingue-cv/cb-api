@@ -51,8 +51,8 @@ RSpec.describe Api::MeController do
       end
     end
   end
-  describe 'PATCH update' do
 
+  describe 'PATCH update' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
 
@@ -241,6 +241,56 @@ RSpec.describe Api::MeController do
 
       subject do
         post :create_document, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST create_complementary_information' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:complementary_information_attrs) { complementary_information.attributes }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_complementary_information, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { complementary_information_attrs.merge({format: :json}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(complementary_information: {
+            date: complementary_information.date.to_s,
+            description: complementary_information.description
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:complementary_information_attrs) { complementary_information.attributes }
+
+      let(:params) { complementary_information_attrs.merge({format: :json}) }
+      subject do
+        post :create_complementary_information, params: params
 
         response
       end
