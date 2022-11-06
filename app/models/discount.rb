@@ -7,7 +7,8 @@ class Discount < ApplicationRecord
   has_one_attached :resolution
   has_one_attached :administrative_info
 
-  validates :percentage, :start_date, :end_date, presence: true
+  validates :percentage, presence: true
+  validates :start_date, :end_date, presence: true, if: :resolution?
   validate :validation_date
 
   private
@@ -19,4 +20,9 @@ class Discount < ApplicationRecord
       errors.add(:end_date, I18n.t('discount.validations.validity_date'))
     end
   end
+
+  def resolution?
+    explanation.blank? || [:resolution].include?(explanation.to_sym)
+  end
+
 end
