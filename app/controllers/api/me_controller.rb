@@ -69,6 +69,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def groups
+    groups = current_user.groups
+
+    response = Panko::Response.new(
+      groups: Panko::ArraySerializer.new(groups, each_serializer: GroupSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
   private
 
   def me_params

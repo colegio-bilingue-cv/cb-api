@@ -182,7 +182,6 @@ RSpec.describe Api::MeController do
           })
         end
       end
-
     end
 
     context 'when user is not signed in' do
@@ -405,7 +404,66 @@ RSpec.describe Api::MeController do
       let(:params) { { id: user.id, format: :json } }
 
       subject do
-        get :show, params: params
+        get :students, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'GET groups' do
+    context 'when user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :groups, params: params
+
+        response
+      end
+
+      context 'with groups' do
+        let(:user) { FactoryBot.create(:user, :with_group) }
+        let(:group) { user.groups.first }
+        let(:params) { { format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(groups: [{
+            id: group.id,
+            name: group.name,
+            year: group.year,
+            grade_name: group.grade_name
+          }])
+        end
+      end
+
+      context 'without groups' do
+        let(:user) { FactoryBot.create(:user) }
+        let(:params) { { format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(groups: [])
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json } }
+
+      subject do
+        get :groups, params: params
 
         response
       end
