@@ -75,7 +75,6 @@ class Api::MeController < Api::BaseController
     response = Panko::Response.new(
       groups: Panko::ArraySerializer.new(groups, each_serializer: GroupSerializer)
     )
-    end
 
     render json: response, status: :ok
   end
