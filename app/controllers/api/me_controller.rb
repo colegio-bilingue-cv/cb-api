@@ -29,6 +29,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def create_document
+    document = current_user.documents.create!(document_params)
+
+    response = Panko::Response.create do |r|
+      { document: r.serializer(document, DocumentSerializer) }
+    end
+
+    render json: response, status: :created
+  end
+
   private
 
   def me_params
@@ -39,4 +49,7 @@ class Api::MeController < Api::BaseController
     params.require(:user).permit(:password, :password_confirmation)
   end
 
+  def document_params
+    params.permit(:document_type, :certificate, :upload_date)
+  end
 end
