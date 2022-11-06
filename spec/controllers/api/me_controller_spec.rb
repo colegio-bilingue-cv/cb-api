@@ -313,7 +313,7 @@ RSpec.describe Api::MeController do
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
-        post :absences, params: params
+        post :create_absence, params: params
 
         response
       end
@@ -339,7 +339,7 @@ RSpec.describe Api::MeController do
       let(:params) { absence_attrs.merge({user_id: user.id, format: :json}) }
 
       subject do
-        post :absences, params: params
+        post :create_absence, params: params
 
         response
       end
