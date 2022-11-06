@@ -90,15 +90,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_011920) do
     t.index ["student_id"], name: "index_comments_on_student_id"
   end
 
-  create_table "complementary_informations", force: :cascade do |t|
-    t.date "date"
-    t.string "description"
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_complementary_informations_on_user_id"
-  end
-
   create_table "discounts", force: :cascade do |t|
     t.integer "percentage"
     t.integer "explanation"
@@ -308,7 +299,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_05_011920) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
-  add_foreign_key "complementary_informations", "users"
   add_foreign_key "documents", "users"
   add_foreign_key "grades", "cicles"
   add_foreign_key "groups", "grades"
