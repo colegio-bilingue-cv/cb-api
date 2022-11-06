@@ -25,7 +25,7 @@ FactoryBot.define do
     after(:create) { |user| user.add_role(:teacher) }
 
     trait :with_group_and_students do
-      after(:create){ |user| FactoryBot.create(:user_group, :teacher, :with_group_and_students, user_id: user.id) }
+      after(:create) { |user| FactoryBot.create(:user_group, :teacher, :with_group_and_students, user_id: user.id) }
     end
 
     trait :with_document do

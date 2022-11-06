@@ -358,8 +358,8 @@ RSpec.describe Api::MeController do
   describe 'GET students' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user, :with_group_and_students) }
-      let(:group_attr) {user.groups.first}
-      let(:student_attr) {user.groups.first.students.first}
+      let(:group) { user.groups.first }
+      let(:student) { group.students.first }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -369,17 +369,18 @@ RSpec.describe Api::MeController do
       end
 
       context 'with valid data' do
-        let(:params) { { group_id: group_attr[:id], format: :json } }
+        let(:params) { { group_id: group.id, format: :json } }
 
         its(:status) { should eq(200) }
 
         its(:body) do
           should include_json(group: {
-            id: group_attr[:id],
-            name: group_attr[:name],
-            year: group_attr[:year],
+            id: group.id,
+            name: group.name,
+            year: group.year,
+            grade_name: group.grade_name,
             students: [{
-              ci: student_attr[:ci]
+              ci: student.ci
             }]
           })
         end
