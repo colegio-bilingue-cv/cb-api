@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       get :discounts
       get :evaluations
 
-      resources :discounts, only: [:create, :update]
+      resources :discounts, except: [:index]
       post :activate
       post :deactivate
     end

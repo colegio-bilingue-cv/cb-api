@@ -22,6 +22,13 @@ class Api::DiscountsController < Api::BaseController
     render json: response, status: :created
   end
 
+  def destroy 
+    student = Student.find(params[:student_id])
+    student.discounts.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def discount_params
