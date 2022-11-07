@@ -1,3 +1,3 @@
 class CommentSerializer < Panko::Serializer
-  attributes :text
+  attributes :id, :text
 end
