@@ -146,34 +146,33 @@ RSpec.describe Api::DiscountsController do
     end
   end
 
-  describe 'DESTROY destroy' do
+  describe 'DELETE destroy' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
       let(:student) { FactoryBot.create(:student, :with_discount) }
-      let(:discount) { student.discounts.first.id }
+      let(:discount) { student.discounts.first }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
         delete :destroy, params: params
 
+        response
       end
 
       context 'with valid student id' do
-        let(:params) { {student_id: student.id, id: discount, format: :json} }
- 
+        let(:params) { {student_id: student.id, id: discount.id, format: :json} }
+
         its(:status) { should eq(204) }
 
         it 'destroy the discount' do
           expect {
-            subject
-
-            student.discounts.reload
-          }.to expect(student.discounts).to be_empty
+            delete :destroy, params: params
+          }.to change(Discount, :count).by(1)
         end
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: -1, id: discount, format: :json} }
+        let(:params) { {student_id: -1, id: discount.id, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -181,6 +180,19 @@ RSpec.describe Api::DiscountsController do
           should include_json(error: {
             key: 'student.not_found',
             description: I18n.t('student.not_found')
+          })
+        end
+      end
+
+      context 'with invalid discount id' do
+        let(:params) { {student_id: student.id, id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'discount.not_found',
+            description: I18n.t('discount.not_found')
           })
         end
       end
