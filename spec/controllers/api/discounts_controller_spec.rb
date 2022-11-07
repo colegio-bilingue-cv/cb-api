@@ -150,7 +150,7 @@ RSpec.describe Api::DiscountsController do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
       let(:student) { FactoryBot.create(:student, :with_discount) }
-      let(:discount) { student.discounts.first }
+      let!(:discount) { student.discounts.first }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -166,8 +166,14 @@ RSpec.describe Api::DiscountsController do
 
         it 'destroy the discount' do
           expect {
-            delete :destroy, params: params
-          }.to change(Discount, :count).by(1)
+            subject
+          }.to change(Discount, :count).by(-1)
+        end
+
+        it 'destroy the student association with the discount' do
+          expect {
+            subject
+          }.to change { student.discounts.count }.by(-1)
         end
       end
 
