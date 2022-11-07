@@ -14,7 +14,7 @@ RSpec.describe Api::UserGroupsController do
       end
 
       context 'when everything is right for the assosiation' do
-        let(:params) { {  user_id: user.id, group_id: group.id, role: "teacher", format: :json } }
+        let(:params) { { user_group: { user_id: user.id, group_id: group.id } , role: "teacher", format: :json } }
 
         its(:status) { should eq(201) }
 
@@ -41,7 +41,7 @@ RSpec.describe Api::UserGroupsController do
 
       context 'when assosiation already exists' do
         let(:user2) { FactoryBot.create(:user, :with_group) }
-        let(:params) { {  user_id: user2.id, group_id: user2.groups.first.id, role: "teacher", format: :json } }
+        let(:params) { { user_group: { user_id: user2.id, group_id: user2.groups.first.id }, role: "teacher", format: :json } }
 
         its(:status) { should eq(422) }
 
@@ -50,10 +50,10 @@ RSpec.describe Api::UserGroupsController do
             error: {
                 key: "record_invalid",
                 description: {
-                    user: [
+                    user_id: [
                         "ya está en uso"
                     ],
-                    group: [
+                    group_id: [
                         "ya está en uso"
                     ]
                 }
@@ -63,8 +63,8 @@ RSpec.describe Api::UserGroupsController do
       end
 
       context 'when group does not exist' do
-        let(:params) { {  user_id: user.id, group_id: -1, role: "teacher", format: :json } }
-        
+        let(:params) { { user_group: {  user_id: user.id, group_id: -1 }, role: "teacher", format: :json } }
+
         its(:status) { should eq(404) }
 
         its(:body) do
@@ -78,7 +78,7 @@ RSpec.describe Api::UserGroupsController do
       end
 
       context 'when user does not exist' do
-        let(:params) { {  user_id: -1, group_id: group.id, role: "teacher", format: :json } }
+        let(:params) { { user_group: {  user_id: -1, group_id: group.id } , role: "teacher", format: :json } }
 
         its(:status) { should eq(404) }
 
@@ -106,14 +106,14 @@ RSpec.describe Api::UserGroupsController do
       end
 
       context 'when everything is right for the disassosiation' do
-        let(:params) { {  user_id: user.id, group_id: user.groups.first.id, role: "teacher", format: :json } }
+        let(:params) { { user_group: {  user_id: user.id, group_id: user.groups.first.id } , role: "teacher", format: :json } }
 
-        its(:status) { should eq(200) }
+        its(:status) { should eq(204) }
       end
 
       context 'when assosiation does not exist' do
         let(:user2) { FactoryBot.create(:user) }
-        let(:params) { {  user_id: user2.id, group_id: user.groups.first.id, role: "teacher", format: :json } }
+        let(:params) { { user_group: { user_id: user2.id, group_id: user.groups.first.id } , role: "teacher", format: :json } }
 
         its(:status) { should eq(404) }
 
@@ -128,7 +128,7 @@ RSpec.describe Api::UserGroupsController do
       end
 
       context 'when group does not exist' do
-        let(:params) { {  user_id: user.id, group_id: -1, role: "teacher", format: :json } }
+        let(:params) { { user_group: {  user_id: user.id, group_id: -1 } , role: "teacher", format: :json } }
 
         its(:status) { should eq(404) }
 
@@ -143,7 +143,7 @@ RSpec.describe Api::UserGroupsController do
       end
 
       context 'when user does not exist' do
-        let(:params) { {  user_id: -1, group_id: user.groups.first.id, role: "teacher", format: :json } }
+        let(:params) { { user_group: {  user_id: -1, group_id: user.groups.first.id } , role: "teacher", format: :json } }
 
         its(:status) { should eq(404) }
 

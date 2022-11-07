@@ -45,37 +45,8 @@ RSpec.describe Api::TeachersController do
         end
       end
 
-      context 'with teachers in specific group' do
-        let(:params) { { group_id: user.groups.first.id, format: :json } }
-        its(:status) { should eq(200) }
 
-        its(:body) do
-          should include_json(teachers: [
-            {
-              "name": user.name,
-              "surname": user.surname,
-              "groups": [
-                {
-                  "name": user.groups.first.name,
-                  "year": user.groups.first.year,
-                  "grade": user.groups.first.grade.name
-                }
-              ]
-            }
-          ])
-        end
-      end
 
-      context 'without teachers in specific group' do
-        let(:group) { FactoryBot.create(:group) }
-        let(:params) { { group_id: group.id, format: :json } }
-
-        its(:status) { should eq(200) }
-
-        its(:body) do
-          should include_json(teachers: [])
-        end
-      end
     end
 
     context 'when user is not signed in' do

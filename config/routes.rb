@@ -32,7 +32,7 @@ Rails.application.routes.draw do
     resources :cicles, only: [:index]
 
     resources :groups, only: [:index] do
-      get '/teachers', to: 'teachers#index'
+      get :teachers
     end
 
     resources :grades, only: [:index, :show] do
