@@ -3,7 +3,7 @@ class Api::CiclesController < Api::BaseController
     cicles = Cicle.all
 
     response = Panko::Response.new(
-      cicles: Panko::ArraySerializer.new(cicles, each_serializer: CicleSerializer)
+      cicles: Panko::ArraySerializer.new(cicles, each_serializer: CicleWithQuestionsSerializer)
     )
 
     render json: response, status: :ok
