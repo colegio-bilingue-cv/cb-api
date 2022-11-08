@@ -437,13 +437,18 @@ RSpec.describe Api::MeController do
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(groups: [{
-            id: group.id,
-            name: group.name,
-            year: group.year,
-            grade_name: group.grade_name
-          }])
-        end
+            should include_json(groups: [{
+              id: group.id,
+              name: group.name,
+              grade: {
+                id: group.grade.id,
+                name: group.grade.name
+              },
+              principal: nil,
+              support_teacher: nil,
+              teachers: []
+            }])
+          end
       end
 
       context 'without groups' do
