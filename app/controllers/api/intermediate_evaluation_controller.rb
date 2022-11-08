@@ -26,6 +26,13 @@ class Api::IntermediateEvaluationController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def destroy
+    student = Student.find(params[:student_id])
+    student.intermediate_evaluations.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def intermediate_evaluation_params
