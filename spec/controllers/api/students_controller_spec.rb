@@ -81,6 +81,7 @@ RSpec.describe Api::StudentsController do
   end
 
   describe 'POST create' do
+    let(:group) { FactoryBot.create(:group) }
     let(:student) { FactoryBot.build(:student) }
     let(:student_attrs) { student.attributes }
 
@@ -98,7 +99,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid data' do
-        let(:params) { student_attrs.merge({format: :json}) }
+        let(:params) { student_attrs.merge({ group_id: group.id, format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -127,7 +128,13 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year,
+              grade_name: group.grade_name
+            }
           })
         end
       end
@@ -210,7 +217,8 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            group: {}
           })
         end
       end
@@ -253,7 +261,8 @@ RSpec.describe Api::StudentsController do
 
   describe 'PATCH update' do
     context 'when user is signed in' do
-      let(:student) { FactoryBot.create(:student) }
+      let(:group) { FactoryBot.create(:group) }
+      let(:student) { FactoryBot.create(:student, :with_group) }
       let(:user) { FactoryBot.create(:user) }
 
       subject do
@@ -264,7 +273,7 @@ RSpec.describe Api::StudentsController do
       end
 
       context 'with valid data' do
-        let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: student.id, format: :json} }
+        let(:params) { {name: 'Changed Name', surname: 'Changed Surname', id: student.id, group_id: group.id, format: :json} }
 
         it 'changes the name and surname' do
           expect {
@@ -301,7 +310,13 @@ RSpec.describe Api::StudentsController do
             inscription_date: student.inscription_date.to_s,
             starting_date: student.starting_date.to_s,
             contact: student.contact,
-            contact_phone: student.contact_phone
+            contact_phone: student.contact_phone,
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year,
+              grade_name: group.grade_name
+            }
           })
         end
 
@@ -706,29 +721,29 @@ RSpec.describe Api::StudentsController do
 
         its(:body) do
           should include_json(student: {
-              final_evaluations:[ {
-                "id": final_evaluation.id,
-                "student_id": student.id,
-                "status": final_evaluation.status,
-                group: {
-                  "id": final_evaluation.group_id,
-                  "year": final_evaluation.group.year,
-                  "name": final_evaluation.group.name,
-                  "grade_name": final_evaluation.group.grade_name
-                }
-              }],
-              intermediate_evaluations: [{
-                "id": intermediate_evaluation.id,
-                "student_id": student.id,
-                "starting_month": intermediate_evaluation.starting_month.to_s,
-                "ending_month": intermediate_evaluation.ending_month.to_s,
-                group:  {
-                  "id": intermediate_evaluation.group_id,
-                  "name": intermediate_evaluation.group.name,
-                  "year": intermediate_evaluation.group.year,
-                  "grade_name": intermediate_evaluation.group.grade_name
-                }
-              }]
+            final_evaluations:[ {
+              id: final_evaluation.id,
+              student_id: student.id,
+              status: final_evaluation.status,
+              group: {
+                id: final_evaluation.group_id,
+                year: final_evaluation.group.year,
+                name: final_evaluation.group.name,
+                grade_name: final_evaluation.group.grade_name
+              }
+            }],
+            intermediate_evaluations: [{
+              id: intermediate_evaluation.id,
+              student_id: student.id,
+              starting_month: intermediate_evaluation.starting_month.to_s,
+              ending_month: intermediate_evaluation.ending_month.to_s,
+              group:  {
+                id: intermediate_evaluation.group_id,
+                name: intermediate_evaluation.group.name,
+                year: intermediate_evaluation.group.year,
+                grade_name: intermediate_evaluation.group.grade_name
+              }
+            }]
           })
         end
       end
@@ -984,4 +999,307 @@ RSpec.describe Api::StudentsController do
     end
   end
 
+  describe 'GET active' do
+    context 'when the user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      context 'with students' do
+        let(:student) { FactoryBot.create(:student, :active) }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [{
+            ci: student.ci,
+            name: student.name,
+            surname: student.surname,
+            birthplace: student.birthplace.to_s,
+            birthdate: student.birthdate.to_s,
+            nationality: student.nationality,
+            schedule_start: student.schedule_start,
+            schedule_end: student.schedule_end,
+            tuition: student.tuition,
+            reference_number: student.reference_number,
+            office: student.office,
+            status: 'active',
+            first_language: student.first_language,
+            address: student.address,
+            neighborhood: student.neighborhood,
+            medical_assurance: student.medical_assurance,
+            emergency: student.emergency,
+            vaccine_expiration: student.vaccine_expiration.to_s,
+            vaccine_name: student.vaccine_name,
+            phone_number: student.phone_number,
+            inscription_date: student.inscription_date.to_s,
+            starting_date: student.starting_date.to_s,
+            contact: student.contact,
+            contact_phone: student.contact_phone
+          }])
+        end
+      end
+
+      context 'without students' do
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [])
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST deactivate' do
+    let(:user) { FactoryBot.create(:user) }
+    let(:student) { FactoryBot.create(:student, :pending, :with_family_member) }
+
+    context 'when the user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :deactivate, params: params
+
+        response
+      end
+
+      let(:motive_inactivate_student_attrs) { FactoryBot.attributes_for(:motive_inactivate_student) }
+
+      let(:params) { motive_inactivate_student_attrs.merge({ student_id: student.id, format: :json}) }
+
+      its(:status) { should eq(200) }
+
+      its(:body) do
+        should include_json(student: {
+          ci: student.ci,
+          name: student.name,
+          surname: student.surname,
+          birthplace: student.birthplace.to_s,
+          birthdate: student.birthdate.to_s,
+          nationality: student.nationality,
+          schedule_start: student.schedule_start,
+          schedule_end: student.schedule_end,
+          tuition: student.tuition,
+          reference_number: student.reference_number.to_s,
+          office: student.office,
+          status: 'inactive',
+          first_language: student.first_language,
+          address: student.address,
+          neighborhood: student.neighborhood,
+          medical_assurance: student.medical_assurance,
+          emergency: student.emergency,
+          vaccine_expiration: student.vaccine_expiration.to_s,
+          vaccine_name: student.vaccine_name,
+          phone_number: student.phone_number,
+          inscription_date: student.inscription_date.to_s,
+          starting_date: student.starting_date.to_s,
+          contact: student.contact,
+          contact_phone: student.contact_phone
+        })
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_discount) }
+
+      let(:motive_inactivate_student_attrs) { FactoryBot.attributes_for(:motive_inactivate_student) }
+
+      let(:params) { motive_inactivate_student_attrs.merge({ student_id: student.id, format: :json}) }
+
+      subject do
+        post :deactivate, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'GET inactive' do
+    context 'when the user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :inactive, params: { format: :json }
+
+        response
+      end
+
+      context 'with students' do
+        let(:motive_inactivate) { FactoryBot.create(:motive_inactivate_student) }
+        let(:student) { motive_inactivate.student }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [{
+            ci: student.ci,
+            name: student.name,
+            surname: student.surname,
+            birthplace: student.birthplace.to_s,
+            birthdate: student.birthdate.to_s,
+            nationality: student.nationality,
+            schedule_start: student.schedule_start,
+            schedule_end: student.schedule_end,
+            tuition: student.tuition,
+            reference_number: student.reference_number,
+            office: student.office,
+            status: 'inactive',
+            first_language: student.first_language,
+            address: student.address,
+            neighborhood: student.neighborhood,
+            medical_assurance: student.medical_assurance,
+            emergency: student.emergency,
+            vaccine_expiration: student.vaccine_expiration.to_s,
+            vaccine_name: student.vaccine_name,
+            phone_number: student.phone_number,
+            inscription_date: student.inscription_date.to_s,
+            starting_date: student.starting_date.to_s,
+            contact: student.contact,
+            contact_phone: student.contact_phone,
+            last_motive_inactivate: {
+              id: motive_inactivate.id,
+              motive: motive_inactivate.motive,
+              last_day: motive_inactivate.last_day.to_s,
+              description: motive_inactivate.description
+            }
+          }])
+        end
+      end
+
+      context 'without students' do
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [])
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'GET pending' do
+    context 'when the user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :pending, params: { format: :json }
+
+        response
+      end
+
+      context 'with students' do
+        let(:student) { FactoryBot.create(:student, :pending) }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [{
+            ci: student.ci,
+            name: student.name,
+            surname: student.surname,
+            birthplace: student.birthplace.to_s,
+            birthdate: student.birthdate.to_s,
+            nationality: student.nationality,
+            schedule_start: student.schedule_start,
+            schedule_end: student.schedule_end,
+            tuition: student.tuition,
+            reference_number: student.reference_number,
+            office: student.office,
+            status: 'pending',
+            first_language: student.first_language,
+            address: student.address,
+            neighborhood: student.neighborhood,
+            medical_assurance: student.medical_assurance,
+            emergency: student.emergency,
+            vaccine_expiration: student.vaccine_expiration.to_s,
+            vaccine_name: student.vaccine_name,
+            phone_number: student.phone_number,
+            inscription_date: student.inscription_date.to_s,
+            starting_date: student.starting_date.to_s,
+            contact: student.contact,
+            contact_phone: student.contact_phone
+          }])
+        end
+      end
+
+      context 'without students' do
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [])
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        get :index, params: { format: :json }
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end

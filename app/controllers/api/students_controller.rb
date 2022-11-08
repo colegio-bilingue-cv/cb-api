@@ -21,6 +21,7 @@ class Api::StudentsController < Api::BaseController
   end
 
   def create
+    raise ActiveRecord::RecordNotFound.new('', Group.to_s) if student_params[:group_id].present? && !Group.exists?(student_params[:group_id])
     student = Student.create!(student_params)
 
     response = Panko::Response.create do |r|
@@ -31,6 +32,7 @@ class Api::StudentsController < Api::BaseController
   end
 
   def update
+    raise ActiveRecord::RecordNotFound.new('', Group.to_s) if student_params[:group_id].present? && !Group.exists?(student_params[:group_id])
     student = Student.find(params[:id])
     student.update!(student_params)
 
@@ -125,6 +127,15 @@ class Api::StudentsController < Api::BaseController
     render json: response, status: :unprocessable_entity
   end
 
+  def inactive
+    students = Student.inactive
+
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentWithMotiveInactiveSerializer)
+    )
+    render json: response, status: :ok
+  end
+
   def evaluations
     student = Student.find(params[:student_id])
     final_evaluation = student.final_evaluations
@@ -140,6 +151,38 @@ class Api::StudentsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def active
+    students = Student.active
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
+  def pending
+    students = Student.pending
+
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
+
+  def deactivate
+    student = Student.find(params[:student_id])
+    motive_inactivate_student = student.motive_inactivate_students.create!(deactivate_params)
+    student.deactivate!
+
+    response = Panko::Response.create do |r|
+      { student: r.serializer(student, StudentSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+
   private
 
   def student_params
@@ -148,11 +191,16 @@ class Api::StudentsController < Api::BaseController
       :reference_number, :office,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
-      :inscription_date, :starting_date, :contact, :contact_phone, :enrollment_commitment
+      :inscription_date, :starting_date, :contact, :contact_phone, :enrollment_commitment, :group_id
     )
   end
 
   def activate_params
     params.require(:student).permit(:reference_number)
   end
+
+  def deactivate_params
+    params.permit(:motive, :last_day, :description)
+  end
+
 end

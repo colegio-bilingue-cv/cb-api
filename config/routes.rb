@@ -7,6 +7,12 @@ Rails.application.routes.draw do
 
     resources :users, only: [:create, :update, :index]
 
+    scope :students, controller: :students do
+      get :active
+      get :inactive
+      get :pending
+    end
+
     resources :students, except: [:destroy] do
       resources :family_members, only: [:create, :update]
       resources :comments, only: [:create, :update]
@@ -20,8 +26,9 @@ Rails.application.routes.draw do
       get :discounts
       get :evaluations
 
-      resources :discounts, only: [:create, :update]
+      resources :discounts, only: [:create, :update, :destroy]
       post :activate
+      post :deactivate
     end
 
     resources :type_scholarships, only: [:create, :index, :update]
@@ -41,6 +48,14 @@ Rails.application.routes.draw do
 
     resource :me, only: [:show, :update], controller: :me do
       patch :password
+      post :documents, to:'me#create_document'
+      post :complementary_informations, to: 'me#create_complementary_information'
+      post :absences, to: 'me#create_absence'
+      get :groups
+
+      scope :groups, controller: :me do
+        get :students
+      end
     end
 
     resources :teachers, only: [:index]

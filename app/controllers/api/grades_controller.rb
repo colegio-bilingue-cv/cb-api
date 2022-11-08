@@ -3,7 +3,7 @@ class Api::GradesController < Api::BaseController
     grades = Grade.all
 
     response = Panko::Response.new(
-      grades: Panko::ArraySerializer.new(grades, each_serializer: GradeSerializer)
+      grades: Panko::ArraySerializer.new(grades, each_serializer: GradeWithGroupsSerializer)
     )
 
     render json: response, status: :ok
@@ -13,7 +13,7 @@ class Api::GradesController < Api::BaseController
     grade = Grade.find(params[:id])
 
     response = Panko::Response.create do |r|
-      { grade: r.serializer(grade, GradeSerializer) }
+      { grade: r.serializer(grade, GradeWithGroupsSerializer) }
     end
 
     render json: response, status: :ok

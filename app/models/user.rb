@@ -5,6 +5,9 @@ class User < ApplicationRecord
   has_many :allowlisted_jwts, dependent: :destroy
   has_many :user_groups
   has_many :groups, through: :user_groups
+  has_many :documents
+  has_many :complementary_informations
+  has_many :absences
 
   validates :name, :surname, :email, presence: true
   validates :ci, length: { minimum: 8 }, uniqueness: true, allow_nil: true

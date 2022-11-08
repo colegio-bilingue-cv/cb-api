@@ -51,8 +51,8 @@ RSpec.describe Api::MeController do
       end
     end
   end
-  describe 'PATCH update' do
 
+  describe 'PATCH update' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
 
@@ -182,7 +182,6 @@ RSpec.describe Api::MeController do
           })
         end
       end
-
     end
 
     context 'when user is not signed in' do
@@ -191,6 +190,280 @@ RSpec.describe Api::MeController do
 
       subject do
         patch :password, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST create_document' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document) }
+      let(:document) { user.documents.first }
+      let(:document_attrs) { document.attributes }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_document, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { document_attrs.merge({format: :json}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(document: {
+            document_type: document.document_type,
+            upload_date: document.upload_date.to_s,
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document) }
+      let(:document) { user.documents.first }
+      let(:document_attrs) { document.attributes }
+      let(:params) { document_attrs.merge({format: :json}) }
+
+      subject do
+        post :create_document, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST create_complementary_information' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:complementary_information_attrs) { complementary_information.attributes }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_complementary_information, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { complementary_information_attrs.merge({format: :json}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(complementary_information: {
+            date: complementary_information.date.to_s,
+            description: complementary_information.description
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:complementary_information_attrs) { complementary_information.attributes }
+
+      let(:params) { complementary_information_attrs.merge({format: :json}) }
+      subject do
+        post :create_complementary_information, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST create_absences' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:absence_attrs) { FactoryBot.attributes_for(:absence) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_absence, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { absence_attrs.merge({user_id: user.id, format: :json}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(absence: {
+            start_date: absence_attrs[:start_date].to_s,
+            end_date: absence_attrs[:end_date].to_s,
+            reason: absence_attrs[:reason]
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:absence_attrs) { FactoryBot.attributes_for(:absence) }
+      let(:params) { absence_attrs.merge({user_id: user.id, format: :json}) }
+
+      subject do
+        post :create_absence, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'GET students' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_group_and_students) }
+      let(:group) { user.groups.first }
+      let(:student) { group.students.first }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :students, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { { group_id: group.id, format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(group: {
+            id: group.id,
+            name: group.name,
+            year: group.year,
+            grade_name: group.grade_name,
+            students: [{
+              ci: student.ci
+            }]
+          })
+        end
+      end
+
+      context 'with invalid data' do
+        let(:params) { {group_id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'group.not_found',
+            description: I18n.t('group.not_found')
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json } }
+
+      subject do
+        get :students, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'GET groups' do
+    context 'when user is signed in' do
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :groups, params: params
+
+        response
+      end
+
+      context 'with groups' do
+        let(:user) { FactoryBot.create(:user, :with_group) }
+        let(:group) { user.groups.first }
+        let(:params) { { format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(groups: [{
+            id: group.id,
+            name: group.name,
+            year: group.year,
+            grade_name: group.grade_name
+          }])
+        end
+      end
+
+      context 'without groups' do
+        let(:user) { FactoryBot.create(:user) }
+        let(:params) { { format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(groups: [])
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json } }
+
+      subject do
+        get :groups, params: params
 
         response
       end

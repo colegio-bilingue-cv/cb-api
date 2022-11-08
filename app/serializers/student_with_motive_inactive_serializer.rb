@@ -1,4 +1,4 @@
-class StudentSerializer < Panko::Serializer
+class StudentWithMotiveInactiveSerializer < Panko::Serializer
   attributes :id, :ci, :surname, :name, :birthplace, :birthdate,
     :nationality, :schedule_start, :schedule_end, :tuition,
     :reference_number, :office, :status,
@@ -7,9 +7,10 @@ class StudentSerializer < Panko::Serializer
     :inscription_date, :starting_date, :contact, :contact_phone,
     :enrollment_commitment_url
 
-  has_one :group
+  has_one :last_motive_inactivate, serializer: MotiveInactivateStudentSerializer
 
   def enrollment_commitment_url
     object.enrollment_commitment.url if object.enrollment_commitment.attached?
   end
+
 end

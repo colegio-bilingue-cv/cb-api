@@ -10,10 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-
-ActiveRecord::Schema[7.0].define(version: 2022_11_03_002236) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_06_201448) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "absences", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.string "reason"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_absences_on_user_id"
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -91,6 +100,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_002236) do
     t.index ["student_id"], name: "index_comments_on_student_id"
   end
 
+  create_table "complementary_informations", force: :cascade do |t|
+    t.date "date"
+    t.string "description"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_complementary_informations_on_user_id"
+  end
+
   create_table "discounts", force: :cascade do |t|
     t.integer "percentage"
     t.integer "explanation"
@@ -102,6 +120,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_002236) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["student_id"], name: "index_discounts_on_student_id"
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.bigint "user_id"
+    t.integer "document_type"
+    t.date "upload_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
   create_table "family_members", force: :cascade do |t|
@@ -168,6 +195,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_002236) do
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_intermediate_evaluations_on_group_id"
     t.index ["student_id"], name: "index_intermediate_evaluations_on_student_id"
+  end
+
+  create_table "motive_inactivate_students", force: :cascade do |t|
+    t.string "motive"
+    t.string "description"
+    t.date "last_day"
+    t.bigint "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id"], name: "index_motive_inactivate_students_on_student_id"
   end
 
   create_table "payment_methods", force: :cascade do |t|
@@ -281,6 +318,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_03_002236) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "allowlisted_jwts", "users", on_delete: :cascade
+  add_foreign_key "complementary_informations", "users"
+  add_foreign_key "documents", "users"
   add_foreign_key "grades", "cicles"
   add_foreign_key "groups", "grades"
   add_foreign_key "questions", "categories"

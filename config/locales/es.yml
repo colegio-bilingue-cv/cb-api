@@ -248,6 +248,7 @@ es:
   family_member:
     not_found: 'Tutor no encontrado'
   discount:
+    not_found: 'Descuento no encontrado'
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
   intermediate_evalution:
@@ -261,3 +262,6 @@ es:
     not_found: 'Rol no encontrado'
   user_group:
     not_found: 'Usuario no perteneciente al grupo'
+  absence:
+    validations:
+      validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'

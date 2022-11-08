@@ -7,6 +7,7 @@ RSpec.describe Api::GroupsController do
     let(:user) { FactoryBot.create(:user) }
     let(:params) { { format: :json } }
     let(:group) { FactoryBot.create(:group) }
+    let(:grade) { group.grade }
 
     context 'when user is signed in' do
       subject do
@@ -21,14 +22,53 @@ RSpec.describe Api::GroupsController do
           group
         end
 
-        its(:status) { should eq(200) }
+        context 'with teachers, principal and support teacher' do
+          let(:principal) { FactoryBot.create(:user, :principal) }
+          let(:teacher) { FactoryBot.create(:user) }
+          let(:support_teacher) { FactoryBot.create(:user, :support_teacher) }
 
-        its(:body) do
-          should include_json(groups: [{
-            id: group.id,
-            name: group.name,
-            grade_name: group.grade_name
-          }])
+          before do
+            UserGroup.create(group: group, user: principal, role_id: Role.find_by(name: :principal).id)
+            UserGroup.create(group: group, user: teacher, role_id: Role.find_by(name: :teacher).id)
+            UserGroup.create(group: group, user: support_teacher, role_id: Role.find_by(name: :support_teacher).id)
+          end
+
+          its(:status) { should eq(200) }
+
+          its(:body) do
+            should include_json(groups: [{
+              id: group.id,
+              name: group.name,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              },
+              principal: {
+                ci: principal.ci.to_s,
+                name: principal.name,
+                surname: principal.surname,
+                birthdate: principal.birthdate.to_s,
+                address: principal.address,
+                email: principal.email
+              },
+              support_teacher: {
+                ci: support_teacher.ci.to_s,
+                name: support_teacher.name,
+                surname: support_teacher.surname,
+                birthdate: support_teacher.birthdate.to_s,
+                address: support_teacher.address,
+                email: support_teacher.email
+              },
+              teachers: [{
+                ci: teacher.ci.to_s,
+                name: teacher.name,
+                surname: teacher.surname,
+                birthdate: teacher.birthdate.to_s,
+                address: teacher.address,
+                email: teacher.email
+              }]
+            }])
+          end
         end
 
         context 'without groups' do
@@ -39,6 +79,7 @@ RSpec.describe Api::GroupsController do
           end
         end
       end
+
     end
 
     context 'when user is not signed in' do

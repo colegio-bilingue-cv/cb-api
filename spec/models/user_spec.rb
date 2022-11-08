@@ -10,6 +10,8 @@ RSpec.describe User, type: :model do
 
   describe 'relations' do
     it { should have_many(:allowlisted_jwts).dependent(:destroy) }
+
+    it { should have_many(:absences) }
   end
 
   describe '#sign_in!' do

@@ -14,6 +14,7 @@ class Student < ApplicationRecord
   has_many :questions, through: :answers
   has_many :final_evaluations
   has_many :intermediate_evaluations
+  has_many :motive_inactivate_students
 
   has_one_attached :enrollment_commitment
 
@@ -27,6 +28,10 @@ class Student < ApplicationRecord
 
   validates :reference_number, allow_blank: true, uniqueness: true
 
+  def last_motive_inactivate
+    motive_inactivate_students.last
+  end
+
   def activate!
     raise StudentsActivation::IncompleteBasicInfoError unless completed_basic_info?
     raise StudentsActivation::IncompleteFamilyMembersError unless has_family_members?
@@ -34,6 +39,10 @@ class Student < ApplicationRecord
     raise StudentsActivation::IncompletePaymentMethodError unless has_valid_payment_method?
 
     self.active!
+  end
+
+  def deactivate!
+    self.inactive!
   end
 
   def current_payment_method
