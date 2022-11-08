@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::IntermediateEvaluationController do
+RSpec.describe Api::IntermediateEvaluationsController do
 
   describe 'POST create' do
     context 'when user is signed in' do
