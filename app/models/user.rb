@@ -21,4 +21,17 @@ class User < ApplicationRecord
       raise InvalidCredentialsError
     end
   end
+
+  def groups_by_role(role)
+    raise ActiveRecord::RecordNotFound.new('', Role.to_s) unless Role.exists?(name: role)
+    groups = []
+    role_instance = Role.find_by(name: role)
+    role_user_groups = user_groups.where('"user_groups"."role_id" = ?', role_instance.id)
+
+    for user_group in role_user_groups do
+      groups.push(Group.find(user_group.group_id))
+    end
+
+    groups
+  end
 end

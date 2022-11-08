@@ -38,7 +38,10 @@ Rails.application.routes.draw do
     resources :student_payment_methods, only: [:create, :update]
     resources :cicles, only: [:index]
 
-    resources :groups, only: [:index]
+    resources :groups, only: [:index] do
+      get :teachers
+    end
+
     resources :grades, only: [:index, :show] do
       resources :groups, only: [:create, :update]
     end
@@ -56,5 +59,7 @@ Rails.application.routes.draw do
     end
 
     resources :teachers, only: [:index]
+
+    resource :user_groups, only: [:create, :destroy]
   end
 end

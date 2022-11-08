@@ -4,7 +4,6 @@ RSpec.describe Api::TeachersController do
 
   describe 'GET index' do
     let(:user) { FactoryBot.create(:user, :with_group) }
-    let(:params) { { format: :json } }
 
     context 'when user is signed in' do
 
@@ -16,6 +15,7 @@ RSpec.describe Api::TeachersController do
       end
 
       context 'with teachers' do
+        let(:params) { { format: :json } }
         its(:status) { should eq(200) }
 
         its(:body) do
@@ -36,15 +36,21 @@ RSpec.describe Api::TeachersController do
       end
 
       context 'without teachers' do
+        let(:params) { { format: :json } }
+
         its(:status) { should eq(200) }
 
         its(:body) do
           should include_json(teachers: [])
         end
       end
+
+
+
     end
 
     context 'when user is not signed in' do
+      let(:params) { { format: :json } }
       subject do
         get :index, params: params
 
@@ -61,5 +67,4 @@ RSpec.describe Api::TeachersController do
       end
     end
   end
-
 end

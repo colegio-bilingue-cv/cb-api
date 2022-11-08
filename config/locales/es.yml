@@ -256,10 +256,12 @@ es:
       starting_month: "El mes de inicio no puede ser posterior al mes final"
   grade:
     not_found: 'Grado no encontrado'
+  group:
+    not_found: Grupo no encontrado
   role:
     not_found: 'Rol no encontrado'
+  user_group:
+    not_found: 'Usuario no perteneciente al grupo'
   absence:
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
-  group:
-    not_found: 'Grupo no encontrado'
