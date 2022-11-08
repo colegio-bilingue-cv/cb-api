@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe Api::MeController do
   describe 'GET show' do
     context 'when user is signed in' do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { FactoryBot.create(:user, :with_document, :with_complementary_information, :with_absence) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:document) { user.documents.first }
+      let(:absence) { user.absences.first }
 
       let(:params) { { id: user.id, format: :json } }
 
@@ -25,8 +28,21 @@ RSpec.describe Api::MeController do
             surname: user.surname,
             birthdate: user.birthdate.to_s,
             address: user.address,
-            email: user.email
-          })
+            email: user.email,
+            absences: [{
+              start_date: absence.start_date.to_s,
+              end_date: absence.end_date.to_s,
+              reason: absence.reason
+            }],
+            complementary_informations: [{
+              date: complementary_information.date.to_s,
+              description: complementary_information.description
+             }],
+            documents:[{
+              document_type: document.document_type,
+              upload_date: document.upload_date.to_s,
+            }]
+        })
         end
       end
     end
