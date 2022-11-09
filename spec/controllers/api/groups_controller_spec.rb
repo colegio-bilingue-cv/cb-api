@@ -70,13 +70,13 @@ RSpec.describe Api::GroupsController do
             }])
           end
         end
+      end
 
-        context 'without groups' do
-          its(:status) { should eq(200) }
+      context 'without groups' do
+        its(:status) { should eq(200) }
 
-          its(:body) do
-            should include_json(groups: [])
-          end
+        its(:body) do
+          should include_json(groups: [])
         end
       end
 
