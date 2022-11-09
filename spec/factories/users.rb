@@ -21,7 +21,11 @@ FactoryBot.define do
 
     trait :support_teacher_with_group do
       after(:create) { |user| user.add_role(:support_teacher) }
-      after(:create){ |user| FactoryBot.create(:user_group, :support_teacher, :with_group, user_id: user.id) }
+      after(:create) { |user| FactoryBot.create(:user_group, :support_teacher, :with_group, user_id: user.id) }
+    end
+
+    trait :principal do
+      after(:create) { |user| user.add_role(:principal) }
     end
 
     trait :with_invalid_data do
