@@ -78,6 +78,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def teachers
+    teachers = current_user.teachers
+
+    response = Panko::Response.new(
+      teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
   private
 
   def me_params

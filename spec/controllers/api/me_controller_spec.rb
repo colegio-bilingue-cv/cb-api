@@ -501,4 +501,63 @@ RSpec.describe Api::MeController do
       end
     end
   end
+
+  describe 'GET teachers' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_group_and_students) }
+      let(:group) { user.groups.first }
+      let(:grade) { group.grade }
+      let(:student) { group.students.first }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :teachers, params: params
+
+        response
+      end
+
+      context 'with teachers' do
+        let(:params) { { format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(teachers: [{
+            name: user.name,
+            surname: user.surname,
+            groups: [{
+              name: group.name,
+              year: group.year,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              }
+            }]
+          }])
+        end
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json } }
+
+      subject do
+        get :students, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
 end
