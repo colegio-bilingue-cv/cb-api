@@ -1,5 +1,5 @@
 class TeacherSerializer < Panko::Serializer
-  attributes :id, :name, :surname
+  attributes :id, :ci, :name, :surname
 
   has_many :teacher_groups, each_serializer: GroupWithGradeTeachersPrincipalSerializer, name: :groups
 end
