@@ -448,6 +448,8 @@ RSpec.describe Api::MeController do
       context 'with groups' do
         let(:user) { FactoryBot.create(:user, :with_group) }
         let(:group) { user.groups.first }
+        let(:grade) { group.grade }
+
         let(:params) { { format: :json } }
 
         its(:status) { should eq(200) }
@@ -457,11 +459,11 @@ RSpec.describe Api::MeController do
               id: group.id,
               name: group.name,
               grade: {
-                id: group.grade.id,
-                name: group.grade.name
+                id: grade.id,
+                name: grade.name
               },
-              principal: nil,
-              support_teacher: nil,
+              principals: [],
+              support_teachers: [],
               teachers: []
             }])
           end

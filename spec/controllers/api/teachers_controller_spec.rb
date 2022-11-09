@@ -4,6 +4,8 @@ RSpec.describe Api::TeachersController do
 
   describe 'GET index' do
     let(:user) { FactoryBot.create(:user, :with_group) }
+    let(:group) { user.groups.first }
+    let(:grade) { group.grade }
 
     context 'when user is signed in' do
 
@@ -19,19 +21,18 @@ RSpec.describe Api::TeachersController do
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(teachers: [
-            {
-              "name": user.name,
-              "surname": user.surname,
-              "groups": [
-                {
-                  "name": user.groups.first.name,
-                  "year": user.groups.first.year,
-                  "grade_name": user.groups.first.grade_name
-                }
-              ]
-            }
-          ])
+          should include_json(teachers: [{
+            name: user.name,
+            surname: user.surname,
+            groups: [{
+              name: user.groups.first.name,
+              year: user.groups.first.year,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              }
+            }]
+          }])
         end
       end
 
@@ -44,9 +45,6 @@ RSpec.describe Api::TeachersController do
           should include_json(teachers: [])
         end
       end
-
-
-
     end
 
     context 'when user is not signed in' do

@@ -9,6 +9,9 @@ class User < ApplicationRecord
   has_many :complementary_informations
   has_many :absences
 
+  has_many :user_groups_teacher, -> { where(role_id: Role.where(name: :teacher).ids.first) }, class_name: 'UserGroup'
+  has_many :teacher_groups, through: :user_groups_teacher, source: :group
+
   validates :name, :surname, :email, presence: true
   validates :ci, length: { minimum: 8 }, uniqueness: true, allow_nil: true
 
@@ -20,18 +23,5 @@ class User < ApplicationRecord
     else
       raise InvalidCredentialsError
     end
-  end
-
-  def groups_by_role(role)
-    raise ActiveRecord::RecordNotFound.new('', Role.to_s) unless Role.exists?(name: role)
-    groups = []
-    role_instance = Role.find_by(name: role)
-    role_user_groups = user_groups.where('"user_groups"."role_id" = ?', role_instance.id)
-
-    for user_group in role_user_groups do
-      groups.push(Group.find(user_group.group_id))
-    end
-
-    groups
   end
 end
