@@ -1,4 +1,4 @@
-class Api::IntermediateEvaluationController < Api::BaseController
+class Api::IntermediateEvaluationsController < Api::BaseController
   def create
     raise ActiveRecord::RecordNotFound.new('', Group.to_s) unless Group.exists?(intermediate_evaluation_params[:group_id])
     raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(intermediate_evaluation_params[:student_id])

@@ -1,4 +1,4 @@
-class Api::FinalEvaluationController < Api::BaseController
+class Api::FinalEvaluationsController < Api::BaseController
   def create
     raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(final_evaluation_params[:student_id])
     raise ActiveRecord::RecordNotFound.new('', Group.to_s) unless Group.exists?(final_evaluation_params[:group_id])
