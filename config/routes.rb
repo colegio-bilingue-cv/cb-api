@@ -42,6 +42,7 @@ Rails.application.routes.draw do
 
     resources :groups, only: [:index] do
       get :teachers
+      get :students
     end
 
     resources :grades, only: [:index, :show] do
