@@ -34,17 +34,17 @@ class Api::GroupsController < Api::BaseController
   end
 
   def teachers
-      teachers = User.with_role(:teacher)
-      teachers = teachers.joins(:user_groups).where('"user_groups"."group_id" = ?', params[:group_id])
+    group = Group.find(params[:group_id])
 
-      response = Panko::Response.new(
-        teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherSerializer)
-      )
+    response = Panko::Response.new(
+      teachers: Panko::ArraySerializer.new(group.teachers, each_serializer: TeacherSerializer)
+    )
 
-      render json: response, status: :ok
+    render json: response, status: :ok
   end
 
   private
+
   def group_params
     params.require(:group).permit(:name, :year)
   end

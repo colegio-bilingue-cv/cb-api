@@ -43,22 +43,22 @@ RSpec.describe Api::GroupsController do
                 id: grade.id,
                 name: grade.name
               },
-              principal: {
+              principals: [{
                 ci: principal.ci.to_s,
                 name: principal.name,
                 surname: principal.surname,
                 birthdate: principal.birthdate.to_s,
                 address: principal.address,
                 email: principal.email
-              },
-              support_teacher: {
+              }],
+              support_teachers: [{
                 ci: support_teacher.ci.to_s,
                 name: support_teacher.name,
                 surname: support_teacher.surname,
                 birthdate: support_teacher.birthdate.to_s,
                 address: support_teacher.address,
                 email: support_teacher.email
-              },
+              }],
               teachers: [{
                 ci: teacher.ci.to_s,
                 name: teacher.name,
@@ -273,7 +273,8 @@ RSpec.describe Api::GroupsController do
 
   describe 'GET teachers' do
     let(:user) { FactoryBot.create(:user, :with_group) }
-    let(:group) { FactoryBot.create(:group) }
+    let(:group) { user.groups.first }
+    let(:grade) { group.grade }
 
     context 'when user is signed in' do
       subject do
@@ -284,23 +285,32 @@ RSpec.describe Api::GroupsController do
       end
 
       context 'with teachers in specific group' do
-        let(:params) { { group_id: user.groups.first.id, format: :json } }
+        let(:params) { { group_id: group.id, format: :json } }
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(teachers: [
-            {
-              "name": user.name,
-              "surname": user.surname,
-              "groups": [
-                {
-                  "name": user.groups.first.name,
-                  "year": user.groups.first.year,
-                  "grade": user.groups.first.grade.name
-                }
-              ]
-            }
-          ])
+          should include_json(teachers: [{
+            name: user.name,
+            surname: user.surname,
+            groups: [{
+              name: user.groups.first.name,
+              year: user.groups.first.year,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              },
+              teachers: [{
+                ci: user.ci.to_s,
+                name: user.name,
+                surname: user.surname,
+                birthdate: user.birthdate.to_s,
+                address: user.address,
+                email: user.email
+              }],
+              principals: [],
+              support_teachers: []
+            }]
+          }])
         end
       end
 
