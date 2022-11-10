@@ -26,7 +26,7 @@ FactoryBot.define do
 
     trait :principal_with_group do
       after(:create) { |user| user.add_role(:principal) }
-      after(:create){ |user| FactoryBot.create(:user_group, :with_group, :principal, user_id: user.id) }
+      after(:create) { |user| FactoryBot.create(:user_group, :with_group, :principal, user_id: user.id) }
     end
 
     trait :with_invalid_data do
