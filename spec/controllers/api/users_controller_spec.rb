@@ -206,4 +206,71 @@ RSpec.describe Api::UsersController do
     end
   end
 
+  describe 'GET show' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document, :with_complementary_information, :with_absence) }
+      let(:other_user) { FactoryBot.create(:user, :with_document, :with_complementary_information, :with_absence) }
+      let(:complementary_information) { other_user.complementary_informations.first }
+      let(:document) { other_user.documents.first }
+      let(:absence) { other_user.absences.first }
+
+      let(:params) { { id: other_user.id, format: :json } }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :show, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(user: {
+            ci: other_user.ci.to_s,
+            name: other_user.name,
+            surname: other_user.surname,
+            birthdate: other_user.birthdate.to_s,
+            address: other_user.address,
+            email: other_user.email,
+            absences: [{
+              start_date: absence.start_date.to_s,
+              end_date: absence.end_date.to_s,
+              reason: absence.reason
+            }],
+            complementary_informations: [{
+              date: complementary_information.date.to_s,
+              description: complementary_information.description
+             }],
+            documents:[{
+              document_type: document.document_type,
+              upload_date: document.upload_date.to_s,
+            }]
+        })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json } }
+
+      subject do
+        get :show, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end
