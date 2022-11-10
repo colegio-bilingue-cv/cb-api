@@ -3,9 +3,11 @@ require 'rails_helper'
 RSpec.describe Api::PrincipalsController do
 
   describe 'GET index' do
-    let(:user) { FactoryBot.create(:user, :principal ) }
-
-  context 'when user is signed in' do
+    let(:user) { FactoryBot.create(:user, :principal_with_group) }
+    let(:group) { user.groups.first }
+    let(:grade) { group.grade }
+    
+    context 'when user is signed in' do
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -23,6 +25,14 @@ RSpec.describe Api::PrincipalsController do
             ci: user.ci,
             name: user.name,
             surname: user.surname,
+            groups: [{
+              name: group.name,
+              year: group.year,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              }
+            }]
           }])
         end
       end

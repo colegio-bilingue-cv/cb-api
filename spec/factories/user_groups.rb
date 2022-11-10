@@ -12,6 +12,10 @@ FactoryBot.define do
       group { FactoryBot.create(:group) }
     end
 
+    trait :principal do
+      role_id { Role.find_by(name: "principal").id }
+    end
+
     trait :with_group_and_students do
       group { FactoryBot.create(:group, :with_student) }
     end
