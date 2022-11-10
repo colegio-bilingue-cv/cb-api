@@ -14,6 +14,9 @@ class User < ApplicationRecord
 
   has_many :teachers, through: :user_groups, source: :user
 
+  has_many :user_groups_support_teacher, -> { where(role_id: Role.where(name: :support_teacher).ids.first) }, class_name: 'UserGroup'
+  has_many :support_teacher_groups, through: :user_groups_support_teacher, source: :group
+
   validates :name, :surname, :email, presence: true
   validates :ci, length: { minimum: 8 }, uniqueness: true, allow_nil: true
 

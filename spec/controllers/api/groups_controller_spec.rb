@@ -290,6 +290,7 @@ RSpec.describe Api::GroupsController do
 
         its(:body) do
           should include_json(teachers: [{
+            ci: user.ci,
             name: user.name,
             surname: user.surname,
             groups: [{

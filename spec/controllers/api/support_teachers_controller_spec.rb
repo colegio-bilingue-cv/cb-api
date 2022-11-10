@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe Api::TeachersController do
+RSpec.describe Api::SupportTeachersController do
 
   describe 'GET index' do
-    let(:user) { FactoryBot.create(:user, :with_group) }
+    let(:user) { FactoryBot.create(:user, :support_teacher_with_group ) }
     let(:group) { user.groups.first }
     let(:grade) { group.grade }
 
@@ -16,18 +16,18 @@ RSpec.describe Api::TeachersController do
         response
       end
 
-      context 'with teachers' do
+      context 'with support_teachers' do
         let(:params) { { format: :json } }
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(teachers: [{
+          should include_json(support_teachers: [{
             ci: user.ci,
             name: user.name,
             surname: user.surname,
             groups: [{
-              name: user.groups.first.name,
-              year: user.groups.first.year,
+              name: group.name,
+              year: group.year,
               grade: {
                 id: grade.id,
                 name: grade.name
@@ -37,13 +37,13 @@ RSpec.describe Api::TeachersController do
         end
       end
 
-      context 'without teachers' do
+      context 'without support_teachers' do
         let(:params) { { format: :json } }
 
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(teachers: [])
+          should include_json(support_teachers: [])
         end
       end
     end
