@@ -15,6 +15,10 @@ FactoryBot.define do
       after(:create) { |user| user.add_role(:principal) }
     end
 
+    trait :support_teacher do
+      after(:create) { |user| user.add_role(:support_teacher) }
+    end
+
     trait :support_teacher_with_group do
       after(:create) { |user| user.add_role(:support_teacher) }
       after(:create){ |user| FactoryBot.create(:user_group, :support_teacher, :with_group, user_id: user.id) }

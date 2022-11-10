@@ -26,8 +26,8 @@ RSpec.describe Api::SupportTeachersController do
             name: user.name,
             surname: user.surname,
             groups: [{
-              name: user.groups.first.name,
-              year: user.groups.first.year,
+              name: group.name,
+              year: group.year,
               grade: {
                 id: grade.id,
                 name: grade.name
