@@ -64,6 +64,7 @@ Rails.application.routes.draw do
 
     resources :teachers, only: [:index]
     resources :support_teachers, only: [:index]
+    resources :principals, only: [:index]
 
     resource :user_groups, only: [:create, :destroy]
   end
