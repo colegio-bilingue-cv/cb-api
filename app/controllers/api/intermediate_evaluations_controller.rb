@@ -1,4 +1,4 @@
-class Api::IntermediateEvaluationController < Api::BaseController
+class Api::IntermediateEvaluationsController < Api::BaseController
   def create
     raise ActiveRecord::RecordNotFound.new('', Group.to_s) unless Group.exists?(intermediate_evaluation_params[:group_id])
     raise ActiveRecord::RecordNotFound.new('', Student.to_s) unless Student.exists?(intermediate_evaluation_params[:student_id])
@@ -24,6 +24,13 @@ class Api::IntermediateEvaluationController < Api::BaseController
     end
 
     render json: response, status: :ok
+  end
+
+  def destroy
+    student = Student.find(params[:student_id])
+    student.intermediate_evaluations.destroy(params[:id])
+
+    head :no_content, status: :deleted
   end
 
   private

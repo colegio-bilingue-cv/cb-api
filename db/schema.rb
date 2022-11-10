@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_08_200708) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_09_015037) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,7 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_200708) do
     t.index ["user_id"], name: "index_allowlisted_jwts_on_user_id"
   end
 
-  create_table "answers", id: false, force: :cascade do |t|
+  create_table "answers", force: :cascade do |t|
     t.bigint "question_id", null: false
     t.bigint "student_id", null: false
     t.string "answer"
@@ -284,7 +284,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_08_200708) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "user_groups", id: false, force: :cascade do |t|
+  create_table "user_groups", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "group_id", null: false
     t.bigint "role_id"

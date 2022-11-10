@@ -1,9 +1,8 @@
 class Api::MeController < Api::BaseController
 
   def show
-
     response = Panko::Response.create do |r|
-      { me: r.serializer(current_user, UserSerializer) }
+      { me: r.serializer(current_user, UserWithFullInformationSerializer) }
     end
 
     render json: response, status: :ok
@@ -73,7 +72,17 @@ class Api::MeController < Api::BaseController
     groups = current_user.groups
 
     response = Panko::Response.new(
-      groups: Panko::ArraySerializer.new(groups, each_serializer: GroupSerializer)
+      groups: Panko::ArraySerializer.new(groups, each_serializer: GroupWithGradeTeachersPrincipalSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
+  def teachers
+    teachers = current_user.teachers
+
+    response = Panko::Response.new(
+      teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherSerializer)
     )
 
     render json: response, status: :ok

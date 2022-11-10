@@ -3,5 +3,4 @@ class Answer < ApplicationRecord
   belongs_to :student
 
   validates :answer, presence: true
-
 end

@@ -164,13 +164,13 @@ RSpec.describe Api::DiscountsController do
 
         its(:status) { should eq(204) }
 
-        it 'destroy the discount' do
+        it 'destroys the discount' do
           expect {
             subject
           }.to change(Discount, :count).by(-1)
         end
 
-        it 'destroy the student association with the discount' do
+        it 'destroys the student association with the discount' do
           expect {
             subject
           }.to change { student.discounts.count }.by(-1)

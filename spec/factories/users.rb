@@ -40,5 +40,9 @@ FactoryBot.define do
     trait :with_document do
       documents { FactoryBot.create_list(:document, 1) }
     end
+
+    trait :with_absence do
+      absences { FactoryBot.create_list(:absence, 1) }
+    end
   end
 end

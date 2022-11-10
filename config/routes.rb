@@ -16,8 +16,10 @@ Rails.application.routes.draw do
     resources :students, except: [:destroy] do
       resources :family_members, only: [:create, :update]
       resources :comments, only: [:create, :update]
-      resources :final_evaluation, only: [:create, :update]
-      resources :intermediate_evaluation, only: [:create, :update]
+
+      resources :final_evaluations, only: [:create, :update, :destroy]
+      resources :intermediate_evaluations, only: [:create, :update, :destroy]
+      resources :answers, only: [:create]
 
       get :family_members
       get :type_scholarships
@@ -38,7 +40,11 @@ Rails.application.routes.draw do
     resources :student_payment_methods, only: [:create, :update]
     resources :cicles, only: [:index]
 
-    resources :groups, only: [:index]
+    resources :groups, only: [:index] do
+      get :teachers
+      get :students
+    end
+
     resources :grades, only: [:index, :show] do
       resources :groups, only: [:create, :update]
     end
@@ -49,6 +55,7 @@ Rails.application.routes.draw do
       post :complementary_informations, to: 'me#create_complementary_information'
       post :absences, to: 'me#create_absence'
       get :groups
+      get :teachers
 
       scope :groups, controller: :me do
         get :students
@@ -56,5 +63,7 @@ Rails.application.routes.draw do
     end
 
     resources :teachers, only: [:index]
+
+    resource :user_groups, only: [:create, :destroy]
   end
 end

@@ -33,9 +33,33 @@ class Api::GroupsController < Api::BaseController
     render json: response, status: :ok
   end
 
-  private
+  def teachers
+    group = Group.find(params[:group_id])
 
+    response = Panko::Response.new(
+      teachers: Panko::ArraySerializer.new(group.teachers, each_serializer: TeacherSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
+  def students
+    group = Group.find(group_students_params[:group_id])
+    students = group.students
+
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
+  private
   def group_params
-    params.require(:group).permit(:name, :year)
+    params.require(:group).permit(:group_id, :name, :year)
+  end
+
+  def group_students_params
+    params.permit(:group_id)
   end
 end

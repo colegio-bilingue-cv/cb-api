@@ -3,7 +3,10 @@ require 'rails_helper'
 RSpec.describe Api::MeController do
   describe 'GET show' do
     context 'when user is signed in' do
-      let(:user) { FactoryBot.create(:user) }
+      let(:user) { FactoryBot.create(:user, :with_document, :with_complementary_information, :with_absence) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:document) { user.documents.first }
+      let(:absence) { user.absences.first }
 
       let(:params) { { id: user.id, format: :json } }
 
@@ -25,8 +28,21 @@ RSpec.describe Api::MeController do
             surname: user.surname,
             birthdate: user.birthdate.to_s,
             address: user.address,
-            email: user.email
-          })
+            email: user.email,
+            absences: [{
+              start_date: absence.start_date.to_s,
+              end_date: absence.end_date.to_s,
+              reason: absence.reason
+            }],
+            complementary_informations: [{
+              date: complementary_information.date.to_s,
+              description: complementary_information.description
+             }],
+            documents:[{
+              document_type: document.document_type,
+              upload_date: document.upload_date.to_s,
+            }]
+        })
         end
       end
     end
@@ -432,18 +448,25 @@ RSpec.describe Api::MeController do
       context 'with groups' do
         let(:user) { FactoryBot.create(:user, :with_group) }
         let(:group) { user.groups.first }
+        let(:grade) { group.grade }
+
         let(:params) { { format: :json } }
 
         its(:status) { should eq(200) }
 
         its(:body) do
-          should include_json(groups: [{
-            id: group.id,
-            name: group.name,
-            year: group.year,
-            grade_name: group.grade_name
-          }])
-        end
+            should include_json(groups: [{
+              id: group.id,
+              name: group.name,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              },
+              principals: [],
+              support_teachers: [],
+              teachers: []
+            }])
+          end
       end
 
       context 'without groups' do
@@ -478,4 +501,63 @@ RSpec.describe Api::MeController do
       end
     end
   end
+
+  describe 'GET teachers' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_group_and_students) }
+      let(:group) { user.groups.first }
+      let(:grade) { group.grade }
+      let(:student) { group.students.first }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :teachers, params: params
+
+        response
+      end
+
+      context 'with teachers' do
+        let(:params) { { format: :json } }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(teachers: [{
+            name: user.name,
+            surname: user.surname,
+            groups: [{
+              name: group.name,
+              year: group.year,
+              grade: {
+                id: grade.id,
+                name: grade.name
+              }
+            }]
+          }])
+        end
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:params) { { id: user.id, format: :json } }
+
+      subject do
+        get :students, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
 end

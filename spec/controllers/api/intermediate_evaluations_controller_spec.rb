@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Api::IntermediateEvaluationController do
+RSpec.describe Api::IntermediateEvaluationsController do
 
   describe 'POST create' do
     context 'when user is signed in' do
@@ -201,6 +201,86 @@ RSpec.describe Api::IntermediateEvaluationController do
 
       subject do
         patch :update, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'DELETE destroy' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:student) { FactoryBot.create(:student, :with_evaluation) }
+      let!(:intermediate_evaluation) { student.intermediate_evaluations.first }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :destroy, params: params
+
+        response
+      end
+
+      context 'with valid student id' do
+        let(:params) { {student_id: student.id, id: intermediate_evaluation.id, format: :json} }
+
+        its(:status) { should eq(204) }
+
+        it 'destroy the intermediate_evaluation' do
+          expect {
+            subject
+          }.to change(IntermediateEvaluation, :count).by(-1)
+        end
+
+        it 'destroy the student association with the intermediate_evaluation' do
+          expect {
+            subject
+          }.to change { student.intermediate_evaluations.count }.by(-1)
+        end
+      end
+
+      context 'with invalid student id' do
+        let(:params) { {student_id: -1, id: intermediate_evaluation.id, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
+      end
+
+      context 'with invalid intermediate_evaluation id' do
+        let(:params) { {student_id: student.id, id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'intermediate_evaluation.not_found',
+            description: I18n.t('intermediate_evaluation.not_found')
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_evaluation) }
+      let(:intermediate_evaluation) { student.intermediate_evaluations.first}
+      let(:params) { {student_id: student.id, id: intermediate_evaluation.id, format: :json} }
+
+      subject do
+        delete :destroy, params: params
 
         response
       end
