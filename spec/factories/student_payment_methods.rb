@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :student_payment_method do
-    year { Faker::Number.number(digits: 4) }
+    year { Date.today }
 
     trait :with_student do
       student
