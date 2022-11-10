@@ -234,7 +234,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_09_015037) do
   create_table "student_payment_methods", force: :cascade do |t|
     t.bigint "payment_method_id", null: false
     t.bigint "student_id", null: false
-    t.integer "year"
+    t.date "year"
+    t.index ["student_id", "payment_method_id", "year"], name: "index_student_payment_method_year", unique: true
   end
 
   create_table "student_type_scholarships", force: :cascade do |t|

@@ -26,7 +26,6 @@ class Api::StudentPaymentMethodsController < Api::BaseController
     render json: response, status: :ok
   end
 
-  private
   def student_payment_method_params
     params.permit(:year, :payment_method_id, :student_id, :annual_payment)
   end
