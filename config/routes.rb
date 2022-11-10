@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get :comments
       get :discounts
       get :evaluations
+      get :answers
 
       resources :discounts, only: [:create, :update, :destroy]
       post :activate
