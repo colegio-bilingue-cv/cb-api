@@ -13,6 +13,19 @@ class Api::AnswersController < Api::BaseController
     render json: response, status: :created
   end
 
+  def update
+    student = Student.find(params[:student_id])
+    answer = student.answers.find(params[:id])
+
+    answer.update!(answer_params)
+
+    response = Panko::Response.create do |r|
+      { answer: r.serializer(answer, AnswerSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+
   private
 
   def answer_params
