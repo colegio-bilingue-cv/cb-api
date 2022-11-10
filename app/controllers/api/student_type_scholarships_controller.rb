@@ -18,14 +18,21 @@ class Api::StudentTypeScholarshipsController < Api::BaseController
 
     student_type_scholarship = StudentTypeScholarship.find(params[:id])
     student_type_scholarship.update!(student_type_scholarship_params)
-    
+
     response = Panko::Response.create do |r|
       { student_type_scholarship: r.serializer(student_type_scholarship, StudentTypeScholarshipSerializer) }
     end
 
     render json: response, status: :ok
   end
-  
+
+  def destroy
+    student = Student.find(params[:student_id])
+    student.student_type_scholarships.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def student_type_scholarship_params

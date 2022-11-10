@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
 
     resources :type_scholarships, only: [:create, :index, :update]
-    resources :student_type_scholarships, only: [:create, :update]
+    resources :student_type_scholarships, only: [:create, :update, :destroy]
 
     resources :payment_methods, except: [:delete]
     resources :student_payment_methods, only: [:create, :update]
