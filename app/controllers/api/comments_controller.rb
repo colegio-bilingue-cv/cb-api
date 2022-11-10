@@ -23,6 +23,13 @@ class Api::CommentsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def destroy
+    student = Student.find(params[:student_id])
+    student.comments.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def comment_params
