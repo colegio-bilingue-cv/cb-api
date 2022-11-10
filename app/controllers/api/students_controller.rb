@@ -110,7 +110,7 @@ class Api::StudentsController < Api::BaseController
 
   def answers
     student = Student.find(params[:student_id])
-    danswers = student.answers
+    answers = student.answers
 
     response = Panko::Response.new(
       student: {

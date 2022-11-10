@@ -803,14 +803,14 @@ RSpec.describe Api::StudentsController do
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
-        get :discounts, params: params
+        get :answers, params: params
 
         response
       end
 
       context 'with valid id' do
         let(:student) { FactoryBot.create(:student, :with_answer) }
-        let(:discount) { student.answers.first }
+        let(:answer) { student.answers.first}
 
         let(:params) { {student_id: student.id, format: :json} }
 
@@ -818,7 +818,7 @@ RSpec.describe Api::StudentsController do
 
         its(:body) do
           should include_json(student:{answers: [{
-            answer: answer_attrs[:answer],
+            answer: answer.answer,
             question: {
               id: question.id,
               text: question.text
