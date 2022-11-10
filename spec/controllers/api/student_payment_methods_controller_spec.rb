@@ -27,7 +27,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
           should include_json(student_payment_method: {
             student_id: student_payment_method.student_id,
             payment_method_id: student_payment_method.payment_method_id,
-            year: student_payment_method.year.to_s
+            year: student_payment_method.year
           })
         end
       end
@@ -114,7 +114,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
       context 'with invalid data duplicate index' do
         let(:second_student_payment_method) do
-          FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id, year: Date.yesterday)
+          FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id, year: Faker::Number.number(digits: 4))
         end
 
         let(:params) do {
@@ -138,8 +138,9 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
 
       context 'with valid data' do
-       let(:params) do {
-          year: Date.yesterday,
+        let(:year) {Faker::Number.number(digits: 4)}
+        let(:params) do {
+          year: year,
           student_id: student_payment_method.student_id,
           payment_method_id: student_payment_method.payment_method_id,
           id: student_payment_method.id,
@@ -151,7 +152,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
             subject
 
             student_payment_method.reload
-          }.to change(student_payment_method, :year).to(Date.yesterday)
+          }.to change(student_payment_method, :year).to(year)
         end
 
         its(:status) { should eq(200) }
@@ -161,14 +162,14 @@ RSpec.describe Api::StudentPaymentMethodsController do
             id: student_payment_method.id,
             student_id: student_payment_method.student_id,
             payment_method_id: student_payment_method.payment_method_id,
-            year: Date.yesterday.to_s
+            year: year
           })
         end
       end
 
       context 'with invalid id' do
         let(:params) do {
-          year: Date.yesterday,
+          year: Faker::Number.number(digits: 4),
           student_id: student_payment_method.student_id,
           payment_method_id: student_payment_method.payment_method_id, id: -1,
           format: :json }
@@ -212,7 +213,7 @@ RSpec.describe Api::StudentPaymentMethodsController do
       let(:student_payment_method) { FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
 
       let(:params) do {
-        year: '01-01-1900',
+        year: Faker::Number.number(digits: 4),
         student_id: student_payment_method.student_id,
         payment_method_id: student_payment_method.payment_method_id ,
         id: student_payment_method.id,
