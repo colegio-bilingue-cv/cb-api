@@ -121,24 +121,23 @@ RSpec.describe Api::AnswersController do
       let(:group) { FactoryBot.create(:group) }
       let(:question) { FactoryBot.create(:question) }
       let(:answer) { FactoryBot.create(:answer, student_id: student.id, question_id: question.id) }
-      let(:new_answer) {Faker::Movies::LordOfTheRings.character}
-
+      let(:new_answer) { FactoryBot.attributes_for(:answer) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
         patch :update, params: params
-        p params
+
         response
       end
 
       context 'with valid data' do
-        let(:params) { { answer: {answer: new_answer}, id: answer.id, student_id: student.id, format: :json } }
+        let(:params) { { answer: new_answer, id: answer.id, student_id: student.id, format: :json } }
 
         its(:status) { should eq(200) }
 
         its(:body) do
           should include_json(answer: {
-            answer: new_answer,
+            answer: new_answer[:answer],
             question: {
               id: question.id,
               text: question.text
@@ -174,7 +173,7 @@ RSpec.describe Api::AnswersController do
       end
 
       context 'with invalid student id' do
-        let(:params) { { answer: {answer: new_answer}, id: answer.id, student_id: -1, format: :json } }
+        let(:params) { { answer: new_answer, id: answer.id, student_id: -1, format: :json } }
 
         its(:status) { should eq(404) }
 
@@ -187,8 +186,7 @@ RSpec.describe Api::AnswersController do
       end
 
       context 'with invalid question id' do
-        let(:params) { { answer: answer,id: -1, student_id: student.id, format: :json } }
-
+        let(:params) { { answer: new_answer, id: -1, student_id: student.id, format: :json } }
 
         its(:status) { should eq(404) }
 
@@ -205,12 +203,13 @@ RSpec.describe Api::AnswersController do
       let(:student) { FactoryBot.create(:student) }
       let(:group) { FactoryBot.create(:group) }
       let(:question) { FactoryBot.create(:question) }
+      let(:answer) { FactoryBot.create(:answer, student_id: student.id, question_id: question.id) }
 
-      let(:answer) { FactoryBot.attributes_for(:answer) }
-      let(:params) { { answer: answer.merge(question_id: question.id), student_id: student.id, format: :json } }
+      let(:new_answer) { FactoryBot.attributes_for(:answer) }
+      let(:params) { { answer: new_answer, student_id: student.id, id: answer.id, format: :json } }
 
       subject do
-        post :create, params: params
+        patch :update, params: params
 
         response
       end
