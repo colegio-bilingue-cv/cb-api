@@ -3,7 +3,7 @@ class UserWithFullInformationSerializer < Panko::Serializer
   has_many :absences
   has_many :documents
 
-  attributes :id, :email, :name, :surname, :ci, :address, :birthdate, :role, :institution_start
+  attributes :id, :email, :name, :surname, :ci, :address, :birthdate, :role, :starting_date
 
   def role
     object.roles.first.name

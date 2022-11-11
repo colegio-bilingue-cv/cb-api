@@ -27,7 +27,7 @@ RSpec.describe Api::UsersController do
             birthdate: user_attrs[:birthdate].to_s,
             address: user_attrs[:address],
             email: user_attrs[:email],
-            institution_start: user_attrs[:institution_start].to_s
+            starting_date: user_attrs[:starting_date].to_s
           })
         end
       end
@@ -93,7 +93,7 @@ RSpec.describe Api::UsersController do
             birthdate: user.birthdate.to_s,
             address: user.address,
             email: user.email,
-            institution_start: user.institution_start.to_s
+            starting_date: user.starting_date.to_s
           }])
         end
       end
@@ -153,7 +153,7 @@ RSpec.describe Api::UsersController do
             birthdate: user[:birthdate].to_s,
             address: 'New address 1234',
             email: user[:email],
-            institution_start: user[:institution_start].to_s
+            starting_date: user[:starting_date].to_s
           })
         end
       end
