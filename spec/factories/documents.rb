@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :document do
-    document_type { 0 }
+    document_type { Document::document_types.keys.sample }
     upload_date { Date.today }
 
     user

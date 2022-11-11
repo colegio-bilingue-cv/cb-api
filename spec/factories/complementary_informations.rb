@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :complementary_information do
     date { Date.today }
-    description { Faker::Lorem.sentences }
+    description { Faker::GreekPhilosophers.quote }
 
     user
   end

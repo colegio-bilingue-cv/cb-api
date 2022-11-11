@@ -223,9 +223,8 @@ RSpec.describe Api::MeController do
 
   describe 'POST create_document' do
     context 'when user is signed in' do
-      let(:user) { FactoryBot.create(:user, :with_document) }
-      let(:document) { user.documents.first }
-      let(:document_attrs) { document.attributes }
+      let(:user) { FactoryBot.create(:user) }
+      let(:document_attrs) { FactoryBot.attributes_for(:document) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -241,17 +240,16 @@ RSpec.describe Api::MeController do
 
         its(:body) do
           should include_json(document: {
-            document_type: document.document_type,
-            upload_date: document.upload_date.to_s,
+            document_type: document_attrs[:document_type],
+            upload_date: document_attrs[:upload_date].to_s,
           })
         end
       end
     end
 
     context 'when user is not signed in' do
-      let(:user) { FactoryBot.create(:user, :with_document) }
-      let(:document) { user.documents.first }
-      let(:document_attrs) { document.attributes }
+      let(:user) { FactoryBot.create(:user) }
+      let(:document_attrs) { FactoryBot.attributes_for(:document) }
       let(:params) { document_attrs.merge({format: :json}) }
 
       subject do
@@ -273,9 +271,8 @@ RSpec.describe Api::MeController do
 
   describe 'POST create_complementary_information' do
     context 'when user is signed in' do
-      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
-      let(:complementary_information) { user.complementary_informations.first }
-      let(:complementary_information_attrs) { complementary_information.attributes }
+      let(:user) { FactoryBot.create(:user) }
+      let(:complementary_information_attrs) { FactoryBot.attributes_for(:complementary_information) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -291,17 +288,16 @@ RSpec.describe Api::MeController do
 
         its(:body) do
           should include_json(complementary_information: {
-            date: complementary_information.date.to_s,
-            description: complementary_information.description
+            date: complementary_information_attrs[:date].to_s,
+            description: complementary_information_attrs[:description]
           })
         end
       end
     end
 
     context 'when user is not signed in' do
-      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
-      let(:complementary_information) { user.complementary_informations.first }
-      let(:complementary_information_attrs) { complementary_information.attributes }
+      let(:user) { FactoryBot.create(:user) }
+      let(:complementary_information_attrs) { FactoryBot.attributes_for(:complementary_information) }
 
       let(:params) { complementary_information_attrs.merge({format: :json}) }
       subject do
