@@ -235,4 +235,90 @@ RSpec.describe Api::StudentPaymentMethodsController do
       end
     end
   end
+
+  describe 'DELETE destroy' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:student) { FactoryBot.create(:student) }
+      let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
+
+      let!(:student_payment_method) { FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :destroy, params: params
+
+        response
+      end
+
+      context 'with valid student id' do
+        let(:params) { {student_id: student.id, id: student_payment_method.id, format: :json} }
+
+        its(:status) { should eq(204) }
+
+        it 'destroy the student_payment_method' do
+          expect {
+            subject
+          }.to change(StudentPaymentMethod, :count).by(-1)
+        end
+
+        it 'destroy the student association with the student_payment_method' do
+          expect {
+            subject
+          }.to change { student.student_payment_methods.count }.by(-1)
+        end
+      end
+
+      context 'with invalid student id' do
+        let(:params) { {student_id: -1, id: student_payment_method.id, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
+      end
+
+      context 'with invalid student_payment_method id' do
+        let(:params) { {student_id: student.id, id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student_payment_method.not_found',
+            description: I18n.t('student_payment_method.not_found')
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:student) { FactoryBot.create(:student) }
+      let(:payment_method) { FactoryBot.create(:payment_method, method: Faker::Music::Prince.album) }
+
+      let!(:student_payment_method) { FactoryBot.create(:student_payment_method, student_id: student.id, payment_method_id: payment_method.id) }
+
+      let(:params) { {student_id: student.id, id: student_payment_method.id, format: :json} }
+
+      subject do
+        delete :destroy, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
 end

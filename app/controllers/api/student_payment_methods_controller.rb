@@ -26,6 +26,14 @@ class Api::StudentPaymentMethodsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def destroy
+    student = Student.find(params[:student_id])
+    student.student_payment_methods.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
+
   def student_payment_method_params
     params.permit(:year, :payment_method_id, :student_id, :annual_payment)
   end

@@ -37,7 +37,7 @@ Rails.application.routes.draw do
     resources :student_type_scholarships, only: [:create, :update, :destroy]
 
     resources :payment_methods, except: [:delete]
-    resources :student_payment_methods, only: [:create, :update]
+    resources :student_payment_methods, only: [:create, :update, :destroy]
     resources :cicles, only: [:index]
 
     resources :groups, only: [:index] do
