@@ -7,7 +7,7 @@ class Api::AnswersController < Api::BaseController
     answer = student.answers.create!(answer_params)
 
     response = Panko::Response.create do |r|
-      { answer: r.serializer(answer, AnswerSerializer) }
+      { answer: r.serializer(answer, AnswerWithStudentQuestionSerializer) }
     end
 
     render json: response, status: :created
@@ -20,7 +20,7 @@ class Api::AnswersController < Api::BaseController
     answer.update!(answer_params)
 
     response = Panko::Response.create do |r|
-      { answer: r.serializer(answer, AnswerSerializer) }
+      { answer: r.serializer(answer, AnswerWithStudentQuestionSerializer) }
     end
 
     render json: response, status: :ok

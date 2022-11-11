@@ -797,6 +797,74 @@ RSpec.describe Api::StudentsController do
     end
   end
 
+  describe 'GET answers' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :answers, params: params
+
+        response
+      end
+
+      context 'with valid id' do
+        let(:student) { FactoryBot.create(:student, :with_answer) }
+        let(:answer) { student.answers.first}
+
+        let(:params) { {student_id: student.id, format: :json} }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(student:{answers: [{
+            answer: answer.answer,
+            question: {
+              id: answer.question.id,
+              text: answer.question.text
+            }
+          }]})
+        end
+      end
+
+      context 'with invalid id' do
+        let(:params) { {student_id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
+
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_answer) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        get :discounts, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+
+  end
 
   describe 'POST activate' do
     let(:user) { FactoryBot.create(:user) }

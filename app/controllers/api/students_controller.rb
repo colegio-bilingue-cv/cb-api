@@ -108,6 +108,18 @@ class Api::StudentsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def answers
+    student = Student.find(params[:student_id])
+    answers = student.answers
+
+    response = Panko::Response.new(
+      student: {
+        answers: Panko::ArraySerializer.new(answers, each_serializer: AnswerSerializer)
+      }
+    )
+
+    render json: response, status: :ok
+  end
   def activate
     student = Student.find(params[:student_id])
 

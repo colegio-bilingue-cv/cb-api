@@ -58,6 +58,10 @@ FactoryBot.define do
       discounts { FactoryBot.create_list(:discount, 1) }
     end
 
+    trait :with_answer do
+      answers { FactoryBot.create_list(:answer, 1) }
+    end
+
     trait :without_reference_number do
       reference_number { nil }
     end
