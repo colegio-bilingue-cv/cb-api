@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
       resources :final_evaluations, only: [:create, :update, :destroy]
       resources :intermediate_evaluations, only: [:create, :update, :destroy]
-      resources :answers, only: [:create]
+      resources :answers, only: [:create, :update]
 
       get :family_members
       get :type_scholarships

@@ -266,4 +266,6 @@ es:
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
   question:
-    not_found: 'Pregunta no encontrado'
+    not_found: 'Pregunta no encontrada'
+  answer:
+    not_found: 'Respuesta no encontrada'
