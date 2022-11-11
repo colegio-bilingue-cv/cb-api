@@ -374,6 +374,7 @@ RSpec.describe Api::MeController do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user, :with_group_and_students) }
       let(:group) { user.groups.first }
+      let(:grade) { group.grade }
       let(:student) { group.students.first }
 
       subject do
@@ -395,7 +396,36 @@ RSpec.describe Api::MeController do
             year: group.year,
             grade_name: group.grade_name,
             students: [{
-              ci: student.ci
+              ci: student.ci,
+              name: student.name,
+              surname: student.surname,
+              birthplace: student.birthplace.to_s,
+              birthdate: student.birthdate.to_s,
+              nationality: student.nationality,
+              schedule_start: student.schedule_start,
+              schedule_end: student.schedule_end,
+              tuition: student.tuition,
+              reference_number: student.reference_number,
+              office: student.office,
+              status: student.status,
+              first_language: student.first_language,
+              address: student.address,
+              neighborhood: student.neighborhood,
+              medical_assurance: student.medical_assurance,
+              emergency: student.emergency,
+              vaccine_expiration: student.vaccine_expiration.to_s,
+              vaccine_name: student.vaccine_name,
+              phone_number: student.phone_number,
+              inscription_date: student.inscription_date.to_s,
+              starting_date: student.starting_date.to_s,
+              contact: student.contact,
+              contact_phone: student.contact_phone,
+              group: {
+                id: group.id,
+                name: group.name,
+                year: group.year,
+                grade_name: group.grade_name
+              }
             }]
           })
         end
@@ -545,6 +575,92 @@ RSpec.describe Api::MeController do
 
       subject do
         get :students, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'GET students' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_group_and_students) }
+      let(:group) { user.groups.first }
+      let(:grade) { group.grade }
+      let(:student) { group.students.first }
+      let(:params) { { format: :json } }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :groups_students, params: params
+
+        response
+      end
+
+      context 'with students' do
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [{
+            ci: student.ci,
+            name: student.name,
+            surname: student.surname,
+            birthplace: student.birthplace.to_s,
+            birthdate: student.birthdate.to_s,
+            nationality: student.nationality,
+            schedule_start: student.schedule_start,
+            schedule_end: student.schedule_end,
+            tuition: student.tuition,
+            reference_number: student.reference_number,
+            office: student.office,
+            status: student.status,
+            first_language: student.first_language,
+            address: student.address,
+            neighborhood: student.neighborhood,
+            medical_assurance: student.medical_assurance,
+            emergency: student.emergency,
+            vaccine_expiration: student.vaccine_expiration.to_s,
+            vaccine_name: student.vaccine_name,
+            phone_number: student.phone_number,
+            inscription_date: student.inscription_date.to_s,
+            starting_date: student.starting_date.to_s,
+            contact: student.contact,
+            contact_phone: student.contact_phone,
+            group: {
+              id: group.id,
+              name: group.name,
+              year: group.year,
+              grade_name: group.grade_name
+            }
+          }])
+        end
+      end
+
+      context 'without students' do
+        let(:user) { FactoryBot.create(:user) }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(students: [])
+        end
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:params) { { format: :json } }
+
+      subject do
+        get :groups_students, params: params
 
         response
       end
