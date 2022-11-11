@@ -56,6 +56,7 @@ Rails.application.routes.draw do
       post :absences, to: 'me#create_absence'
       get :groups
       get :teachers
+      get :students, to: 'me#groups_students'
 
       scope :groups, controller: :me do
         get :students

@@ -68,6 +68,16 @@ class Api::MeController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def groups_students
+    students = current_user.students.preload(:group)
+
+    response = Panko::Response.new(
+      students: Panko::ArraySerializer.new(students, each_serializer: StudentSerializer)
+    )
+
+    render json: response, status: :ok
+  end
+
   def groups
     groups = current_user.groups
 
