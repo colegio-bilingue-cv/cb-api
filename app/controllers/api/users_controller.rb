@@ -42,10 +42,25 @@ class Api::UsersController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def create_document
+    user = User.find(params[:user_id])
+    document = user.documents.create!(document_params)
+
+    response = Panko::Response.create do |r|
+      { document: r.serializer(document, DocumentSerializer) }
+    end
+
+    render json: response, status: :created
+  end
+
   private
 
   def users_params
     params.require(:user).permit(:email, :password, :birthdate, :name, :surname, :ci, :address, :role)
+  end
+
+  def document_params
+    params.permit(:document_type, :certificate, :upload_date)
   end
 
 end

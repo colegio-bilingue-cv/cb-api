@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     post :sign_in, to: 'auth#sign_in'
     post :sign_out, to: 'auth#sign_out'
 
-    resources :users, except: [:delete]
+    resources :users, except: [:delete] do
+      post :documents, to:'users#create_document'
+    end
 
     scope :students, controller: :students do
       get :active
