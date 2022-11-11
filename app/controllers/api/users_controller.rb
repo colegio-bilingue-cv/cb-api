@@ -33,6 +33,15 @@ class Api::UsersController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def show
+    user = User.find(params[:id])
+    response = Panko::Response.create do |r|
+      { user: r.serializer(user, UserWithFullInformationSerializer) }
+    end
+
+    render json: response, status: :ok
+  end
+
   private
 
   def users_params
