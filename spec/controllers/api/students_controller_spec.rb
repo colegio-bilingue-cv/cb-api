@@ -820,8 +820,8 @@ RSpec.describe Api::StudentsController do
           should include_json(student:{answers: [{
             answer: answer.answer,
             question: {
-              id: question.id,
-              text: question.text
+              id: answer.question.id,
+              text: answer.question.text
             },
             student: {
               ci: student.ci,
