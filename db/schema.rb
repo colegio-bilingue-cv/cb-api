@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_09_015037) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_11_212531) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -234,8 +234,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_09_015037) do
   create_table "student_payment_methods", force: :cascade do |t|
     t.bigint "payment_method_id", null: false
     t.bigint "student_id", null: false
-    t.date "year"
-    t.index ["student_id", "payment_method_id", "year"], name: "index_student_payment_method_year", unique: true
+    t.integer "year"
   end
 
   create_table "student_type_scholarships", force: :cascade do |t|
@@ -303,6 +302,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_09_015037) do
     t.string "encrypted_password", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "institution_start"
     t.index ["ci"], name: "index_users_on_ci", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
   end
