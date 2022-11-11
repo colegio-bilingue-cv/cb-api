@@ -280,6 +280,7 @@ RSpec.describe Api::UsersController do
       let(:other_user) { FactoryBot.create(:user) }
 
       let(:document_attrs) { FactoryBot.attributes_for(:document) }
+      let(:params) { document_attrs.merge({format: :json, user_id: other_user.id}) }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -289,7 +290,6 @@ RSpec.describe Api::UsersController do
       end
 
       context 'with valid data' do
-        let(:params) { document_attrs.merge({format: :json, user_id: other_user.id}) }
 
         its(:status) { should eq(201) }
 
@@ -297,6 +297,19 @@ RSpec.describe Api::UsersController do
           should include_json(document: {
             document_type: document_attrs[:document_type],
             upload_date: document_attrs[:upload_date].to_s,
+          })
+        end
+      end
+
+      context 'with invalid user id' do
+        let(:params) { document_attrs.merge({format: :json, user_id: -1}) }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'user.not_found',
+            description: I18n.t('user.not_found')
           })
         end
       end
@@ -311,6 +324,72 @@ RSpec.describe Api::UsersController do
 
       subject do
         post :create_document, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST create_complementary_information' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:other_user) { FactoryBot.create(:user) }
+
+      let(:complementary_information_attrs) { FactoryBot.attributes_for(:complementary_information) }
+      let(:params) { complementary_information_attrs.merge({format: :json, user_id: other_user.id}) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_complementary_information, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(complementary_information: {
+            date: complementary_information_attrs[:date].to_s,
+            description: complementary_information_attrs[:description]
+          })
+        end
+      end
+
+      context 'with invalid user id' do
+        let(:params) { complementary_information_attrs.merge({format: :json, user_id: -1}) }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'user.not_found',
+            description: I18n.t('user.not_found')
+          })
+        end
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:other_user) { FactoryBot.create(:user) }
+      let(:complementary_information_attrs) { FactoryBot.attributes_for(:complementary_information) }
+
+      let(:params) { complementary_information_attrs.merge({format: :json, user_id: other_user.id}) }
+
+      subject do
+        post :create_complementary_information, params: params
 
         response
       end
