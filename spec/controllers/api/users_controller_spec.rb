@@ -355,7 +355,6 @@ RSpec.describe Api::UsersController do
       end
 
       context 'with valid data' do
-
         its(:status) { should eq(201) }
 
         its(:body) do
@@ -378,7 +377,6 @@ RSpec.describe Api::UsersController do
           })
         end
       end
-
     end
 
     context 'when user is not signed in' do
@@ -390,6 +388,73 @@ RSpec.describe Api::UsersController do
 
       subject do
         post :create_complementary_information, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'POST create_absence' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:other_user) { FactoryBot.create(:user) }
+
+      let(:absence_attrs) { FactoryBot.attributes_for(:absence) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        post :create_absence, params: params
+
+        response
+      end
+
+      context 'with valid data' do
+        let(:params) { absence_attrs.merge({format: :json, user_id: other_user.id}) }
+
+        its(:status) { should eq(201) }
+
+        its(:body) do
+          should include_json(absence: {
+            start_date: absence_attrs[:start_date].to_s,
+            end_date: absence_attrs[:end_date].to_s,
+            reason: absence_attrs[:reason]
+          })
+        end
+      end
+
+      context 'with invalid user id' do
+        let(:params) { absence_attrs.merge({format: :json, user_id: -1}) }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'user.not_found',
+            description: I18n.t('user.not_found')
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user) }
+      let(:other_user) { FactoryBot.create(:user) }
+      let(:absence_attrs) { FactoryBot.attributes_for(:absence) }
+
+
+      let(:params) { absence_attrs.merge({format: :json, user_id: -1}) }
+
+      subject do
+        post :create_document, params: params
 
         response
       end
