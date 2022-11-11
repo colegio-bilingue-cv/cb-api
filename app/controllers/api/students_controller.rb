@@ -199,7 +199,7 @@ class Api::StudentsController < Api::BaseController
 
   def student_params
     params.permit(:ci, :surname,
-      :name, :birthplace, :birthdate, :nationality, :schedule_start, :schedule_end, :tuition,
+      :name, :birthplace, :birthdate, :nationality, :schedule_start, :schedule_end,
       :reference_number, :office,
       :first_language, :address, :neighborhood, :medical_assurance,
       :emergency, :vaccine_name, :vaccine_expiration, :phone_number,
@@ -208,7 +208,7 @@ class Api::StudentsController < Api::BaseController
   end
 
   def activate_params
-    params.require(:student).permit(:reference_number)
+    params.require(:student).permit(:reference_number, :tuition)
   end
 
   def deactivate_params

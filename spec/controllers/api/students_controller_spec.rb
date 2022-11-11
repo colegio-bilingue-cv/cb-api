@@ -113,7 +113,7 @@ RSpec.describe Api::StudentsController do
             nationality: student.nationality,
             schedule_start: student.schedule_start,
             schedule_end: student.schedule_end,
-            tuition: student.tuition,
+            tuition: nil,
             reference_number: student.reference_number,
             office: student.office,
             status: student.status,
