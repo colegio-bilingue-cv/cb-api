@@ -152,49 +152,62 @@ RSpec.describe Api::MeController do
         response
       end
 
-      context 'with valid data' do
-        let(:params) { {user: { password:'new_password1', password_confirmation:'new_password1' }, format: :json} }
+      context 'with valid current password' do
+        context 'with valid data' do
+          let(:params) { {user: { current_password: 'testing', password:'new_password1', password_confirmation:'new_password1' }, format: :json} }
 
-        its(:status) { should eq(200) }
+          its(:status) { should eq(200) }
 
-        its(:body) do
-          should include_json(user: {
-            ci: user[:ci].to_s,
-            name: user[:name],
-            surname: user[:surname],
-            birthdate: user[:birthdate].to_s,
-            address: user[:address],
-            email: user[:email]
-          })
+          its(:body) do
+            should include_json(user: {
+              ci: user[:ci].to_s,
+              name: user[:name],
+              surname: user[:surname],
+              birthdate: user[:birthdate].to_s,
+              address: user[:address],
+              email: user[:email]
+            })
+          end
+        end
+
+        context 'with invalid data' do
+          let(:params) { {user: { current_password: 'testing', password: '111', password_confirmation: '111' }, format: :json} }
+
+          its(:status) { should eq(422) }
+
+          its(:body) do
+            should include_json(error: {
+              key: 'record_invalid',
+              description: {
+                password: ['es demasiado corto (6 caracteres mínimo)']
+              }
+            })
+          end
+        end
+
+        context 'with invalid password_confirmation' do
+          let(:params) { {user: { current_password: 'testing', password:'new_password', password_confirmation: 'diferent_password' }, format: :json} }
+
+          its(:status) { should eq(422) }
+
+          its(:body) do
+            should include_json(error: {
+              key: 'user.no_match_password',
+              description: I18n.t('user.no_match_password')
+            })
+          end
         end
       end
 
-      context 'with invalid data' do
-        let(:params) { {user: { password: '111', password_confirmation: '111' }, format: :json} }
+      context 'with invalid current password' do
+        let(:params) { {user: { current_password: 'wrong_password', password: 'new_password1', password_confirmation: 'new_password1' }, format: :json} }
 
         its(:status) { should eq(422) }
 
         its(:body) do
           should include_json(error: {
-            key: 'record_invalid',
-            description: {
-              password: ['es demasiado corto (6 caracteres mínimo)']
-            }
-          })
-        end
-      end
-
-      context 'with invalid password_confirmation' do
-        let(:params) { {user: { password:'new_password', password_confirmation:'diferent_password' }, format: :json} }
-
-        its(:status) { should eq(422) }
-
-        its(:body) do
-          should include_json(error: {
-            key: 'record_invalid',
-            description: {
-              password_confirmation: ['no coincide']
-            }
+            key: 'user.invalid_current_password',
+            description: I18n.t('user.invalid_current_password')
           })
         end
       end

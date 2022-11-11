@@ -28,6 +28,14 @@ class ErrorMessage
       new('record_invalid', record.errors)
     end
 
+    def build_invalid_current_password(error)
+      new(error.message_key, I18n.t(error.message_key))
+    end
+
+    def build_no_match_password(error)
+      new(error.message_key, I18n.t(error.message_key))
+    end
+
     def build_invalid_credentials(error)
       new(error.message_key, I18n.t(error.message_key))
     end
