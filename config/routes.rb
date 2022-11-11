@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
     resources :users, except: [:delete] do
       post :documents, to:'users#create_document'
+      post :complementary_informations, to:'users#create_complementary_information'
     end
 
     scope :students, controller: :students do
