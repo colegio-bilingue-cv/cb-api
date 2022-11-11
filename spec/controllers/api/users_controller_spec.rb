@@ -26,7 +26,8 @@ RSpec.describe Api::UsersController do
             surname: user_attrs[:surname],
             birthdate: user_attrs[:birthdate].to_s,
             address: user_attrs[:address],
-            email: user_attrs[:email]
+            email: user_attrs[:email],
+            institution_start: user_attrs[:institution_start].to_s
           })
         end
       end
@@ -91,7 +92,8 @@ RSpec.describe Api::UsersController do
             surname: user.surname,
             birthdate: user.birthdate.to_s,
             address: user.address,
-            email: user.email
+            email: user.email,
+            institution_start: user.institution_start.to_s
           }])
         end
       end
@@ -150,7 +152,8 @@ RSpec.describe Api::UsersController do
             surname: user[:surname],
             birthdate: user[:birthdate].to_s,
             address: 'New address 1234',
-            email: user[:email]
+            email: user[:email],
+            institution_start: user[:institution_start].to_s
           })
         end
       end
@@ -182,7 +185,6 @@ RSpec.describe Api::UsersController do
           })
         end
       end
-
     end
 
     context 'when user is not signed in' do
