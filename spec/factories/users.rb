@@ -43,7 +43,6 @@ FactoryBot.define do
       complementary_informations { FactoryBot.create_list(:complementary_information, 1) }
     end
 
-
     trait :with_group_and_students do
       after(:create) { |user| FactoryBot.create(:user_group, :teacher, :with_group_and_students, user_id: user.id) }
     end
