@@ -8,6 +8,7 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { 'testing' }
     password_confirmation { password }
+    starting_date { Date.today }
 
     after(:create) { |user| user.add_role(:teacher) }
 
