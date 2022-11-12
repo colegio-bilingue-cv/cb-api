@@ -120,6 +120,7 @@ class Api::StudentsController < Api::BaseController
 
     render json: response, status: :ok
   end
+
   def activate
     student = Student.find(params[:student_id])
 
