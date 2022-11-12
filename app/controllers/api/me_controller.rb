@@ -59,8 +59,13 @@ class Api::MeController < Api::BaseController
   end
 
   def destroy_absence
-    absence = current_user.absences.find(params[:id])
-    absence.destroy!
+    absence = current_user.absences.destroy(params[:id])
+
+    head :no_content
+  end
+
+  def destroy_document
+    document = current_user.documents.destroy(params[:id])
 
     head :no_content
   end

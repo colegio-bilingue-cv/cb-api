@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       post :complementary_informations, to: 'users#create_complementary_information'
       post :absences, to: 'users#create_absence'
       delete 'absences/:id', to: 'users#destroy_absence'
+      delete 'documents/:id', to: 'users#destroy_document'
     end
 
     scope :students, controller: :students do
@@ -65,6 +66,7 @@ Rails.application.routes.draw do
       get :students, to: 'me#groups_students'
 
       delete 'absences/:id', to:'me#destroy_absence'
+      delete 'documents/:id', to:'me#destroy_document'
 
       scope :groups, controller: :me do
         get :students

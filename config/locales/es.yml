@@ -272,3 +272,5 @@ es:
     not_found: 'Pregunta no encontrada'
   answer:
     not_found: 'Respuesta no encontrada'
+  document:
+    not_found: 'Document no encontrado'
