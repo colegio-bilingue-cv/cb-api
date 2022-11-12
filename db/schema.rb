@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_11_212531) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_12_181136) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -81,15 +81,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_212531) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "cicles_questions", id: false, force: :cascade do |t|
-    t.bigint "question_id", null: false
-    t.bigint "cicle_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cicle_id", "question_id"], name: "index_cicles_questions_on_cicle_id_and_question_id"
-    t.index ["question_id", "cicle_id"], name: "index_cicles_questions_on_question_id_and_cicle_id"
   end
 
   create_table "comments", force: :cascade do |t|
@@ -218,7 +209,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_212531) do
     t.bigint "category_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "cicle_id"
     t.index ["category_id"], name: "index_questions_on_category_id"
+    t.index ["cicle_id"], name: "index_questions_on_cicle_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -324,6 +317,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_212531) do
   add_foreign_key "grades", "cicles"
   add_foreign_key "groups", "grades"
   add_foreign_key "questions", "categories"
+  add_foreign_key "questions", "cicles"
   add_foreign_key "students", "cicles"
   add_foreign_key "students", "groups"
 end
