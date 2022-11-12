@@ -265,6 +265,7 @@ es:
   user_group:
     not_found: 'Usuario no perteneciente al grupo'
   absence:
+    not_found: 'Inasistencia no encontrada'
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
   question:

@@ -75,6 +75,13 @@ class Api::UsersController < Api::BaseController
     render json: response, status: :created
   end
 
+  def destroy_absence
+    user = User.find(params[:user_id])
+    absence = user.absences.destroy(params[:id])
+
+    head :no_content
+  end
+
   private
 
   def users_params
