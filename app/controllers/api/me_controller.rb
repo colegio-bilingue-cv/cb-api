@@ -19,7 +19,7 @@ class Api::MeController < Api::BaseController
   end
 
   def password
-    current_user.update!(me_password_params)
+    current_user.change_password!(password: me_password_params[:password], password_confirmation: me_password_params[:password_confirmation], current_password: me_password_params[:current_password])
 
     response = Panko::Response.create do |r|
       { user: r.serializer(current_user, UserSerializer) }
@@ -105,7 +105,7 @@ class Api::MeController < Api::BaseController
   end
 
   def me_password_params
-    params.require(:user).permit(:password, :password_confirmation)
+    params.require(:user).permit(:current_password, :password, :password_confirmation)
   end
 
   def document_params

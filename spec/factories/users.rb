@@ -6,7 +6,7 @@ FactoryBot.define do
     birthdate { Date.today }
     address { Faker::Address.street_address }
     email { Faker::Internet.email }
-    password { Faker::Internet.password }
+    password { 'testing' }
     password_confirmation { password }
 
     after(:create) { |user| user.add_role(:teacher) }

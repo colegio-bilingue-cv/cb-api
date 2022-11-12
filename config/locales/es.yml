@@ -241,6 +241,8 @@ es:
       incomplete_payment_method: 'No tiene un método de pago válido'
   user:
     not_found: 'Usuario no encontrado'
+    invalid_current_password: 'La contraseña ingresada no es correcta'
+    no_match_password: 'Las contraseñas no coinciden'
   student_type_scholarship:
     not_found: 'Relación entre estudiante y tipo de escolaridad no encontrada'
   payment_method:

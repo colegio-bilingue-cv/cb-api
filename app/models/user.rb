@@ -34,4 +34,13 @@ class User < ApplicationRecord
       raise InvalidCredentialsError
     end
   end
+
+  def change_password!(current_password:, password:, password_confirmation:)
+    raise InvalidCurrentPasswordError unless self.valid_password?(current_password)
+    raise NoMatchPasswordError if password != password_confirmation
+
+    self.password = password
+    self.password_confirmation = password
+    self.save!
+  end
 end
