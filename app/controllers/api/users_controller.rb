@@ -24,7 +24,7 @@ class Api::UsersController < Api::BaseController
 
   def update
     user = User.find(params[:id])
-    user.update!(users_params)
+    user.update!(users_params.except(:role))
 
     response = Panko::Response.create do |r|
       { user: r.serializer(user, UserSerializer) }
