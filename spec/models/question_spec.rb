@@ -7,7 +7,7 @@ RSpec.describe Question, type: :model do
 
   describe 'relations' do
     it { should belong_to(:category) }
-    it { should have_and_belong_to_many(:cicles) }
+    it { should belong_to(:cicle) }
     it { should have_many(:answers) }
     it { should have_many(:students).through(:answers) }
   end
