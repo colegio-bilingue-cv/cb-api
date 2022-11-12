@@ -170,7 +170,7 @@ RSpec.describe Api::CommentsController do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user) }
       let(:student) { FactoryBot.create(:student, :with_comment) }
-      let!(:comment) {student.comments.first}
+      let!(:comment) { student.comments.first }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"

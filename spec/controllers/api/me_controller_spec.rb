@@ -685,4 +685,71 @@ RSpec.describe Api::MeController do
     end
   end
 
+  describe 'DELETE destroy_absence' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_absence) }
+      let!(:absence) { user.absences.first }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :destroy_absence, params: params
+
+        response
+      end
+
+      context 'with valid absence id' do
+        let(:params) { {id: absence.id, format: :json} }
+
+        its(:status) { should eq(204) }
+
+        it 'should destroy the absences' do
+          expect {
+            subject
+          }.to change(Absence, :count).by(-1)
+        end
+
+        it 'should destroy the absences associated with the user' do
+          expect {
+            subject
+          }.to change { user.absences.count }.by(-1)
+        end
+      end
+
+      context 'with invalid absence id' do
+        let(:params) { {id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'absence.not_found',
+            description: I18n.t('absence.not_found')
+          })
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user, :with_absence) }
+      let!(:absence) { user.absences.first }
+
+      let(:params) { { id: absence.id, format: :json } }
+
+      subject do
+        delete :destroy_absence, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
 end

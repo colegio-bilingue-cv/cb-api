@@ -6,9 +6,10 @@ Rails.application.routes.draw do
     post :sign_out, to: 'auth#sign_out'
 
     resources :users, except: [:delete] do
-      post :documents, to:'users#create_document'
-      post :complementary_informations, to:'users#create_complementary_information'
-      post :absences, to:'users#create_absence'
+      post :documents, to: 'users#create_document'
+      post :complementary_informations, to: 'users#create_complementary_information'
+      post :absences, to: 'users#create_absence'
+      delete 'absences/:id', to: 'users#destroy_absence'
     end
 
     scope :students, controller: :students do
@@ -62,6 +63,8 @@ Rails.application.routes.draw do
       get :groups
       get :teachers
       get :students, to: 'me#groups_students'
+
+      delete 'absences/:id', to:'me#destroy_absence'
 
       scope :groups, controller: :me do
         get :students
