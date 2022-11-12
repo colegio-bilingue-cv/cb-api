@@ -702,13 +702,13 @@ RSpec.describe Api::MeController do
 
         its(:status) { should eq(204) }
 
-        it 'should destroy the absences' do
+        it 'should destroy the absence' do
           expect {
             subject
           }.to change(Absence, :count).by(-1)
         end
 
-        it 'should destroy the absences associated with the user' do
+        it 'should destroy the absence associated with the user' do
           expect {
             subject
           }.to change { user.absences.count }.by(-1)
@@ -726,6 +726,18 @@ RSpec.describe Api::MeController do
             description: I18n.t('absence.not_found')
           })
         end
+
+        it 'should not destroy the absence' do
+          expect {
+            subject
+          }.to change(Absence, :count).by(0)
+        end
+
+        it 'should not destroy the absence associated with the user' do
+          expect {
+            subject
+          }.to change { user.absences.count }.by(0)
+        end
       end
     end
 
@@ -737,6 +749,85 @@ RSpec.describe Api::MeController do
 
       subject do
         delete :destroy_absence, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
+  describe 'DELETE destroy_document' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document) }
+      let!(:document) { user.documents.first }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :destroy_document, params: params
+
+        response
+      end
+
+      context 'with valid document id' do
+        let(:params) { {id: document.id, format: :json} }
+
+        its(:status) { should eq(204) }
+
+        it 'should destroy the document' do
+          expect {
+            subject
+          }.to change(Document, :count).by(-1)
+        end
+
+        it 'should destroy the document associated with the user' do
+          expect {
+            subject
+          }.to change { user.documents.count }.by(-1)
+        end
+      end
+
+      context 'with invalid document id' do
+        let(:params) { {id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'document.not_found',
+            description: I18n.t('document.not_found')
+          })
+        end
+
+        it 'should not destroy the document' do
+          expect {
+            subject
+          }.to change(Document, :count).by(0)
+        end
+
+        it 'should not destroy the document associated with the user' do
+          expect {
+            subject
+          }.to change { user.documents.count }.by(0)
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:user) { FactoryBot.create(:user, :with_document) }
+      let!(:document) { user.documents.first }
+
+      let(:params) { { id: document.id, format: :json } }
+
+      subject do
+        delete :destroy_document, params: params
 
         response
       end

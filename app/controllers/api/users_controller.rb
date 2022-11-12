@@ -82,6 +82,13 @@ class Api::UsersController < Api::BaseController
     head :no_content
   end
 
+  def destroy_document
+    user = User.find(params[:user_id])
+    document = user.documents.destroy(params[:id])
+
+    head :no_content
+  end
+
   private
 
   def users_params
