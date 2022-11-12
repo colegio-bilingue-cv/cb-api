@@ -895,7 +895,7 @@ RSpec.describe Api::StudentsController do
           end
         end
 
-        let(:activate_params) { {reference_number: Faker::Number.number(digits: 4)} }
+        let(:activate_params) { {reference_number: Faker::Number.number(digits: 4), tuition: Faker::String.random(length: 8)} }
 
         let(:params) { {student_id: student_with_full_information.id, student: activate_params, format: :json} }
 
@@ -911,7 +911,7 @@ RSpec.describe Api::StudentsController do
             nationality: student_with_full_information.nationality,
             schedule_start: student_with_full_information.schedule_start,
             schedule_end: student_with_full_information.schedule_end,
-            tuition: student_with_full_information.tuition,
+            tuition: activate_params[:tuition],
             reference_number: activate_params[:reference_number].to_s,
             office: student_with_full_information.office,
             status: 'active',
