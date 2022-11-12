@@ -154,7 +154,7 @@ RSpec.describe Api::MeController do
 
       context 'with valid current password' do
         context 'with valid data' do
-          let(:params) { {user: { current_password: 'testing', password:'new_password1', password_confirmation:'new_password1' }, format: :json} }
+          let(:params) { {user: { current_password: 'testing', password: 'new_password1', password_confirmation: 'new_password1' }, format: :json} }
 
           its(:status) { should eq(200) }
 

@@ -40,6 +40,7 @@ class User < ApplicationRecord
     raise NoMatchPasswordError if password != password_confirmation
 
     self.password = password
+    self.password_confirmation = password
     self.save!
   end
 end
