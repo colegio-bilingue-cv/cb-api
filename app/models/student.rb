@@ -15,6 +15,7 @@ class Student < ApplicationRecord
   has_many :final_evaluations
   has_many :intermediate_evaluations
   has_many :motive_inactivate_students
+  has_many :relevant_events
 
   has_one_attached :enrollment_commitment
 

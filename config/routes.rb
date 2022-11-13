@@ -21,22 +21,24 @@ Rails.application.routes.draw do
     end
 
     resources :students, except: [:destroy] do
-      resources :family_members, only: [:create, :update]
+      resources :answers, only: [:create, :update]
       resources :comments, only: [:create, :update, :destroy]
+      resources :discounts, only: [:create, :update, :destroy]
+      resources :family_members, only: [:create, :update]
 
       resources :final_evaluations, only: [:create, :update, :destroy]
       resources :intermediate_evaluations, only: [:create, :update, :destroy]
-      resources :answers, only: [:create, :update]
+      resources :relevant_events, only: [:create, :update, :destroy]
 
-      get :family_members
-      get :type_scholarships
-      get :payment_methods
+      get :answers
       get :comments
       get :discounts
       get :evaluations
-      get :answers
+      get :family_members
+      get :payment_methods
+      get :relevant_events
+      get :type_scholarships
 
-      resources :discounts, only: [:create, :update, :destroy]
       post :activate
       post :deactivate
     end

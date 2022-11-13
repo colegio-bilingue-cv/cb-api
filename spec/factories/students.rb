@@ -72,5 +72,9 @@ FactoryBot.define do
       tuition { Faker::Lorem.word }
       reference_number { Faker::Lorem.word }
     end
+
+    trait :with_relevant_event do
+      relevant_events { FactoryBot.create_list(:relevant_event, 1) }
+    end
   end
 end
