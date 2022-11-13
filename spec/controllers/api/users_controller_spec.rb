@@ -642,4 +642,88 @@ RSpec.describe Api::UsersController do
       end
     end
   end
+
+  describe 'DELETE destroy complementary_information' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+       subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :destroy_complementary_information, params: params
+
+        response
+      end
+
+      context 'with user id' do
+        let(:other_user) { FactoryBot.create(:user, :with_complementary_information) }
+        let!(:complementary_information) { other_user.complementary_informations.first }
+
+        context 'with valid complementary_information' do
+          let(:params) { {user_id: other_user.id, id: complementary_information.id, format: :json} }
+
+          its(:status) { should eq(204) }
+
+          it 'destroys the complementary_information' do
+            expect {
+              subject
+            }.to change(ComplementaryInformation, :count).by(-1)
+          end
+
+          it 'should destroy the complementary_information associated with the user' do
+            expect {
+              subject
+            }.to change { other_user.complementary_informations.count }.by(-1)
+          end
+        end
+
+        context 'with invalid complementary_information' do
+          let(:params) { {user_id: user.id, id: -1, format: :json} }
+
+          its(:status) { should eq(404) }
+
+          its(:body) do
+            should include_json(error: {
+              key: 'complementary_information.not_found',
+              description: I18n.t('complementary_information.not_found')
+            })
+          end
+
+          it 'should not destroy the complementary_information' do
+            expect {
+              subject
+            }.to change(ComplementaryInformation, :count).by(0)
+          end
+
+          it 'should not complementary_information the document associated with the user' do
+            expect {
+              subject
+            }.to change { other_user.complementary_informations.count }.by(0)
+          end
+        end
+      end
+    end
+
+    context 'when user is not signed in' do
+      let(:other_user) { FactoryBot.create(:user, :with_complementary_information) }
+      let!(:complementary_information) { other_user.complementary_informations.first }
+
+      let(:params) { {user_id: other_user.id, id: complementary_information.id, format: :json} }
+
+      subject do
+        delete :destroy_complementary_information, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+  end
+
 end
