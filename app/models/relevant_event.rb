@@ -7,6 +7,4 @@ class RelevantEvent < ApplicationRecord
   enum event_type: [:event, :family_situation, :school_situation, :external_report]
 
   validates :date, :title, presence: true
-
-
 end
