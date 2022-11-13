@@ -9,6 +9,7 @@ class TypeScholarship < ApplicationRecord
   validates :scholarship, presence: true
   validates :description, presence: true, uniqueness: { scope: :scholarship }, if: :bidding_or_agreement?
   validates :description, presence: true, if: :bidding_or_agreement?
+  validates :signed_date, :contact_name, :contact_phone, presence: true, if: :agreement?
 
   private
 
