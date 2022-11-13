@@ -38,16 +38,17 @@ RSpec.describe Api::TypeScholarshipsController do
         context 'and second type scholarship having the same description and another scholarship type' do
           let(:second_type_scholarship_attrs) { FactoryBot.attributes_for(:type_scholarship, :agreement, description: 'test') }
 
-          let(:params) { {type_scholarship: second_type_scholarship_attrs, format: :json} }
+          let(:params) { { type_scholarship: second_type_scholarship_attrs, format: :json } }
 
-          its(:status) {
-            should eq(201)
-          }
+          its(:status) { should eq(201) }
 
           its(:body) do
             should include_json(type_scholarship: {
               scholarship: second_type_scholarship_attrs[:scholarship].to_s,
-              description: second_type_scholarship_attrs[:description].to_s
+              description: second_type_scholarship_attrs[:description],
+              signed_date: second_type_scholarship_attrs[:signed_date].to_s,
+              contact_name: second_type_scholarship_attrs[:contact_name],
+              contact_phone: second_type_scholarship_attrs[:contact_phone]
             })
           end
         end
@@ -55,7 +56,7 @@ RSpec.describe Api::TypeScholarshipsController do
         context 'and second type scholarship having the same description and same scholarship type' do
           let(:second_type_scholarship_attrs) { FactoryBot.attributes_for(:type_scholarship, :bidding, description: 'test') }
 
-          let(:params) { {type_scholarship: second_type_scholarship_attrs, format: :json} }
+          let(:params) { { type_scholarship: second_type_scholarship_attrs, format: :json } }
 
           its(:status) { should eq(422) }
 
@@ -95,25 +96,27 @@ RSpec.describe Api::TypeScholarshipsController do
           its(:body) do
             should include_json(type_scholarships: [{
               scholarship: type_scholarship.scholarship.to_s,
-              description: nil
-              }])
+              description: type_scholarship.description,
+              signed_date: type_scholarship.signed_date,
+              contact_name: type_scholarship.contact_name,
+              contact_phone: type_scholarship.contact_phone
+            }])
           end
         end
 
         context 'with non blank description' do
           let(:type_scholarship) { FactoryBot.create(:type_scholarship, :agreement) }
 
-          before do
-            type_scholarship
-          end
-
           its(:status) { should eq(200) }
 
           its(:body) do
             should include_json(type_scholarships: [{
               scholarship: type_scholarship.scholarship.to_s,
-              description: type_scholarship.description.to_s,
-              }])
+              description: type_scholarship.description,
+              signed_date: type_scholarship.signed_date.to_s,
+              contact_name: type_scholarship.contact_name,
+              contact_phone: type_scholarship.contact_phone
+            }])
           end
         end
       end
@@ -185,8 +188,9 @@ RSpec.describe Api::TypeScholarshipsController do
 
         context 'when scholarship is subsidized' do
           let(:type_scholarship) { FactoryBot.create(:type_scholarship, :special) }
+          let(:type_scholarship_params) {  FactoryBot.attributes_for(:type_scholarship, :agreement) }
 
-          let(:params) { { type_scholarship: { scholarship: :agreement, description: 'Test description'}, id: type_scholarship.id } }
+          let(:params) { { type_scholarship: type_scholarship_params, id: type_scholarship.id } }
 
           subject do
             request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -200,16 +204,19 @@ RSpec.describe Api::TypeScholarshipsController do
               subject
 
               type_scholarship.reload
-            }.to change(type_scholarship, :scholarship).to('agreement')
-            .and change(type_scholarship, :description).to('Test description')
+            }.to change(type_scholarship, :scholarship).to(type_scholarship_params[:scholarship].to_s)
+            .and change(type_scholarship, :description).to(type_scholarship_params[:description])
           end
 
           its(:status) { should eq(200) }
 
           its(:body) do
             should include_json(type_scholarship: {
-              scholarship: 'agreement',
-              description: 'Test description'
+              scholarship: type_scholarship_params[:scholarship].to_s,
+              description: type_scholarship_params[:description],
+              signed_date: type_scholarship_params[:signed_date].to_s,
+              contact_name: type_scholarship_params[:contact_name],
+              contact_phone: type_scholarship_params[:contact_phone]
             })
           end
         end
@@ -233,7 +240,7 @@ RSpec.describe Api::TypeScholarshipsController do
 
       context 'with invalid data' do
         let(:type_scholarship) { FactoryBot.create(:type_scholarship, :bidding) }
-        let(:params) { { type_scholarship: {scholarship: nil} , id: type_scholarship.id, format: :json } }
+        let(:params) { { type_scholarship: { scholarship: nil } , id: type_scholarship.id, format: :json } }
 
         its(:status) { should eq(422) }
 
@@ -250,9 +257,7 @@ RSpec.describe Api::TypeScholarshipsController do
 
     context 'when user is not signed in' do
       let(:type_scholarship) { FactoryBot.create(:type_scholarship, :agreement) }
-      let(:params) do
-        { type_scholarship: { scholarship: :subsidized }, type_scholarship_id: -1, id: type_scholarship.id, format: :json }
-      end
+      let(:params) { { type_scholarship: { scholarship: :subsidized }, type_scholarship_id: -1, id: type_scholarship.id, format: :json } }
 
       subject do
         patch :update, params: params
