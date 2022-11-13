@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_13_162456) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_13_162457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -212,6 +212,19 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_13_162456) do
     t.bigint "cicle_id"
     t.index ["category_id"], name: "index_questions_on_category_id"
     t.index ["cicle_id"], name: "index_questions_on_cicle_id"
+  end
+
+  create_table "relevant_events", force: :cascade do |t|
+    t.string "title"
+    t.string "description"
+    t.date "date"
+    t.integer "event_type"
+    t.bigint "user_id"
+    t.bigint "student_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id"], name: "index_relevant_events_on_student_id"
+    t.index ["user_id"], name: "index_relevant_events_on_user_id"
   end
 
   create_table "roles", force: :cascade do |t|

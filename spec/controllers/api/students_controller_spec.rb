@@ -865,6 +865,84 @@ RSpec.describe Api::StudentsController do
 
   end
 
+  describe 'GET relevant_events' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user) }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        get :relevant_events, params: params
+
+        response
+      end
+
+      context 'with valid id' do
+        let(:student) { FactoryBot.create(:student, :with_relevant_event) }
+        let(:relevant_event) { student.relevant_events.first }
+        let(:user_aux) { relevant_event.user }
+
+        let(:params) { {student_id: student.id, format: :json} }
+
+        its(:status) { should eq(200) }
+
+        its(:body) do
+          should include_json(student: {relevant_events: [{
+            title: relevant_event.title,
+            description: relevant_event.description,
+            date: relevant_event.date.to_s,
+            event_type: relevant_event.event_type,
+            user:{
+              ci: user_aux.ci.to_s,
+              name: user_aux.name,
+              surname: user_aux.surname,
+              birthdate: user_aux.birthdate.to_s,
+              address: user_aux.address,
+              email: user_aux.email,
+              starting_date: user_aux.starting_date.to_s
+            }
+          }]})
+        end
+      end
+
+      context 'with invalid id' do
+        let(:params) { {student_id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'student.not_found',
+            description: I18n.t('student.not_found')
+          })
+        end
+
+      end
+
+    end
+
+    context 'when user is not signed in' do
+      let(:student) { FactoryBot.create(:student, :with_comment) }
+
+      let(:params) { {student_id: student.id, format: :json} }
+
+      subject do
+        get :comments, params: params
+
+        response
+      end
+
+      its(:status) { should eq(403) }
+
+      its(:body) do
+        should include_json(error: {
+          key: 'forbidden.required_signed_in',
+          description: I18n.t('errors.forbidden.required_signed_in')
+        })
+      end
+    end
+
+  end
+
   describe 'POST activate' do
     let(:user) { FactoryBot.create(:user) }
     let(:student) { FactoryBot.create(:student) }
