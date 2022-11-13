@@ -847,7 +847,7 @@ RSpec.describe Api::MeController do
   describe 'DELETE destroy complementary_information' do
     context 'when user is signed in' do
       let(:user) { FactoryBot.create(:user, :with_complementary_information) }
-      let(:complementary_information) { user.complementary_information.first.id }
+      let(:complementary_information) { user.complementary_informations.first }
 
       subject do
         request.headers['Authorization'] = "Bearer #{generate_token(user)}"
@@ -857,7 +857,7 @@ RSpec.describe Api::MeController do
       end
 
       context 'with valid complementary_information' do
-        let(:params) { {id: complementary_information, format: :json} }
+        let(:params) { {id: complementary_information.id, format: :json} }
 
         its(:status) { should eq(204) }
 
@@ -867,6 +867,11 @@ RSpec.describe Api::MeController do
           }.to change(Complementary_information, :count).by(-1)
         end
 
+        it 'should destroy the complementary_information associated with the user' do
+          expect {
+            subject
+          }.to change { user.complementary_informations.count }.by(-1)
+        end
       end
 
       context 'with invalid complementary_information' do
@@ -880,11 +885,25 @@ RSpec.describe Api::MeController do
             description: I18n.t('complementary_information.not_found')
           })
         end
+
+        it 'should not destroy the complementary_information' do
+          expect {
+            subject
+          }.to change(Complementary_information, :count).by(0)
+        end
+      end
+
+      it 'should not destroy the complementary_information associated with the user' do
+        expect {
+          subject
+        }.to change { user.complementary_informations.count }.by(0)
       end
     end
 
     context 'when user is not signed in' do
-      let(:params) { { format: :json} }
+      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
+      let(:complementary_information) { user.complementary_informations.first }
+      let(:params) { {id: complementary_information.id, format: :json} }
 
       subject do
         delete :destroy_complementary_information, params: params
