@@ -8,4 +8,5 @@ class RelevantEvent < ApplicationRecord
 
   validates :date, :title, presence: true
 
+
 end

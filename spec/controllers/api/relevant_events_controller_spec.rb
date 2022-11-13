@@ -16,7 +16,7 @@ RSpec.describe Api::RelevantEventsController do
       end
 
       context 'with valid data' do
-        let(:params) { relevant_event_attrs.merge({user_id: user.id, student_id: student.id, format: :json}) }
+        let(:params) { relevant_event_attrs.merge({student_id: student.id, format: :json}) }
 
         its(:status) { should eq(201) }
 
@@ -40,7 +40,7 @@ RSpec.describe Api::RelevantEventsController do
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: -1, user_id: user.id, relevant_event: relevant_event_attrs, format: :json} }
+        let(:params) { {student_id: -1, relevant_event: relevant_event_attrs, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -53,7 +53,7 @@ RSpec.describe Api::RelevantEventsController do
       end
 
       context 'with invalid data' do
-        let(:params) { {student_id: student.id, user_id: user.id, relevant_event: { date: '' }, format: :json} }
+        let(:params) { {student_id: student.id, relevant_event: { date: '' }, format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -73,7 +73,7 @@ RSpec.describe Api::RelevantEventsController do
       let(:student) { FactoryBot.create(:student, :with_relevant_event) }
       let(:relevant_event) { student.relevant_events.first }
       let(:relevant_event_attrs) { relevant_event.attributes }
-      let(:params) { {student_id: student.id, user_id: user.id, relevant_event: relevant_event_attrs, format: :json} }
+      let(:params) { {student_id: student.id, relevant_event: relevant_event_attrs, format: :json} }
 
       subject do
         post :create, params: params
@@ -108,7 +108,7 @@ RSpec.describe Api::RelevantEventsController do
 
       context 'with valid data' do
 
-        let(:params) { {student_id: student.id, user_id: user.id, id: relevant_event.id, title:'Nuevo title', format: :json} }
+        let(:params) { {student_id: student.id, id: relevant_event.id, title:'Nuevo title', format: :json} }
         it 'changes the title of the relevant_event' do
           expect {
             subject
@@ -127,7 +127,7 @@ RSpec.describe Api::RelevantEventsController do
       end
 
       context 'with invalid student id' do
-        let(:params) { {student_id: -1, user_id: user.id, id: relevant_event.id, relevant_event: relevant_event_attrs, format: :json} }
+        let(:params) { {student_id: -1, id: relevant_event.id, relevant_event: relevant_event_attrs, format: :json} }
 
         its(:status) { should eq(404) }
 
@@ -140,7 +140,7 @@ RSpec.describe Api::RelevantEventsController do
       end
 
       context 'with invalid data' do
-        let(:params) { {student_id: student.id, user_id: user.id, id: relevant_event.id, date: nil , format: :json} }
+        let(:params) { {student_id: student.id, id: relevant_event.id, date: nil , format: :json} }
 
         its(:status) { should eq(422) }
 
@@ -160,7 +160,7 @@ RSpec.describe Api::RelevantEventsController do
       let(:student) { FactoryBot.create(:student, :with_relevant_event) }
       let(:relevant_event) { student.relevant_events.first }
       let(:relevant_event_attrs) { relevant_event.attributes }
-      let(:params) { {student_id: student.id, user_id: user.id, id: relevant_event.id, relevant_event: relevant_event_attrs, format: :json} }
+      let(:params) { {student_id: student.id, id: relevant_event.id, relevant_event: relevant_event_attrs, format: :json} }
 
       subject do
         patch :update, params: params
