@@ -41,7 +41,7 @@ RSpec.describe Student, type: :model do
 
     context 'with full information' do
       let(:student_with_full_information) do
-        FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+        FactoryBot.create(:student, :pending, :with_tuituion_and_reference_number, :with_family_member, :with_group, cicle: cicle) do |student|
           student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
         end
       end
@@ -93,7 +93,7 @@ RSpec.describe Student, type: :model do
 
     context 'without family members' do
       let(:student_without_family_members) do
-        FactoryBot.create(:student, :pending, cicle: cicle) do |student|
+        FactoryBot.create(:student, :pending, :with_tuituion_and_reference_number, cicle: cicle) do |student|
           student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
         end
       end
@@ -117,31 +117,31 @@ RSpec.describe Student, type: :model do
 
     end
 
-    context 'without answered questions' do
-      let(:student_without_answered_questions) { FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) }
+    context 'without group' do
+      let(:student_without_group) { FactoryBot.create(:student, :pending, :with_tuituion_and_reference_number, :with_family_member, cicle: cicle) }
 
       before do
         payment_method = FactoryBot.create(:payment_method, method: Faker::Music::Prince.album)
-        FactoryBot.create(:student_payment_method, payment_method_id: payment_method.id, student_id: student_without_answered_questions.id)
+        FactoryBot.create(:student_payment_method, payment_method_id: payment_method.id, student_id: student_without_group.id)
       end
 
-      subject { student_without_answered_questions.activate! }
+      subject { student_without_group.activate! }
 
       it 'does not activate the student' do
         expect {
           subject
 
-          student_without_answered_questions.reload
-        }.to raise_error(StudentsActivation::IncompleteQuestionsError)
+          student_without_group.reload
+        }.to raise_error(StudentsActivation::IncompleteGroupError)
 
-        expect(student_without_answered_questions.pending?).to be(true)
+        expect(student_without_group.pending?).to be(true)
       end
 
     end
 
     context 'without valid payment method' do
       let(:student_without_valid_payment_method) do
-        FactoryBot.create(:student, :pending, :with_family_member, cicle: cicle) do |student|
+        FactoryBot.create(:student, :pending, :with_family_member, :with_tuituion_and_reference_number, cicle: cicle) do |student|
           student.answers.create!(question: question, answer: Faker::Movies::LordOfTheRings.location)
         end
       end

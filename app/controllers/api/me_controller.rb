@@ -58,6 +58,18 @@ class Api::MeController < Api::BaseController
     render json: response, status: :created
   end
 
+  def destroy_absence
+    absence = current_user.absences.destroy(params[:id])
+
+    head :no_content
+  end
+
+  def destroy_document
+    document = current_user.documents.destroy(params[:id])
+
+    head :no_content
+  end
+
   def students
     group = current_user.groups.find(params[:group_id])
 

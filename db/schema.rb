@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_12_181136) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_13_162456) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -262,7 +262,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_12_181136) do
     t.date "starting_date"
     t.string "contact"
     t.string "contact_phone"
-    t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "group_id"
@@ -276,6 +275,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_12_181136) do
     t.integer "scholarship"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "signed_date"
+    t.string "contact_name"
+    t.string "contact_phone"
   end
 
   create_table "user_groups", force: :cascade do |t|

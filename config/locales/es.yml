@@ -237,7 +237,7 @@ es:
     activation_errors:
       incomplete_basic_info: 'La información básica no está completa'
       incomplete_family_member: 'No tiene familiares asignados'
-      incomplete_questions_error: 'No tiene todas las preguntas del ciclo respondidas'
+      incomplete_group_error: 'No tiene grupo asignado'
       incomplete_payment_method: 'No tiene un método de pago válido'
   user:
     not_found: 'Usuario no encontrado'
@@ -265,9 +265,12 @@ es:
   user_group:
     not_found: 'Usuario no perteneciente al grupo'
   absence:
+    not_found: 'Inasistencia no encontrada'
     validations:
       validity_date: 'La fecha de inicio debe ser anterior a la fecha de fin'
   question:
     not_found: 'Pregunta no encontrada'
   answer:
     not_found: 'Respuesta no encontrada'
+  document:
+    not_found: 'Document no encontrado'

@@ -6,10 +6,12 @@ Rails.application.routes.draw do
     post :sign_out, to: 'auth#sign_out'
 
     resources :users, except: [:delete] do
-      post :documents, to:'users#create_document'
-      post :complementary_informations, to:'users#create_complementary_information'
-      post :absences, to:'users#create_absence'
-      delete :complementary_informations, to:'users#destroy_complementary_information'
+      post :documents, to: 'users#create_document'
+      post :complementary_informations, to: 'users#create_complementary_information'
+      post :absences, to: 'users#create_absence'
+      delete 'absences/:id', to: 'users#destroy_absence'
+      delete 'documents/:id', to: 'users#destroy_document'
+      delete 'complementary_informations/:id', to:'users#destroy_complementary_information'
     end
 
     scope :students, controller: :students do
@@ -59,11 +61,14 @@ Rails.application.routes.draw do
       patch :password
       post :documents, to:'me#create_document'
       post :complementary_informations, to: 'me#create_complementary_information'
-      delete :complementary_informations, to: 'me#destroy_complementary_information'
       post :absences, to: 'me#create_absence'
       get :groups
       get :teachers
       get :students, to: 'me#groups_students'
+
+      delete 'absences/:id', to:'me#destroy_absence'
+      delete 'documents/:id', to:'me#destroy_document'
+      delete 'complementary_informations/:id', to: 'me#destroy_complementary_information'
 
       scope :groups, controller: :me do
         get :students

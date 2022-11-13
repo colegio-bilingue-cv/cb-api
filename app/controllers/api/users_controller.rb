@@ -79,7 +79,21 @@ class Api::UsersController < Api::BaseController
     user = User.find(params[:user_id])
     user.complementary_informations.destroy(params[:id])
 
-    head :no_content, status: :deleted
+    head :no_content
+  end
+
+  def destroy_absence
+    user = User.find(params[:user_id])
+    absence = user.absences.destroy(params[:id])
+
+    head :no_content
+  end
+
+  def destroy_document
+    user = User.find(params[:user_id])
+    document = user.documents.destroy(params[:id])
+
+    head :no_content
   end
 
   private

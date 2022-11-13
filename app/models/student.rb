@@ -35,8 +35,8 @@ class Student < ApplicationRecord
   def activate!
     raise StudentsActivation::IncompleteBasicInfoError unless completed_basic_info?
     raise StudentsActivation::IncompleteFamilyMembersError unless has_family_members?
-    raise StudentsActivation::IncompleteQuestionsError unless all_cicle_questions_answered?
     raise StudentsActivation::IncompletePaymentMethodError unless has_valid_payment_method?
+    raise StudentsActivation::IncompleteGroupError unless group.present?
 
     self.active!
   end
@@ -54,15 +54,11 @@ class Student < ApplicationRecord
   private
 
   def completed_basic_info?
-    reference_number && schedule_start && schedule_end && office && emergency && vaccine_name && vaccine_expiration && phone_number && inscription_date && starting_date && contact && contact_phone
+    tuition && reference_number && schedule_start && schedule_end && office && emergency && vaccine_name && vaccine_expiration && phone_number && inscription_date && starting_date && contact && contact_phone
   end
 
   def has_family_members?
     family_members.count > 0
-  end
-
-  def all_cicle_questions_answered?
-    cicle.present? && cicle.questions.count == answers.where(question_id: cicle.questions.pluck(:id)).count
   end
 
   def has_valid_payment_method?
