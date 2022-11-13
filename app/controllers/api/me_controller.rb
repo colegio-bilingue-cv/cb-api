@@ -98,6 +98,12 @@ class Api::MeController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def destroy_complementary_information
+    current_user.complementary_informations.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def me_params

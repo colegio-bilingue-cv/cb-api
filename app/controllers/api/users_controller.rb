@@ -75,6 +75,13 @@ class Api::UsersController < Api::BaseController
     render json: response, status: :created
   end
 
+  def destroy_complementary_information
+    user = User.find(params[:user_id])
+    user.complementary_informations.destroy(params[:id])
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def users_params

@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       post :documents, to:'users#create_document'
       post :complementary_informations, to:'users#create_complementary_information'
       post :absences, to:'users#create_absence'
+      delete :complementary_informations, to:'users#destroy_complementary_information'
     end
 
     scope :students, controller: :students do
@@ -58,6 +59,7 @@ Rails.application.routes.draw do
       patch :password
       post :documents, to:'me#create_document'
       post :complementary_informations, to: 'me#create_complementary_information'
+      delete :complementary_informations, to: 'me#destroy_complementary_information'
       post :absences, to: 'me#create_absence'
       get :groups
       get :teachers

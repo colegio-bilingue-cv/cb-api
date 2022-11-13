@@ -471,4 +471,57 @@ RSpec.describe Api::UsersController do
       end
     end
   end
+
+  describe 'DELETE destroy complementary_information' do
+    context 'when user is signed in' do
+      let(:user) { FactoryBot.create(:user, :with_complementary_information) }
+      let(:complementary_information) { user.complementary_information.first.id }
+
+      subject do
+        request.headers['Authorization'] = "Bearer #{generate_token(user)}"
+        delete :destroy_complementary_information, params: params
+
+        response
+      end
+
+      context 'with valid complementary_information' do
+        let(:params) { {user_id: user.id, id: complementary_information, format: :json} }
+
+        its(:status) { should eq(204) }
+
+        it 'destroys the complementary_information' do
+          expect {
+            subject
+          }.to change(Complementary_information, :count).by(-1)
+        end
+
+      end
+
+      context 'with invalid complementary_information' do
+        let(:params) { {user_id: user.id, id: -1, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'complementary_information.not_found',
+            description: I18n.t('complementary_information.not_found')
+          })
+        end
+      end
+
+      context 'with invalid user' do
+        let(:params) { {user_id: -1, id: complementary_information, format: :json} }
+
+        its(:status) { should eq(404) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'user.not_found',
+            description: I18n.t('user.not_found')
+          })
+        end
+      end
+    end
+  end
 end
