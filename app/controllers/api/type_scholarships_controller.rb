@@ -33,6 +33,6 @@ class Api::TypeScholarshipsController < Api::BaseController
   private
 
   def type_scholarship_params
-    params.require(:type_scholarship).permit(:description, :scholarship)
+    params.require(:type_scholarship).permit(:description, :scholarship, :signed_date, :contact_name, :contact_phone)
   end
 end
