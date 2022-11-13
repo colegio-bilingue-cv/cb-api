@@ -92,7 +92,7 @@ class Api::UsersController < Api::BaseController
   private
 
   def users_params
-    params.require(:user).permit(:email, :password, :birthdate, :name, :surname, :ci, :address, :role, :starting_date)
+    params.require(:user).permit(:email, :password, :birthdate, :name, :surname, :ci, :address, :role, :starting_date, :phone_number)
   end
 
   def document_params
