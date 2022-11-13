@@ -23,7 +23,9 @@ RSpec.describe Api::AuthController do
           surname: user.surname,
           birthdate: user.birthdate.to_s,
           address: user.address,
-          email: user.email
+          email: user.email,
+          phone_number: user.phone_number,
+          starting_date: user.starting_date.to_s
         })
       end
 

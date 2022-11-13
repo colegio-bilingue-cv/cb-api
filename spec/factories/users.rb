@@ -9,6 +9,7 @@ FactoryBot.define do
     password { 'testing' }
     password_confirmation { password }
     starting_date { Date.today }
+    phone_number { Faker::Lorem.word }
 
     after(:create) { |user| user.add_role(:teacher) }
 
