@@ -43,7 +43,7 @@ Rails.application.routes.draw do
       post :deactivate
     end
 
-    resources :type_scholarships, only: [:create, :index, :update]
+    resources :type_scholarships, only: [:create, :index, :update, :destroy]
     resources :student_type_scholarships, only: [:create, :update, :destroy]
 
     resources :payment_methods, except: [:delete]
