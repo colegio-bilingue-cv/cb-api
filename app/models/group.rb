@@ -17,4 +17,6 @@ class Group < ApplicationRecord
   validates :name, :year, presence: true
 
   delegate :name, to: :grade, prefix: true
+
+  validates_uniqueness_of :name, scope: [:year, :grade_id]
 end
