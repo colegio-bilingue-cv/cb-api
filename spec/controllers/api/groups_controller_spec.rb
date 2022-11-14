@@ -161,6 +161,27 @@ RSpec.describe Api::GroupsController do
             })
           end
         end
+
+        context 'with duplicate index' do
+          let(:second_group) do
+            FactoryBot.create(:group)
+          end
+          let(:second_group_attrs) { second_group.attributes }
+
+          let(:params) { {grade_id: second_group.grade.id, group: second_group_attrs, format: :json} }
+
+          its(:status) { should eq(422) }
+
+          its(:body) do
+            should include_json(error: {
+              key: 'record_invalid',
+              description: {
+                name: ['ya está en uso']
+              }
+            })
+          end
+        end
+
       end
     end
 
@@ -240,6 +261,26 @@ RSpec.describe Api::GroupsController do
           should include_json(error: {
             key: 'group.not_found',
             description: I18n.t('group.not_found')
+          })
+        end
+      end
+
+      context 'with invalid data duplicate index' do
+        let(:second_group) do
+          FactoryBot.create(:group, grade_id: grade.id)
+        end
+        let(:second_group_attrs) { second_group.attributes }
+
+        let(:params) { {grade_id: grade.id, id: group.id, group: second_group_attrs, format: :json} }
+
+        its(:status) { should eq(422) }
+
+        its(:body) do
+          should include_json(error: {
+            key: 'record_invalid',
+            description: {
+              name: ['ya está en uso']
+            }
           })
         end
       end
