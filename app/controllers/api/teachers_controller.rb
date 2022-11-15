@@ -3,7 +3,7 @@ class Api::TeachersController < Api::BaseController
     teachers = User.with_role(:teacher)
 
     response = Panko::Response.new(
-      teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherSerializer)
+      teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherWithGroupTeachersPrincipalSerializer)
     )
 
     render json: response, status: :ok

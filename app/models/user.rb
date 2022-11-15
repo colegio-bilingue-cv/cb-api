@@ -15,9 +15,9 @@ class User < ApplicationRecord
   has_many :user_groups_principal, -> { where(role_id: Role.where(name: :principal).ids.first) }, class_name: 'UserGroup'
   has_many :principal_groups, through: :user_groups_principal, source: :group
 
-  has_many :teachers, through: :user_groups, source: :user
+  has_many :teachers, -> { distinct } , through: :groups, source: :teachers
 
-  has_many :students, through: :groups, source: :students
+  has_many :students, -> { distinct } , through: :groups, source: :students
 
   has_many :user_groups_support_teacher, -> { where(role_id: Role.where(name: :support_teacher).ids.first) }, class_name: 'UserGroup'
   has_many :support_teacher_groups, through: :user_groups_support_teacher, source: :group

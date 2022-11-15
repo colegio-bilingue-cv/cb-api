@@ -37,7 +37,7 @@ class Api::GroupsController < Api::BaseController
     group = Group.find(params[:group_id])
 
     response = Panko::Response.new(
-      teachers: Panko::ArraySerializer.new(group.teachers, each_serializer: TeacherSerializer)
+      teachers: Panko::ArraySerializer.new(group.teachers, each_serializer: TeacherWithGroupTeachersPrincipalSerializer)
     )
 
     render json: response, status: :ok
