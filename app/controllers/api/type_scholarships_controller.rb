@@ -30,6 +30,17 @@ class Api::TypeScholarshipsController < Api::BaseController
     render json: response, status: :ok
   end
 
+  def destroy
+    raise ActiveRecord::RecordNotFound.new('', TypeScholarship.to_s) if !TypeScholarship.exists?(params[:id])
+    type_scholarship = TypeScholarship.find(params[:id])
+    raise ActiveRecord::RecordNotFound.new('', TypeScholarship.to_s) if !type_scholarship.bidding_or_agreement?
+
+    
+    type_scholarship.destroy
+
+    head :no_content, status: :deleted
+  end
+
   private
 
   def type_scholarship_params
