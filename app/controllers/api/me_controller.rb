@@ -104,7 +104,7 @@ class Api::MeController < Api::BaseController
     teachers = current_user.teachers
 
     response = Panko::Response.new(
-      teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeacherSerializer)
+      teachers: Panko::ArraySerializer.new(teachers, each_serializer: TeachersSerializer)
     )
 
     render json: response, status: :ok
