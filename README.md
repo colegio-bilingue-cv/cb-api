@@ -68,20 +68,6 @@ Then run Rails commands as usual:
 % bin/rails routes
 ```
 
-## Seed Local Database (Development)
-
-First, run a terminal in a docker container:
-
-```
-$ ./bin/terminal
-```
-
-Then run the Rake task:
-
-```
-% bin/rake seed_dev
-```
-
 ## Issues with Ubuntu package manager docker compose version
 
 Run the docker compose ubuntu installer:
