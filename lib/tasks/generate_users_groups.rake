@@ -23,8 +23,13 @@ task generate_users_groups: :environment do
   group_a = Group.create!(grade_id: 1, name: 'A', year: 2022)
   group_b = Group.create!(grade_id: 1, name: 'B', year: 2023)
 
-  UserGroup.create!(user_id: user_teacher.id, group_id: group_a.id, role_id: 1)
-  UserGroup.create!(user_id: user_support_teacher.id, group_id: group_a.id, role_id: 2)
-  UserGroup.create!(user_id: user_principal.id, group_id: group_a.id, role_id: 3)
-  UserGroup.create!(user_id: user_principal.id, group_id: group_b.id, role_id: 3)
+
+  #ROLES
+  rol_teacher = Role.find_by_name('teacher')
+  rol_support_teacher = Role.find_by_name('support_teacher')
+  rol_principal = Role.find_by_name('principal')
+  UserGroup.create!(user_id: user_teacher.id, group_id: group_a.id, role_id: rol_teacher.id)
+  UserGroup.create!(user_id: user_support_teacher.id, group_id: group_a.id, role_id: rol_support_teacher.id)
+  UserGroup.create!(user_id: user_principal.id, group_id: group_a.id, role_id: rol_principal.id)
+  UserGroup.create!(user_id: user_principal.id, group_id: group_b.id, role_id: rol_principal.id)
 end
