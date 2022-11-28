@@ -10,8 +10,8 @@ task generate_users_groups: :environment do
   user_teacher = User.create!(name: 'Rosa', surname: 'Rodriguez', email: 'teacher@test.com', password: 'password', ci: '1234567B')
   user_teacher.add_role('teacher')
 
-  user_support_teacher = User.create!(name: 'Marta', surname: 'Sanchez', email: 'support_teahcer@test.com', password: 'password', ci: '1234567C')
-  user_teacher.add_role('support_teacher')
+  user_support_teacher = User.create!(name: 'Marta', surname: 'Sanchez', email: 'support_teacher@test.com', password: 'password', ci: '1234567C')
+  user_support_teacher.add_role('support_teacher')
 
   user_administrative = User.create!(name: 'Juan', surname: 'Perez', email: 'administrative@test.com', password: 'password', ci: '1234567D')
   user_administrative.add_role('administrative')
@@ -26,8 +26,5 @@ task generate_users_groups: :environment do
   UserGroup.create!(user_id: user_teacher.id, group_id: group_a.id, role_id: 1)
   UserGroup.create!(user_id: user_support_teacher.id, group_id: group_a.id, role_id: 2)
   UserGroup.create!(user_id: user_principal.id, group_id: group_a.id, role_id: 3)
-  UserGroup.create!(user_id: user_principal.id, group_id: group_bss.id, role_id: 3)
-
-  #STUDENTS
-
+  UserGroup.create!(user_id: user_principal.id, group_id: group_b.id, role_id: 3)
 end
