@@ -138,7 +138,7 @@ class Api::StudentsController < Api::BaseController
     student = Student.find(params[:student_id])
 
     student.update!(activate_params)
-    student.activate!
+    student.active!
 
     response = Panko::Response.create do |r|
       { student: r.serializer(student, StudentSerializer) }
